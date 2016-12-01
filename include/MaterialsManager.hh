@@ -1,0 +1,97 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: MaterialsManager.hh 21.10.2016 A Fijalkowska $
+//
+/// \file MaterialsManager.hh
+/// \brief Definition of the MaterialsManager class. This class is singleton
+///  Every materials and its properties should to be defined here.
+//
+#ifndef MaterialsManager_H
+#define MaterialsManager_H 1
+
+#include "G4Material.hh"
+
+
+class MaterialsManager //MaterialsFactory??
+{
+  public:
+	MaterialsManager* GetMaterialsManager();
+	G4Material* GetVaccum();
+    G4Material* GetAir();
+    G4Material* GetBC408();
+    G4Material* GetTin();
+    G4Material* GetPMTGlass();
+    G4Material* GetAluminium();
+    G4Material* GetNaI();
+
+
+  private:
+	MaterialsManager();
+	static MaterialsManager* s_instance;
+	void CleanUp();
+	
+	G4double atomicMass;
+    G4double z;
+    G4double density;
+    G4int numberElements;
+  
+	G4Element* H;
+	G4Element* C;
+	G4Element* N;
+	G4Element* O;
+	G4Element* Na;
+	G4Element* Al;
+	G4Element* Si;
+	G4Element* S;
+	G4Element* Fe;
+	G4Element* Ni;
+	G4Element* Ag;
+	G4Element* Sn;
+	G4Element* I;
+	G4Element* Pb;
+	
+	G4Material* vaccum;
+	G4Material* air;
+	G4Material* BC408;
+	G4Material* tin;
+	G4Material* PMTGlass;
+	G4Material* aluminium;
+	G4Material* NaI;
+	
+  public:
+	static MaterialsManager *GetInstance()
+	{
+		if (!s_instance)
+			s_instance = new MaterialsManager;
+		return s_instance;
+	}
+};
+
+#endif
+
+
+
+	
