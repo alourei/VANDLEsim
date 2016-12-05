@@ -60,15 +60,19 @@ class VANDLEBar : public G4PVPlacement
 	void MakeModuleLogic(G4double barX, G4double barY, G4double barZ, 
 	                     G4double wrappingThickness, G4double PMTLength);
 	void MakePlasticBar(G4double barX, G4double barY, G4double barZ);
-	void MakePMT(G4double radius, G4double length);
+
 	void MakeWrapping(G4double barX, G4double barY, G4double barZ, 
 	                  G4double airThickness, G4double wrappingThickness);
 	                  
     void MakeAirLayer(G4double barX, G4double barY, 
                       G4double barZ, G4double airThickness); 
-    void MakePMTsGlass(G4double radius, G4double thickness);         
+    void MakePMTsGlass(G4double radius, G4double thickness);
+    void MakePMTPhotocathode(G4double radius, G4double thickness); 
+    void PlacePMTPhotocathode(G4double glassThickness, G4double photocathThickness);        
     void PlacePMTGlass(G4double barZ, G4double thickness);
-    void PlacePMT(G4double barZ, G4double thickness);
+    
+    void MakePMTShell(G4double thickness, G4double outerRad, G4double length);
+    void PlacePMTShell(G4double barZ, G4double length);
     
     MaterialsManager* materialsManager;
     
@@ -81,6 +85,8 @@ class VANDLEBar : public G4PVPlacement
 	G4double PMTRadius;
 	G4double PMTLength;
 	G4double PMTGlassThickness;
+	G4double PMTShellThickness;
+	G4double PMTPhotocathodeThickness;
 	
 	G4LogicalVolume* moduleLogic;
 	G4LogicalVolume* barLogic;
@@ -88,6 +94,7 @@ class VANDLEBar : public G4PVPlacement
 	G4LogicalVolume* wrappingLogic;
 	G4LogicalVolume* airLayerLogic;
 	G4LogicalVolume* glassLogic;
+	G4LogicalVolume* photocathLogic;
 
 };
 

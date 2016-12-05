@@ -86,22 +86,25 @@ VANDLEBar::VANDLEBar(G4RotationMatrix *pRot,
 
 	
 	MakePMTsGlass(PMTRadius, PMTGlassThickness);
+	MakePMTPhotocathode(PMTRadius, PMTPhotocathodeThickness);
+	PlacePMTPhotocathode(PMTGlassThickness, PMTPhotocathodeThickness);
 	PlacePMTGlass(barLength, PMTGlassThickness);
 	
-	MakePMT(PMTRadius, PMTLength);
-	PlacePMT(barLength, PMTLength);
-	
+	MakePMTShell(PMTShellThickness, PMTRadius, PMTLength);
+    PlacePMTShell(barLength, PMTLength);	
 	SetLogicalVolume(moduleLogic);
 }
 				
 void VANDLEBar::SetBasicSizes()
 {
-	//reflectiveFoilThickness = 10.*mm;
-	//airThickness = 10.*mm;
 	reflectiveFoilThickness = 0.01*mm;
 	airThickness = 0.01*mm;
 	PMTLength = 10.0*cm;
-	PMTGlassThickness = 1.0*cm;	
+	PMTGlassThickness = 2.0*mm;		
+	PMTShellThickness = 1.0*mm;
+	PMTPhotocathodeThickness = 1.0*mm;
+	
+	//fD_mtl=0.0635*cm;
 }
 
 void VANDLEBar::SetSmallBarSizes()
@@ -155,26 +158,7 @@ void VANDLEBar::MakePlasticBar(G4double barX, G4double barY, G4double barZ)
 	barLogic->SetVisAttributes(G4VisAttributes::GetInvisible());
 } 
 
-void VANDLEBar::MakePMT(double radius, double length)
-{
-	G4double innerRadius = 0.0*mm;
-	G4double outerRadius = radius;
-	G4double startPhi = 0.0 * degree;
-	G4double deltaPhi = 360.0 * degree;
-	G4double halfLength = length/2.;
-	
 
-	G4Tubs* PMTSolid = new G4Tubs("PMTSolid", innerRadius, outerRadius, 
-	                               halfLength, startPhi, deltaPhi);
-	G4Material* PMTMaterial = materialsManager->GetTin();
-	PMTLogic = new G4LogicalVolume( PMTSolid, PMTMaterial, "PMTLogic");
-	
-	G4VisAttributes* visAtt = new G4VisAttributes( G4Colour(0x00,0x00,0xFF) );
-	visAtt->SetLineWidth(0.1);
-	visAtt->SetForceAuxEdgeVisible(true);
-	visAtt->SetForceSolid(true);
-	PMTLogic->SetVisAttributes(visAtt);
-}
 			
 
 void VANDLEBar::MakeWrapping(G4double barX, G4double barY, 
@@ -191,7 +175,7 @@ void VANDLEBar::MakeWrapping(G4double barX, G4double barY,
 	                                    wrappingMaterial, 
 	                                    "wrappingLogic");
 	
-	G4VisAttributes* visAtt = new G4VisAttributes( G4Colour(0x00,0xFF,0x00) );
+	G4VisAttributes* visAtt = new G4VisAttributes( G4Colour(0.,1.,0.) );
 	visAtt->SetLineWidth(0.1);
 	visAtt->SetForceAuxEdgeVisible(true);
 	//visAtt->SetForceSolid(true);
@@ -222,7 +206,8 @@ void VANDLEBar::MakeAirLayer(G4double barX, G4double barY,
 	//airLayerLogic->SetVisAttributes(visAtt);
 	airLayerLogic->SetVisAttributes(G4VisAttributes::GetInvisible());
 }							 
-							 
+
+    							 
 void VANDLEBar::MakePMTsGlass(G4double radius, G4double thickness = 0.001*mm)
 {
 	G4double innerRadius = 0.0*mm;
@@ -234,7 +219,7 @@ void VANDLEBar::MakePMTsGlass(G4double radius, G4double thickness = 0.001*mm)
 	G4Material* PMTGlassMaterial = materialsManager->GetPMTGlass();
 	glassLogic = new G4LogicalVolume(glassSolid, PMTGlassMaterial, "glassLogical");
 	
-	G4VisAttributes* visAtt = new G4VisAttributes( G4Colour(0xFF,0x00,0x00) );
+	G4VisAttributes* visAtt = new G4VisAttributes( G4Colour(0.5,0.5,1.) );
 	visAtt->SetLineWidth(0.1);
 	visAtt->SetForceAuxEdgeVisible(true);
 	visAtt->SetForceSolid(true);
@@ -242,6 +227,40 @@ void VANDLEBar::MakePMTsGlass(G4double radius, G4double thickness = 0.001*mm)
 	//glassLogic->SetVisAttributes(G4VisAttributes::GetInvisible());
 }
 
+
+void VANDLEBar::MakePMTPhotocathode(G4double radius, G4double thickness)
+{
+	G4double innerRadius = 0.0*mm;
+	G4double outerRadius = radius;
+	G4double startPhi = 0.0 * degree;
+	G4double deltaPhi = 360.0 * degree;
+	G4Tubs* photocathSolid = new G4Tubs( "photocathSolid", innerRadius, 
+	                                       outerRadius, thickness, startPhi, deltaPhi);
+	                                       
+	G4Material* photocathMaterial = materialsManager->GetTin();
+	photocathLogic = new G4LogicalVolume(photocathSolid, photocathMaterial,
+	                                     "photocathLogic");
+	
+	G4VisAttributes* visAtt = new G4VisAttributes( G4Colour(0.0,0.0,1.) );
+	visAtt->SetLineWidth(0.1);
+	visAtt->SetForceAuxEdgeVisible(true);
+	visAtt->SetForceSolid(true);
+	photocathLogic->SetVisAttributes(visAtt);
+	//glassLogic->SetVisAttributes(G4VisAttributes::GetInvisible());	
+	
+	
+}
+    
+void VANDLEBar::PlacePMTPhotocathode(G4double glassThickness, G4double photocathThickness)
+{
+	const G4double zPosition = (glassThickness - photocathThickness) * 0.5;
+	
+	G4ThreeVector placement = G4ThreeVector(0.0, 0.0, zPosition);
+	new G4PVPlacement( 0, placement, photocathLogic, 
+	                   "PMTPhotocathPhysical", glassLogic, 0, 0 );
+}
+   
+    
 void VANDLEBar::PlacePMTGlass(G4double barZ, G4double thickness)
 {
 	const G4double PMTGlassPosition = (barZ - thickness) * 0.5;
@@ -250,25 +269,100 @@ void VANDLEBar::PlacePMTGlass(G4double barZ, G4double thickness)
 	new G4PVPlacement( 0, placement, glassLogic, 
 	                   "PMTGlassPhysical", barLogic, 0, 0 );
 	
+	G4RotationMatrix* rot = new G4RotationMatrix();
+	rot->rotateX( 180 * degree );
 	placement = G4ThreeVector(0.0, 0.0, -PMTGlassPosition);
-	new G4PVPlacement( 0, placement, glassLogic, 
+	new G4PVPlacement( rot, placement, glassLogic, 
 	                   "PMTGlassPhysical", barLogic, 0, 1 );
 
 }
 
-void VANDLEBar::PlacePMT(G4double barZ, G4double thickness)
+
+
+void VANDLEBar::MakePMTShell(G4double thickness, G4double outerRad, G4double length)
 {
-	const G4double PMTPosition = (barZ + thickness) * 0.5;
+	G4double innerRadius = outerRad - thickness;
+	G4double outerRadius = outerRad;
+	G4double startPhi = 0.0 * degree;
+	G4double deltaPhi = 360.0 * degree;
+	G4double halfLength = length/2.;
+	
+
+	G4Tubs* PMTSolid = new G4Tubs("PMTSolid", innerRadius, outerRadius, 
+	                               halfLength, startPhi, deltaPhi);
+	G4Material* PMTMaterial = materialsManager->GetTin();
+	PMTLogic = new G4LogicalVolume( PMTSolid, PMTMaterial, "PMTLogic");
+	
+	G4VisAttributes* visAtt = new G4VisAttributes( G4Colour(0.5,0.5,1.) );
+	visAtt->SetLineWidth(0.1);
+	visAtt->SetForceAuxEdgeVisible(true);
+	visAtt->SetForceSolid(true);
+	PMTLogic->SetVisAttributes(visAtt);
+}
+
+
+void VANDLEBar::PlacePMTShell(G4double barZ, G4double length)
+{
+	const G4double PMTPosition = (barZ + length) * 0.5;
 	
 	G4ThreeVector placement = G4ThreeVector(0.0, 0.0, PMTPosition);
 	new G4PVPlacement( 0, placement, PMTLogic, 
-	                   "PMTGlassPhysical", moduleLogic, 0, 0 );
+	                   "PMTShellPhysical", moduleLogic, 0, 0 );
 	
 	placement = G4ThreeVector(0.0, 0.0, -PMTPosition);
 	new G4PVPlacement( 0, placement, PMTLogic, 
-	                   "PMTGlassPhysical", moduleLogic, 0, 1 );
+	                   "PMTShellPhysical", moduleLogic, 0, 1 );
 
 }
+   
+/*
+void VANDLEBar::SurfaceProperties()
+{
+	
+
+  G4double photonEnergy[] = {2.38*eV, 2.48*eV, 2.58*eV, 2.69*eV,
+                             2.75*eV, 2.82*eV, 2.92*eV, 2.95*eV, 
+                             3.02*eV, 3.10*eV, 3.26*eV, 3.44*eV};
+   //TODO - get this array from materials properties                          
+                             
+  const G4int scintEntries = sizeof(photonEnergy)/sizeof(G4double);
+
+  //**Scintillator housing properties
+  G4double reflectivity[] = {fRefl, fRefl};
+  assert(sizeof(reflectivity) == sizeof(ephoton));
+  G4double efficiency[] = {0.0, 0.0};
+  assert(sizeof(efficiency) == sizeof(ephoton));
+  G4MaterialPropertiesTable* scintHsngPT = new G4MaterialPropertiesTable();
+  scintHsngPT->AddProperty("REFLECTIVITY", ephoton, reflectivity, num);
+  scintHsngPT->AddProperty("EFFICIENCY", ephoton, efficiency, num);
+  G4OpticalSurface* OpScintHousingSurface =
+    new G4OpticalSurface("HousingSurface",unified,polished,dielectric_metal);
+  OpScintHousingSurface->SetMaterialPropertiesTable(scintHsngPT);
+ 
+ 
+  //**Photocathode surface properties
+  G4double photocath_EFF[]={1.,1.}; //Enables 'detection' of photons
+  assert(sizeof(photocath_EFF) == sizeof(ephoton));
+  G4double photocath_ReR[]={1.92,1.92};
+  assert(sizeof(photocath_ReR) == sizeof(ephoton));
+  G4double photocath_ImR[]={1.69,1.69};
+  assert(sizeof(photocath_ImR) == sizeof(ephoton));
+  G4MaterialPropertiesTable* photocath_mt = new G4MaterialPropertiesTable();
+  photocath_mt->AddProperty("EFFICIENCY",ephoton,photocath_EFF,num);
+  photocath_mt->AddProperty("REALRINDEX",ephoton,photocath_ReR,num);
+  photocath_mt->AddProperty("IMAGINARYRINDEX",ephoton,photocath_ImR,num);
+  G4OpticalSurface* photocath_opsurf=
+    new G4OpticalSurface("photocath_opsurf",glisur,polished,
+                         dielectric_metal);
+  photocath_opsurf->SetMaterialPropertiesTable(photocath_mt);
+
+  //**Create logical skin surfaces
+  new G4LogicalSkinSurface("photocath_surf",fHousing_log,
+                           OpScintHousingSurface);
+  new G4LogicalSkinSurface("sphere_surface",fSphere_log,OpSphereSurface);
+  new G4LogicalSkinSurface("photocath_surf",fPhotocath_log,photocath_opsurf);
+}
+*/
 
 /*
 
@@ -385,44 +479,6 @@ void VANDLEBar::PlacePMT(G4double barZ, G4double thickness)
 
 
 /*
-
-void LXeMainVolume::PlacePMTs(G4LogicalVolume* pmt_log,
-                              G4RotationMatrix *rot,
-                              G4double &a, G4double &b, G4double da,
-                              G4double db, G4double amin,
-                              G4double bmin, G4int na, G4int nb,
-                              G4double &x, G4double &y, G4double &z,
-                              G4int &k){
-/*PlacePMTs : a different way to parameterize placement that does not depend on
-  calculating the position from the copy number
-
-  pmt_log = logical volume for pmts to be placed
-  rot = rotation matrix to apply
-  a,b = coordinates to vary(ie. if varying in the xy plane then pass x,y)
-  da,db = value to increment a,b by
-  amin,bmin = start values for a,b
-  na,nb = number of repitions in a and b
-  x,y,z = just pass x,y, and z by reference (the same ones passed for a,b)
-  k = copy number to start with
-  sd = sensitive detector for pmts
-*/
-
-
-/*
-  a=amin;
-  for(G4int j=1;j<=na;j++){
-    a+=da;
-    b=bmin;
-    for(G4int i=1;i<=nb;i++){
-      b+=db;
-      new G4PVPlacement(rot,G4ThreeVector(x,y,z),pmt_log,"pmt",
-                        fHousing_log,false,k);
-      fPmtPositions.push_back(G4ThreeVector(x,y,z));
-      k++;
-    }
-  }
-}
-
 
 void LXeMainVolume::SurfaceProperties(){
   G4double ephoton[] = {7.0*eV, 7.14*eV};
