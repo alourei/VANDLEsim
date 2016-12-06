@@ -43,9 +43,10 @@ class MaterialsManager //MaterialsFactory??
     G4Material* GetAir();
     G4Material* GetBC408();
     G4Material* GetTin();
-    G4Material* GetPMTGlass();
+    G4Material* GetBorosilicate();
     G4Material* GetAluminium();
     G4Material* GetNaI();
+    G4Material* GetBialkali();
 
 
   private:
@@ -57,6 +58,7 @@ class MaterialsManager //MaterialsFactory??
     G4double z;
     G4double density;
     G4int numberElements;
+    G4double massFraction;
   
 	G4Element* H;
 	G4Element* C;
@@ -66,20 +68,25 @@ class MaterialsManager //MaterialsFactory??
 	G4Element* Al;
 	G4Element* Si;
 	G4Element* S;
+	G4Element* K;
 	G4Element* Fe;
 	G4Element* Ni;
 	G4Element* Ag;
 	G4Element* Sn;
+	G4Element* Sb;
 	G4Element* I;
+	G4Element* Cs;
 	G4Element* Pb;
+	G4Element* B;
 	
 	G4Material* vaccum;
 	G4Material* air;
 	G4Material* BC408;
 	G4Material* tin;
-	G4Material* PMTGlass;
+	G4Material* borosilicate;
 	G4Material* aluminium;
 	G4Material* NaI;
+	G4Material* bialkali;
 	
   public:
 	static MaterialsManager *GetInstance()

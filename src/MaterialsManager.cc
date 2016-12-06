@@ -32,27 +32,33 @@
 #include "globals.hh"
 #include "MaterialsManager.hh"
 #include "G4SystemOfUnits.hh"
-    
+#include "G4NistManager.hh"    
 
 MaterialsManager::MaterialsManager()
 {
   CleanUp();
   
-  H  = new G4Element("Hydrogen", "H", z=1., atomicMass =1.008 *g/mole);
-  C  = new G4Element("Carbon", "C",  z=6.,  atomicMass = 12.01*g/mole);
-  N  = new G4Element("Nitrogen", "N",  z=7., atomicMass = 14.01*g/mole);
-  O  = new G4Element("Oxygen", "O",  z=8.,  atomicMass = 16.00*g/mole);
-  Na = new G4Element("Sodium",  "Na", z=11., atomicMass = 22.99*g/mole);
-  Al = new G4Element("Aluminium","Al", z=13., atomicMass = 26.98*g/mole);
-  Si = new G4Element("Silicon"  ,"Si", z=14., atomicMass = 28.09*g/mole);
-  S = new G4Element("Sulfur", "S", z = 16., atomicMass = 32.06*g/mole);
-  Fe = new G4Element("Iron", "Fe", z=26., atomicMass = 55.85*g/mole);
-  Ni = new G4Element("Nickel", "Ni", z=28., atomicMass = 58.69*g/mole);
-  Ag = new G4Element("Silver", "Ag", z = 47., atomicMass = 107.868*g/mole); 
-  Sn  = new G4Element("Tin", "Sn",  z=50., atomicMass = 118.71*g/mole);
-  I  = new G4Element("Iodine", "I",  z=53., atomicMass = 126.9*g/mole);
-  Pb = new G4Element("Lead", "Pb",  z=82., atomicMass = 207.2*g/mole);
+  G4NistManager* man = G4NistManager::Instance();
   
+  H  = man->FindOrBuildElement("H");
+  C  = man->FindOrBuildElement("C");
+  N  = man->FindOrBuildElement("N");
+  O  = man->FindOrBuildElement("O");
+  Na = man->FindOrBuildElement("Na");
+  Al = man->FindOrBuildElement("Al");
+  Si = man->FindOrBuildElement("Si");
+  S = man->FindOrBuildElement("S");
+  K = man->FindOrBuildElement("K");
+  Fe = man->FindOrBuildElement("Fe");
+  Ni = man->FindOrBuildElement("Ni");
+  Ag = man->FindOrBuildElement("Ag");
+  Sn = man->FindOrBuildElement("Sn");
+  Sb = man->FindOrBuildElement("Sb");
+  I = man->FindOrBuildElement("I");
+  Cs = man->FindOrBuildElement("Cs");
+  Pb = man->FindOrBuildElement("Pb");
+  B = man->FindOrBuildElement("B"); 
+
   
 }
 
@@ -62,7 +68,8 @@ void MaterialsManager::CleanUp()
   air = 0L;
   BC408 = 0L;
   tin = 0L;
-  PMTGlass = 0L;
+  borosilicate = 0L;
+  bialkali = 0L;
   aluminium = 0L;
   NaI = 0L;
   
@@ -181,7 +188,7 @@ G4Material* MaterialsManager::GetBC408()
                                      particleEnergy, electronYield, 
                                      energyPoints)->SetSpline(true);
 
-   G4double protonYield[] = { 67.1, 88.6, 120.7, 146.5, 183.8, 246, 
+  G4double protonYield[] = { 67.1, 88.6, 120.7, 146.5, 183.8, 246, 
                               290, 365, 483, 678, 910, 1175, 562, 
                               2385, 3660, 4725, 6250, 8660, 10420, 
                               13270, 17180, 23100, 29500, 36200, 45500 };
@@ -190,7 +197,7 @@ G4Material* MaterialsManager::GetBC408()
                                     particleEnergy, protonYield, 
                                     energyPoints)->SetSpline(true);
   
-   G4double ionYield[] = { 10.4, 12.7, 15.7, 17.9, 20.8, 25.1, 27.9, 
+  G4double ionYield[] = { 10.4, 12.7, 15.7, 17.9, 20.8, 25.1, 27.9, 
                            31.9, 36.8, 43.6, 50.2, 56.9, 65.7, 81.3, 
                            101.6, 116.5, 136.3, 166.15, 187.1, 218.6, 
                            260.54, 323.5, 387.5, 451.54, 539.9 };
@@ -209,27 +216,66 @@ G4Material* MaterialsManager::GetBC408()
 
 G4Material* MaterialsManager::GetTin()
 {
+  if(tin)
+    return tin;
   tin = new G4Material("Tin", density= 7.31*g/cm3, numberElements=1);
   tin->AddElement(Sn, 1);
   return tin;
 }
 
-G4Material* MaterialsManager::GetPMTGlass()
+G4Material* MaterialsManager::GetBorosilicate()
 {
-  PMTGlass = new G4Material("PMTGlass", density= 2.6*g/cm3, 
-                             numberElements=2);
-  PMTGlass->AddElement(Si, 1);
-  PMTGlass->AddElement(O, 2);
-  return PMTGlass;
+  if(borosilicate)
+    return borosilicate;
+  borosilicate = new G4Material("Borosilicate", density= 2.23*g/cm3, 
+                             numberElements=6); 
+  borosilicate->AddElement(B, massFraction=0.040064);
+  borosilicate->AddElement(O, massFraction=0.539562); 
+  borosilicate->AddElement(Na, massFraction=0.028191);
+  borosilicate->AddElement(Al, massFraction=0.011644);
+  borosilicate->AddElement(Si, massFraction=0.377220);
+  borosilicate->AddElement(K, massFraction=0.003321);
+  
+  
+  
+  //optical parameters of Si02 taken from NEXT sim code
+ /* const G4int num = 6;
+  G4double photonEn[] = {2.3*eV, 2.757*eV, 3.102*eV, 3.312*eV, 3.545*eV, 4.136*eV };
+  G4double rIndex[] = {1.54, 1.54, 1.54, 1.54, 1.54, 1.54 };
+  G4double absLenght[] =  {127*cm, 125*cm, 123.5*cm, 122*cm, 121*cm, 120*cm};
+  G4MaterialPropertiesTable* optProperty = new G4MaterialPropertiesTable();
+  optProperty->AddProperty("RINDEX", photonEn, rIndex, num);
+  optProperty->AddProperty("ABSLENGTH", photonEn, absLenght, num);
+  borosilicate->SetMaterialPropertiesTable(optProperty);*/
+  return borosilicate;
 }
+ 
 
+
+  
+  
 G4Material* MaterialsManager::GetAluminium()
 {
+  if(aluminium)
+    return aluminium;
   aluminium = new G4Material("Aluminium", density= 2.7*g/cm3, 
                               numberElements=1);
   aluminium->AddElement(Al, 1);
   return aluminium;
 }
 
-  
+G4Material* MaterialsManager::GetBialkali()
+{
+
+  if(bialkali)
+    return bialkali;
+  bialkali = new G4Material("Bialkali", density= 4.28*g/cm3, 
+                              numberElements=3);
+  bialkali->AddElement(K, massFraction=0.133);
+  bialkali->AddElement(Cs, massFraction=0.452);
+  bialkali->AddElement(Sb, massFraction=0.415); 
+  return bialkali;
+}
+
+
 MaterialsManager *MaterialsManager::s_instance = 0;

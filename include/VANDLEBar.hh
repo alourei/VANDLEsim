@@ -56,9 +56,12 @@ class VANDLEBar : public G4PVPlacement
 	void SetSmallBarSizes();
 	void SetMediumBarSizes();
 	void SetLargeBarSizes();
-    //void SurfaceProperties();
+	                     
 	void MakeModuleLogic(G4double barX, G4double barY, G4double barZ, 
-	                     G4double wrappingThickness, G4double PMTLength);
+                         G4double wrappThickness, G4double PMTRadius,
+                         G4double PMTGlassThickness, G4double PMTLen);
+                                
+                                
 	void MakePlasticBar(G4double barX, G4double barY, G4double barZ);
 
 	void MakeWrapping(G4double barX, G4double barY, G4double barZ, 
@@ -74,6 +77,8 @@ class VANDLEBar : public G4PVPlacement
     void MakePMTShell(G4double thickness, G4double outerRad, G4double length);
     void PlacePMTShell(G4double barZ, G4double length);
     
+    void SetOpticalSurfacesProperties();
+    
     MaterialsManager* materialsManager;
     
     G4double barWidth;
@@ -83,6 +88,7 @@ class VANDLEBar : public G4PVPlacement
 	G4double airThickness;
 
 	G4double PMTRadius;
+	G4double PMTActiveRadius;
 	G4double PMTLength;
 	G4double PMTGlassThickness;
 	G4double PMTShellThickness;

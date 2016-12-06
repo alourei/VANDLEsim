@@ -36,6 +36,7 @@
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 #include "G4Sphere.hh"
+#include "G4SubtractionSolid.hh"
 #include "G4Material.hh"
 #include "G4OpticalSurface.hh"
 #include "G4LogicalSkinSurface.hh"
@@ -70,41 +71,42 @@ VANDLEBar::VANDLEBar(G4RotationMatrix *pRot,
 	materialsManager = MaterialsManager::GetInstance();
 	
 	MakeModuleLogic(barWidth, barHeight, barLength, 
-	                airThickness + reflectiveFoilThickness, PMTLength);
-	
+	                airThickness + reflectiveFoilThickness, PMTRadius,
+	                PMTGlassThickness, PMTLength);
+                         
 	MakeWrapping(barWidth, barHeight, barLength, airThickness,
                  reflectiveFoilThickness);
                  
     const G4ThreeVector zero( 0.0, 0.0, 0.0 );             
     new G4PVPlacement( 0, zero, wrappingLogic, "wrappingPhysical", moduleLogic, 0, 0 );
 	
-	MakeAirLayer(barWidth, barHeight, barLength, airThickness);
-	new G4PVPlacement( 0, zero, airLayerLogic, "airLayerPhysical", wrappingLogic, 0, 0 );
+	//MakeAirLayer(barWidth, barHeight, barLength, airThickness);
+	//new G4PVPlacement( 0, zero, airLayerLogic, "airLayerPhysical", wrappingLogic, 0, 0 );
 	
 	MakePlasticBar(barWidth, barHeight, barLength);
-	new G4PVPlacement( 0, zero, barLogic, "bairPhysical", airLayerLogic, 0, 0 );
+	new G4PVPlacement( 0, zero, barLogic, "bairPhysical", moduleLogic, 0, 0 );
 
 	
 	MakePMTsGlass(PMTRadius, PMTGlassThickness);
-	MakePMTPhotocathode(PMTRadius, PMTPhotocathodeThickness);
+	MakePMTPhotocathode(PMTActiveRadius, PMTPhotocathodeThickness);
 	PlacePMTPhotocathode(PMTGlassThickness, PMTPhotocathodeThickness);
 	PlacePMTGlass(barLength, PMTGlassThickness);
 	
 	MakePMTShell(PMTShellThickness, PMTRadius, PMTLength);
-    PlacePMTShell(barLength, PMTLength);	
+    PlacePMTShell(barLength, PMTLength);
+    SetOpticalSurfacesProperties();	
 	SetLogicalVolume(moduleLogic);
 }
 				
 void VANDLEBar::SetBasicSizes()
 {
-	reflectiveFoilThickness = 0.01*mm;
-	airThickness = 0.01*mm;
+	reflectiveFoilThickness = 0.1*mm;
+	airThickness = 0.1*mm;
 	PMTLength = 10.0*cm;
-	PMTGlassThickness = 2.0*mm;		
-	PMTShellThickness = 1.0*mm;
+	PMTGlassThickness = 4.0*mm;	//1,5	
+	PMTShellThickness = 4.0*mm;
 	PMTPhotocathodeThickness = 1.0*mm;
-	
-	//fD_mtl=0.0635*cm;
+	                             
 }
 
 void VANDLEBar::SetSmallBarSizes()
@@ -112,7 +114,8 @@ void VANDLEBar::SetSmallBarSizes()
 	barWidth = 3.*cm;
 	barHeight = 3.*cm;
 	barLength = 60.*cm;
-	PMTRadius = 1.5*cm;
+	PMTRadius = 1.8*cm;
+	PMTActiveRadius = 1.7*cm;
 }
 
 void VANDLEBar::SetMediumBarSizes()
@@ -120,7 +123,8 @@ void VANDLEBar::SetMediumBarSizes()
 	barWidth = 6.*cm;
 	barHeight = 3.*cm;
 	barLength = 120.*cm;
-	PMTRadius = 1.5*cm;
+	PMTRadius = 2.5*cm;
+	PMTActiveRadius = 2.3*cm;
 }
 
 void VANDLEBar::SetLargeBarSizes()
@@ -129,14 +133,22 @@ void VANDLEBar::SetLargeBarSizes()
 	barHeight = 5.*cm;
 	barLength = 200.*cm;
 	PMTRadius = 2.5*cm;
+	PMTActiveRadius = 2.3*cm;
 }
 
 void VANDLEBar::MakeModuleLogic(G4double barX, G4double barY, G4double barZ, 
-                                G4double wrappThickness, G4double PMTLen)
+                                G4double wrappThickness, G4double PMTRadius,
+                                G4double PMTGlassThickness, G4double PMTLen)
 {
+	
 	G4double halfModuleX = barX/2. + wrappThickness;
+	if(halfModuleX < PMTRadius)
+	    halfModuleX = PMTRadius;
+	
 	G4double halfModuleY = barY/2. + wrappThickness;
-	G4double halfModuleZ = barZ/2. + PMTLen;
+	if(halfModuleY < PMTRadius)
+	    halfModuleY = PMTRadius;
+	G4double halfModuleZ = barZ/2. + PMTLen + PMTGlassThickness;
 	G4Box* moduleSolid = new G4Box("moduleSolid", halfModuleX, halfModuleY, halfModuleZ);
 	
 	G4Material* airMaterial = materialsManager->GetAir();
@@ -154,8 +166,8 @@ void VANDLEBar::MakePlasticBar(G4double barX, G4double barY, G4double barZ)
 	G4VisAttributes* visAtt = new G4VisAttributes( G4Colour(0xFF,0x00,0x00) );
 	visAtt->SetLineWidth(0.1);
 	visAtt->SetForceAuxEdgeVisible(true);
-	//barLogic->SetVisAttributes(visAtt);
-	barLogic->SetVisAttributes(G4VisAttributes::GetInvisible());
+	barLogic->SetVisAttributes(visAtt);
+	//barLogic->SetVisAttributes(G4VisAttributes::GetInvisible());
 } 
 
 
@@ -165,21 +177,36 @@ void VANDLEBar::MakeWrapping(G4double barX, G4double barY,
                              G4double barZ, G4double airThick,
                              G4double wrappThick)
 {
-	G4double halfWrappX = barX/2. + airThick + wrappThick;
-	G4double halfWrappY = barY/2. + airThick + wrappThick;
-	G4double halfWrappZ = barZ/2. ;
-	G4Box* wrappingSolid = new G4Box( "scintillatorSolid", halfWrappX, 
-	                                   halfWrappY, halfWrappZ);
+	G4double halfExtWrappX = barX/2. + airThick + wrappThick;
+	G4double halfExtWrappY = barY/2. + airThick + wrappThick;
+	G4double halfExtWrappZ = barZ/2. ;
+	G4Box* wrappingExteriorSolid = new G4Box( "wrappingExtSolid", 
+	                                         halfExtWrappX, 
+	                                         halfExtWrappY, 
+	                                         halfExtWrappZ);	
+	G4double halfIntWrappX = barX/2. + airThick;
+	G4double halfIntWrappY = barY/2. + airThick;
+	G4double halfIntWrappZ = barZ/2. ;
+	G4Box* wrappingInteriorSolid = new G4Box( "wrappingIntSolid", 
+	                                         halfIntWrappX, 
+	                                         halfIntWrappY, 
+	                                         halfIntWrappZ);
+	const G4ThreeVector position(0., 0., 0.);                                        
+	G4SubtractionSolid* wrappingSolid = new G4SubtractionSolid("wrappingSolid",
+	                                    wrappingExteriorSolid,
+	                                    wrappingInteriorSolid);
+	                                    
 	G4Material* wrappingMaterial = materialsManager->GetAluminium();
 	wrappingLogic = new G4LogicalVolume(wrappingSolid, 
 	                                    wrappingMaterial, 
 	                                    "wrappingLogic");
 	
-	G4VisAttributes* visAtt = new G4VisAttributes( G4Colour(0.,1.,0.) );
-	visAtt->SetLineWidth(0.1);
-	visAtt->SetForceAuxEdgeVisible(true);
+	//G4VisAttributes* visAtt = new G4VisAttributes( G4Colour(0.,1.,0.) );
+	//visAtt->SetLineWidth(0.1);
+	//visAtt->SetForceAuxEdgeVisible(true);
 	//visAtt->SetForceSolid(true);
-	wrappingLogic->SetVisAttributes(visAtt);
+	//wrappingLogic->SetVisAttributes(visAtt);
+	wrappingLogic->SetVisAttributes(G4VisAttributes::GetInvisible());
 }
 
 
@@ -216,7 +243,7 @@ void VANDLEBar::MakePMTsGlass(G4double radius, G4double thickness = 0.001*mm)
 	G4double deltaPhi = 360.0 * degree;
 	G4Tubs* glassSolid = new G4Tubs( "glassSolid", innerRadius, outerRadius, 
 	                                 thickness, startPhi, deltaPhi);
-	G4Material* PMTGlassMaterial = materialsManager->GetPMTGlass();
+	G4Material* PMTGlassMaterial = materialsManager->GetBorosilicate();
 	glassLogic = new G4LogicalVolume(glassSolid, PMTGlassMaterial, "glassLogical");
 	
 	G4VisAttributes* visAtt = new G4VisAttributes( G4Colour(0.5,0.5,1.) );
@@ -237,7 +264,7 @@ void VANDLEBar::MakePMTPhotocathode(G4double radius, G4double thickness)
 	G4Tubs* photocathSolid = new G4Tubs( "photocathSolid", innerRadius, 
 	                                       outerRadius, thickness, startPhi, deltaPhi);
 	                                       
-	G4Material* photocathMaterial = materialsManager->GetTin();
+	G4Material* photocathMaterial = materialsManager->GetBialkali();
 	photocathLogic = new G4LogicalVolume(photocathSolid, photocathMaterial,
 	                                     "photocathLogic");
 	
@@ -263,17 +290,17 @@ void VANDLEBar::PlacePMTPhotocathode(G4double glassThickness, G4double photocath
     
 void VANDLEBar::PlacePMTGlass(G4double barZ, G4double thickness)
 {
-	const G4double PMTGlassPosition = (barZ - thickness) * 0.5;
+	const G4double PMTGlassPosition = (barZ + thickness) * 0.5;
 	
 	G4ThreeVector placement = G4ThreeVector(0.0, 0.0, PMTGlassPosition);
 	new G4PVPlacement( 0, placement, glassLogic, 
-	                   "PMTGlassPhysical", barLogic, 0, 0 );
+	                   "PMTGlassPhysical", moduleLogic, 0, 0 );
 	
 	G4RotationMatrix* rot = new G4RotationMatrix();
 	rot->rotateX( 180 * degree );
 	placement = G4ThreeVector(0.0, 0.0, -PMTGlassPosition);
 	new G4PVPlacement( rot, placement, glassLogic, 
-	                   "PMTGlassPhysical", barLogic, 0, 1 );
+	                   "PMTGlassPhysical", moduleLogic, 0, 1 );
 
 }
 
@@ -290,7 +317,7 @@ void VANDLEBar::MakePMTShell(G4double thickness, G4double outerRad, G4double len
 
 	G4Tubs* PMTSolid = new G4Tubs("PMTSolid", innerRadius, outerRadius, 
 	                               halfLength, startPhi, deltaPhi);
-	G4Material* PMTMaterial = materialsManager->GetTin();
+	G4Material* PMTMaterial = materialsManager->GetBorosilicate();
 	PMTLogic = new G4LogicalVolume( PMTSolid, PMTMaterial, "PMTLogic");
 	
 	G4VisAttributes* visAtt = new G4VisAttributes( G4Colour(0.5,0.5,1.) );
@@ -314,16 +341,107 @@ void VANDLEBar::PlacePMTShell(G4double barZ, G4double length)
 	                   "PMTShellPhysical", moduleLogic, 0, 1 );
 
 }
+
+
+void VANDLEBar::SetOpticalSurfacesProperties()
+{
+	/*TODO make optical photons verification
+	* move photons energies to class fields
+	* move creations of each optical surface to separate method
+	*/ 
+	G4double photonsEn [] = {2.38*eV, 2.48*eV, 2.58*eV, 2.69*eV,
+                             2.75*eV, 2.82*eV, 2.92*eV, 2.95*eV, 
+                             3.02*eV, 3.10*eV, 3.26*eV, 3.44*eV};
+    int scintEntries = 12;
+                             
+    //**Photocathode surface properties                         
+    G4double photocathEfficiency[]={1., 1., 1., 1., 1., 1.,
+		                            1., 1., 1., 1., 1., 1.};
+    assert(sizeof(photocathEfficiency) == sizeof(photonsEn));
+    
+    G4double photocathReflectivity[]={0.2, 0.2, 0.2, 0.2, 0.2, 0.2,
+		                              0.2, 0.2, 0.2, 0.2, 0.2, 0.2};
+    assert(sizeof(photocathReflectivity) == sizeof(photonsEn));
+    
+    
+    G4MaterialPropertiesTable* photocathMatTable = new G4MaterialPropertiesTable();
+    photocathMatTable->AddProperty("EFFICIENCY", photonsEn,
+                                    photocathEfficiency, scintEntries);
+    photocathMatTable->AddProperty("REFLECTIVITY", photonsEn,
+                                   photocathReflectivity, scintEntries);
+    
+    G4OpticalSurface* photocathOpSurf = new G4OpticalSurface("photocathOpSurf");
+    photocathOpSurf->SetModel( unified );
+    photocathOpSurf->SetFinish( polished );
+    photocathOpSurf->SetType( dielectric_metal );		   		
+    photocathOpSurf->SetMaterialPropertiesTable(photocathMatTable);
+    new G4LogicalSkinSurface( "photocathOptSkin", photocathLogic, photocathOpSurf);
+     
+     
+     //** reflective foil properties		                            
+	G4double foilEfficiency[] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+		                          0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+    G4double foilReflectivity[] = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 
+		                            1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+
+
+    G4MaterialPropertiesTable* reflectFoilMatTable = new G4MaterialPropertiesTable();
+	reflectFoilMatTable->AddProperty( "EFFICIENCY", photonsEn, 
+	                                   foilEfficiency, scintEntries );
+	reflectFoilMatTable->AddProperty( "REFLECTIVITY", photonsEn, 
+	                                   foilReflectivity, scintEntries );
+
+		
+	G4OpticalSurface* reflectFoilOpSurf = new G4OpticalSurface("reflectFoilOpSurf");
+	reflectFoilOpSurf->SetType( dielectric_dielectric );
+	reflectFoilOpSurf->SetFinish( polished );
+	reflectFoilOpSurf->SetModel( unified );
+	reflectFoilOpSurf->SetMaterialPropertiesTable(reflectFoilMatTable);
+
+	new G4LogicalSkinSurface( "reflectFoilSkin", wrappingLogic, reflectFoilOpSurf);
+
+
+    //** plastic wall properties
+    //this fragment of code was taken from the Charlie's version
+	G4double angleStandardDev = 0.5;// standard deviation, in radians?, of surface normals. .5 ~28.5 degrees
+	G4double plasticWallrIndex[] = { 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 
+		                             1.58, 1.58, 1.58, 1.58, 1.58, 1.58};
+	G4double plasticWallSpecularLobe[] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+		                                   0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	G4double plasticWallSecularSpike[] = { 0.99, 0.99, 0.99, 0.99,
+		                                   0.99, 0.99, 0.99, 0.99, 
+		                                   0.99, 0.99, 0.99, 0.99};
+		                                   
+	G4double plasticWallBackscatter[] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+		                                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+    //the rest is diffuse lobe
+	G4MaterialPropertiesTable* plasticWallMatTable = new G4MaterialPropertiesTable();
+	plasticWallMatTable->AddProperty( "RINDEX", photonsEn, 
+	                                  plasticWallrIndex, scintEntries );
+	plasticWallMatTable->AddProperty( "SPECULARLOBECONSTANT", photonsEn, 
+	                                  plasticWallSpecularLobe, scintEntries );
+	plasticWallMatTable->AddProperty( "SPECULARSPIKECONSTANT", photonsEn, 
+	                                  plasticWallSpecularLobe, scintEntries );
+	plasticWallMatTable->AddProperty( "BACKSCATTERCONSTANT", photonsEn, 
+	                                   plasticWallBackscatter, scintEntries );
+
+	G4OpticalSurface* plasticWallOpSurf = new G4OpticalSurface("plasticWallOpSurf");
+	plasticWallOpSurf->SetType( dielectric_dielectric );
+	plasticWallOpSurf->SetFinish( polished );
+	plasticWallOpSurf->SetModel( unified );
+	plasticWallOpSurf->SetSigmaAlpha( angleStandardDev );
+	plasticWallOpSurf->SetMaterialPropertiesTable(plasticWallMatTable);
+		
+	new G4LogicalSkinSurface("plasticWallSkin", barLogic, plasticWallOpSurf);
+   
+}
+
+
    
 /*
 void VANDLEBar::SurfaceProperties()
 {
-	
-
-  G4double photonEnergy[] = {2.38*eV, 2.48*eV, 2.58*eV, 2.69*eV,
-                             2.75*eV, 2.82*eV, 2.92*eV, 2.95*eV, 
-                             3.02*eV, 3.10*eV, 3.26*eV, 3.44*eV};
-   //TODO - get this array from materials properties                          
+	                      
                              
   const G4int scintEntries = sizeof(photonEnergy)/sizeof(G4double);
 
@@ -339,22 +457,7 @@ void VANDLEBar::SurfaceProperties()
     new G4OpticalSurface("HousingSurface",unified,polished,dielectric_metal);
   OpScintHousingSurface->SetMaterialPropertiesTable(scintHsngPT);
  
- 
-  //**Photocathode surface properties
-  G4double photocath_EFF[]={1.,1.}; //Enables 'detection' of photons
-  assert(sizeof(photocath_EFF) == sizeof(ephoton));
-  G4double photocath_ReR[]={1.92,1.92};
-  assert(sizeof(photocath_ReR) == sizeof(ephoton));
-  G4double photocath_ImR[]={1.69,1.69};
-  assert(sizeof(photocath_ImR) == sizeof(ephoton));
-  G4MaterialPropertiesTable* photocath_mt = new G4MaterialPropertiesTable();
-  photocath_mt->AddProperty("EFFICIENCY",ephoton,photocath_EFF,num);
-  photocath_mt->AddProperty("REALRINDEX",ephoton,photocath_ReR,num);
-  photocath_mt->AddProperty("IMAGINARYRINDEX",ephoton,photocath_ImR,num);
-  G4OpticalSurface* photocath_opsurf=
-    new G4OpticalSurface("photocath_opsurf",glisur,polished,
-                         dielectric_metal);
-  photocath_opsurf->SetMaterialPropertiesTable(photocath_mt);
+
 
   //**Create logical skin surfaces
   new G4LogicalSkinSurface("photocath_surf",fHousing_log,
@@ -363,118 +466,6 @@ void VANDLEBar::SurfaceProperties()
   new G4LogicalSkinSurface("photocath_surf",fPhotocath_log,photocath_opsurf);
 }
 */
-
-/*
-
-// START ADDING Optical BOUNNDRIES
-	// START REFLECTING FOIL SURFACE
-		const G4int numEntriesFoil = 12;
-// 100% REFLECTIVE
-		G4double rFoil[numEntriesFoil] = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};// For dielectric_metalSurfaces ONLY
-		G4double efficiencyFoil[numEntriesFoil] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};// For dielectric_metalSurfaces ONLY
-
-		G4OpticalSurface* reflectiveFoilOpticalSurface = new G4OpticalSurface("ReflectiveFoilSurface");
-	//	new G4LogicalSkinSurface( "WallPerfectReflectorSkin", m_CellWall_logVol, plasticWallOpticalSurface );
-
-		G4MaterialPropertiesTable* reflectiveFoilBoundry_mt = new G4MaterialPropertiesTable();
-		reflectiveFoilBoundry_mt->AddProperty( "REFLECTIVITY", photonEnergies, rFoil, numEntriesFoil );
-		reflectiveFoilBoundry_mt->AddProperty( "EFFICIENCY", photonEnergies, efficiencyFoil, numEntriesFoil );
-
-		reflectiveFoilOpticalSurface->SetType( dielectric_dielectric );
-		reflectiveFoilOpticalSurface->SetFinish( polished );
-		reflectiveFoilOpticalSurface->SetModel( unified );
-		reflectiveFoilOpticalSurface->SetMaterialPropertiesTable( reflectiveFoilBoundry_mt );
-
-	for( int i = 0; i < numberPMTSizes; ++i )
-	{
-		new G4LogicalSkinSurface( "ReflectiveFoilSkin", m_ModuleTotal_LogicalVolumes[i], reflectiveFoilOpticalSurface );
-	}
-
-	// PMT SURFACE
-		const G4int numEntriesPMT = 12;
-	// These may or may not be well defined numbers...
-		G4double reflectivityPMT[numEntriesPMT] = { 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2};// 80% absorbed and then...
-//		G4double efficiencyPMT[numEntriesPMT] = { 0.25, 0.25 };// 25% of those that are absorbed are detected
-		G4double efficiencyPMT[numEntriesPMT] = { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00};// 100% of those that are absorbed are detected
-
-		G4MaterialPropertiesTable* PMTBoundry_mt = new G4MaterialPropertiesTable();
-		PMTBoundry_mt->AddProperty( "REFLECTIVITY", photonEnergies, reflectivityPMT, numEntriesPMT );
-		PMTBoundry_mt->AddProperty( "EFFICIENCY", photonEnergies, efficiencyPMT, numEntriesPMT );
-
-		G4OpticalSurface* PMTOpticalSurface = new G4OpticalSurface("PMTSurface");
-
-		PMTOpticalSurface->SetType( dielectric_metal );
-		PMTOpticalSurface->SetFinish( polished );
-		PMTOpticalSurface->SetModel( unified );
-		PMTOpticalSurface->SetMaterialPropertiesTable( PMTBoundry_mt );
-		
-//		PMTOpticalSurface->DumpInfo();
-
-	//	new G4LogicalSkinSurface( "WallPerfectReflectorSkin", m_CellWall_logVol, plasticWallOpticalSurface );
-	for( unsigned int i = 0; i < m_PMT_LogicalVolumes.size(); ++i )
-	{
-		new G4LogicalSkinSurface( "PMTSkin", m_PMT_LogicalVolumes[i], PMTOpticalSurface );
-	}
-	// END PMT SURFACE
-// Roughness of plasticwall surface, if not used wall surfaces are perfect.
-	if( m_UseRoughSurfaces && ! m_PerfectPlasticWalls )
-	{
-
-////////// PLASTIC WALL AND SCINTILLATOR SURFACE///////////////////
-
-		const G4int numEntriesPlasticWallScintillator = 12;
-		
-		G4double angleStandardDev = 0.5;// standard deviation, in radians?, of surface normals. .5 ~28.5 degrees
-		G4double nPlasticWall[numEntriesPlasticWallScintillator] = { 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58};
-		G4double specularLobePlasticWall[numEntriesPlasticWallScintillator] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-		G4double specularSpikePlasticWall[numEntriesPlasticWallScintillator] = { 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99};
-		G4double backscatterPlasticWall[numEntriesPlasticWallScintillator] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-	//	G4double diffuseLobePlasticWall[numEntriesPlasticWallScintillator] = { 0.05, 0.05 };// This is set by subtracting the others from 1.0
-
-		G4MaterialPropertiesTable* plasticWallScintillatorBoundry_mt = new G4MaterialPropertiesTable();
-		plasticWallScintillatorBoundry_mt->AddProperty( "RINDEX", photonEnergies, nPlasticWall, numEntriesPlasticWallScintillator );
-		plasticWallScintillatorBoundry_mt->AddProperty( "SPECULARLOBECONSTANT", photonEnergies, specularLobePlasticWall, numEntriesPlasticWallScintillator );
-		plasticWallScintillatorBoundry_mt->AddProperty( "SPECULARSPIKECONSTANT", photonEnergies, specularSpikePlasticWall, numEntriesPlasticWallScintillator );
-		plasticWallScintillatorBoundry_mt->AddProperty( "BACKSCATTERCONSTANT", photonEnergies, backscatterPlasticWall, numEntriesPlasticWallScintillator );
-
-		G4OpticalSurface* plasticWallScintillatorOpticalSurface = new G4OpticalSurface("PlasticWallSurface");
-		plasticWallScintillatorOpticalSurface->SetType( dielectric_dielectric );
-		plasticWallScintillatorOpticalSurface->SetFinish( polished );
-		plasticWallScintillatorOpticalSurface->SetModel( unified );
-		plasticWallScintillatorOpticalSurface->SetSigmaAlpha( angleStandardDev );
-		
-		plasticWallScintillatorOpticalSurface->SetMaterialPropertiesTable( plasticWallScintillatorBoundry_mt );
-		
-//		plasticWallScintillatorOpticalSurface->DumpInfo();
-
-		for( int i = 0; i < numberPMTSizes; ++i )
-		{
-			new G4LogicalSkinSurface( "PlasticWallSkin", m_BC408Cell_LogicalVolumes[i], plasticWallScintillatorOpticalSurface );
-		}
-
-//////// END PLASTIC WALL AND SCINTILLATOR SURFACE///////////
-	}
-
-// END Optical BOUNNDRIES
-
-	}
-}
-
-
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -531,3 +522,6 @@ void LXeMainVolume::SurfaceProperties(){
   new G4LogicalSkinSurface("photocath_surf",fPhotocath_log,photocath_opsurf);
 }
 */
+
+
+//
