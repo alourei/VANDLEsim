@@ -38,6 +38,7 @@ class G4VPhysicalVolume;
 #include "VANDLEBar.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "G4Cache.hh"
+#include "PMTSD.hh"
 #include "MaterialsManager.hh"
 
 class DetectorConstruction : public G4VUserDetectorConstruction
@@ -48,7 +49,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     virtual ~DetectorConstruction();
 
     virtual G4VPhysicalVolume* Construct();
-    //virtual void ConstructSDandField();
+    virtual void ConstructSDandField();
 
   private:
     G4VPhysicalVolume* ConstructDetector();
@@ -59,8 +60,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 	VANDLEBar* vandleBar;
 
     //Sensitive Detectors
-    //G4Cache<ScintSD*> fScint_SD;
-    //G4Cache<PMTSD*> fPmt_SD;
+    G4Cache<PMTSD*> pmtSD;
 
 };
 

@@ -32,7 +32,7 @@
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 //#include "EventAction.hh"
-//#include "SteppingAction.hh"
+#include "SteppingAction.hh"
 //#include "SteppingVerbose.hh"
 
 
@@ -57,7 +57,7 @@ void ActionInitialization::Build() const
 	SetUserAction(new PrimaryGeneratorAction());
 	SetUserAction(new RunAction());
 	//SetUserAction(new EventAction());
-	//SetUserAction(new SteppingAction());
+	SetUserAction(new SteppingAction());
 }
 
 

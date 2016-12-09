@@ -55,7 +55,7 @@ VANDLEBar::VANDLEBar(G4RotationMatrix *pRot,
                  new G4LogicalVolume(new G4Box("temp",1,1,1),
                                      G4Material::GetMaterial("Vacuum"),
                                      "temp",0,0,0),
-                 "housing",pMotherLogical,pMany,pCopyNo)
+                 "VANDLEbar",pMotherLogical,pMany,pCopyNo)
                  
                  
 {
@@ -436,92 +436,3 @@ void VANDLEBar::SetOpticalSurfacesProperties()
    
 }
 
-
-   
-/*
-void VANDLEBar::SurfaceProperties()
-{
-	                      
-                             
-  const G4int scintEntries = sizeof(photonEnergy)/sizeof(G4double);
-
-  //**Scintillator housing properties
-  G4double reflectivity[] = {fRefl, fRefl};
-  assert(sizeof(reflectivity) == sizeof(ephoton));
-  G4double efficiency[] = {0.0, 0.0};
-  assert(sizeof(efficiency) == sizeof(ephoton));
-  G4MaterialPropertiesTable* scintHsngPT = new G4MaterialPropertiesTable();
-  scintHsngPT->AddProperty("REFLECTIVITY", ephoton, reflectivity, num);
-  scintHsngPT->AddProperty("EFFICIENCY", ephoton, efficiency, num);
-  G4OpticalSurface* OpScintHousingSurface =
-    new G4OpticalSurface("HousingSurface",unified,polished,dielectric_metal);
-  OpScintHousingSurface->SetMaterialPropertiesTable(scintHsngPT);
- 
-
-
-  //**Create logical skin surfaces
-  new G4LogicalSkinSurface("photocath_surf",fHousing_log,
-                           OpScintHousingSurface);
-  new G4LogicalSkinSurface("sphere_surface",fSphere_log,OpSphereSurface);
-  new G4LogicalSkinSurface("photocath_surf",fPhotocath_log,photocath_opsurf);
-}
-*/
-
-
-
-/*
-
-void LXeMainVolume::SurfaceProperties(){
-  G4double ephoton[] = {7.0*eV, 7.14*eV};
-  const G4int num = sizeof(ephoton)/sizeof(G4double);
-
-  //**Scintillator housing properties
-  G4double reflectivity[] = {fRefl, fRefl};
-  assert(sizeof(reflectivity) == sizeof(ephoton));
-  G4double efficiency[] = {0.0, 0.0};
-  assert(sizeof(efficiency) == sizeof(ephoton));
-  G4MaterialPropertiesTable* scintHsngPT = new G4MaterialPropertiesTable();
-  scintHsngPT->AddProperty("REFLECTIVITY", ephoton, reflectivity, num);
-  scintHsngPT->AddProperty("EFFICIENCY", ephoton, efficiency, num);
-  G4OpticalSurface* OpScintHousingSurface =
-    new G4OpticalSurface("HousingSurface",unified,polished,dielectric_metal);
-  OpScintHousingSurface->SetMaterialPropertiesTable(scintHsngPT);
- 
-  //**Sphere surface properties
-  G4double sphereReflectivity[] = {1.0, 1.0};
-  assert(sizeof(sphereReflectivity) == sizeof(ephoton));
-  G4double sphereEfficiency[] = {0.0, 0.0};
-  assert(sizeof(sphereEfficiency) == sizeof(ephoton));
-  G4MaterialPropertiesTable* spherePT = new G4MaterialPropertiesTable();
-  spherePT->AddProperty("REFLECTIVITY", ephoton, sphereReflectivity, num);
-  spherePT->AddProperty("EFFICIENCY", ephoton, sphereEfficiency, num);
-  G4OpticalSurface* OpSphereSurface =
-    new G4OpticalSurface("SphereSurface",unified,polished,dielectric_metal);
-  OpSphereSurface->SetMaterialPropertiesTable(spherePT);
- 
-  //**Photocathode surface properties
-  G4double photocath_EFF[]={1.,1.}; //Enables 'detection' of photons
-  assert(sizeof(photocath_EFF) == sizeof(ephoton));
-  G4double photocath_ReR[]={1.92,1.92};
-  assert(sizeof(photocath_ReR) == sizeof(ephoton));
-  G4double photocath_ImR[]={1.69,1.69};
-  assert(sizeof(photocath_ImR) == sizeof(ephoton));
-  G4MaterialPropertiesTable* photocath_mt = new G4MaterialPropertiesTable();
-  photocath_mt->AddProperty("EFFICIENCY",ephoton,photocath_EFF,num);
-  photocath_mt->AddProperty("REALRINDEX",ephoton,photocath_ReR,num);
-  photocath_mt->AddProperty("IMAGINARYRINDEX",ephoton,photocath_ImR,num);
-  G4OpticalSurface* photocath_opsurf=
-    new G4OpticalSurface("photocath_opsurf",glisur,polished,
-                         dielectric_metal);
-  photocath_opsurf->SetMaterialPropertiesTable(photocath_mt);
-
-  //**Create logical skin surfaces
-  new G4LogicalSkinSurface("photocath_surf",fHousing_log,
-                           OpScintHousingSurface);
-  new G4LogicalSkinSurface("sphere_surface",fSphere_log,OpSphereSurface);
-  new G4LogicalSkinSurface("photocath_surf",fPhotocath_log,photocath_opsurf);
-}
-*/
-
-
-//

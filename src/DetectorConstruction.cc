@@ -108,27 +108,21 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
   //call VANDLEBar fabric method
     vandleBar
       = new VANDLEBar(0,G4ThreeVector(),experimentalHallLogic,false,0,1);
-
+   //it has to be Logic Vol type, not Physical Vol!!!!! TODO!!!
 
   return experimentalHallPhys;
 }
 
 
-//void DetectorConstruction::ConstructSDandField() 
-//{
-
-  /*if (!fMainVolume) return;
-
+void DetectorConstruction::ConstructSDandField() 
+{
   // PMT SD
 
-  if (!fPmt_SD.Get()) {
+  if (!pmtSD.Get()) {
     //Created here so it exists as pmts are being placed
-    G4cout << "Construction /LXeDet/pmtSD" << G4endl;
-    LXePMTSD* pmt_SD = new LXePMTSD("/LXeDet/pmtSD");
-    fPmt_SD.Put(pmt_SD);
-
-    pmt_SD->InitPMTs((fNx*fNy+fNx*fNz+fNy*fNz)*2); //let pmtSD know # of pmts
-    pmt_SD->SetPmtPositions(fMainVolume->GetPmtPositions());
+    G4cout << "Construction /VANDLEDet/pmtSD" << G4endl;
+    PMTSD* pmtSDSingle = new PMTSD("/VANDLEDet/pmtSD", 1, 2);
+    pmtSD.Put(pmtSDSingle);
   }
 
   //sensitive detector is not actually on the photocathode.
@@ -138,15 +132,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
   //logical volume.
   //It does however need to be attached to something or else it doesnt get
   //reset at the begining of events
-
-  SetSensitiveDetector(fMainVolume->GetLogPhotoCath(), fPmt_SD.Get());
-
-  // Scint SD
-
-  if (!fScint_SD.Get()) {
-    G4cout << "Construction /LXeDet/scintSD" << G4endl;
-    LXeScintSD* scint_SD = new LXeScintSD("/LXeDet/scintSD");
-    fScint_SD.Put(scint_SD);
-  }
-  SetSensitiveDetector(fMainVolume->GetLogScint(), fScint_SD.Get());*/
-//}
+  
+  SetSensitiveDetector(vandleBar->GetPMTLogical(), pmtSD.Get());
+}

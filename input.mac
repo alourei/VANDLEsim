@@ -1,0 +1,12 @@
+/control/verbose 1
+/run/verbose 2
+/process/verbose 0
+/tracking/verbose 0
+/vis/verbose 0
+/event/verbose 0
+/material/verbose 0
+/random/resetEngineFrom currentEvent.rndm
+/random/setSavingFlag true
+/gun/particle neutron
+/gun/energy 100 keV
+/run/beamOn 10

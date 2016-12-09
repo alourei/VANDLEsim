@@ -47,8 +47,8 @@ class VANDLEBar : public G4PVPlacement
                  G4int pCopyNo,
                  G4int size);
                  
-    G4LogicalVolume* GetScintilatorLogical();
-    G4LogicalVolume* GetPMTLogical();
+    G4LogicalVolume* GetScintilatorLogical() {return barLogic;}
+    G4LogicalVolume* GetPMTLogical() {return photocathLogic;}
 
   private:
   

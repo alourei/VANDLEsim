@@ -24,5 +24,11 @@ public:
 class ParserException : public IOException {
 public:
     ParserException(const string msg = 0) : IOException(msg) {} 
+};    
+    
+class InvalidArgumentException : public Exception {
+public:
+    InvalidArgumentException(const string msg = 0) : Exception(msg) {} 
+
 };
 #endif

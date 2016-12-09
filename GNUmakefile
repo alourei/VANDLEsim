@@ -1,6 +1,6 @@
-# $Id: GNUmakefile 68752 2013-04-05 10:23:47Z gcosmo $
+# $Id: GNUmakefile 12.07.2016 A.Fijalkowska $
 # --------------------------------------------------------------
-# GNUmakefile for LXe example.
+# GNUmakefile for VANDLE simmulation proj.
 # --------------------------------------------------------------
 
 name := VANDLE
