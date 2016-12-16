@@ -9,7 +9,7 @@
 
 #include "globals.hh"
 #include "G4UserSteppingAction.hh"
-//#include "G4OpBoundaryProcess.hh"
+#include "G4OpBoundaryProcess.hh"
 
 
 class SteppingAction : public G4UserSteppingAction
@@ -22,9 +22,9 @@ class SteppingAction : public G4UserSteppingAction
 
  
   private:
-
-
-    //G4OpBoundaryProcessStatus fExpectedNextStatus;
+     //G4ThreadLocal G4OpBoundaryProcess* FindBoundaryProcess(const G4Step*);
+     void PrintStep(const G4Step*);
+    G4OpBoundaryProcessStatus expectedNextStatus;
 };
 
 #endif

@@ -49,10 +49,13 @@ class EventAction : public G4UserEventAction
 
     virtual void BeginOfEventAction(const G4Event*);
     virtual void EndOfEventAction(const G4Event*);
-
+    void SetForceDrawPhotons(G4bool b){forceDrawPhotons = b;}
+    void SetForceDrawNoPhotons(G4bool b){forceNoPhotons = b;}
 
   private:
-
+    G4bool forceDrawPhotons;
+    G4bool forceNoPhotons;
+    G4int  pmtCollID;
 
 };
 

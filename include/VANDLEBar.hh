@@ -58,8 +58,8 @@ class VANDLEBar : public G4PVPlacement
 	void SetLargeBarSizes();
 	                     
 	void MakeModuleLogic(G4double barX, G4double barY, G4double barZ, 
-                         G4double wrappThickness, G4double PMTRadius,
-                         G4double PMTGlassThickness, G4double PMTLen);
+                         G4double wrappThickness, G4double PMTRadiusVal,
+                         G4double PMTGlassThicknessVal, G4double PMTLen);
                                 
                                 
 	void MakePlasticBar(G4double barX, G4double barY, G4double barZ);

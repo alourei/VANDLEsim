@@ -41,7 +41,7 @@ class PMTHit : public G4VHit
     inline G4int GetModuleIndex() { return moduleIndex; }
     G4double GetTime(G4int hitNr);
 	G4double GetEnergyDeposit(G4int hitNr);
-	inline G4int GetHitsNr() {return hitsNr;}
+	inline G4int GetPhotonsCounts() {return hitsNr;}
 	
 	
   private:

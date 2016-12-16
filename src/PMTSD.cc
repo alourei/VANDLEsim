@@ -18,15 +18,14 @@
 #include "G4ParticleDefinition.hh"
 
 
-PMTSD::PMTSD(G4String name, G4int moduleDephVal, G4int pmtDephVal)
-  : G4VSensitiveDetector(name), pmtDeph(pmtDephVal), moduleDeph(moduleDephVal)
+PMTSD::PMTSD(G4String name)
+  : G4VSensitiveDetector(name), moduleDeph(0), pmtDeph(0)
 {
   collectionName.insert("pmtHitCollection");
 }
 
 
 PMTSD::~PMTSD() {}
-
 
 
 void PMTSD::Initialize(G4HCofThisEvent* hitsCE)
@@ -41,6 +40,11 @@ void PMTSD::Initialize(G4HCofThisEvent* hitsCE)
 }
 
 G4bool PMTSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
+{
+	return false;
+}
+
+G4bool PMTSD::ProcessHitsConstStep(const G4Step* aStep, G4TouchableHistory* )
 {
   
   //is it a place for op boundary processes selection?
@@ -79,25 +83,25 @@ G4bool PMTSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
   return true;
 }
 
-G4int PMTSD::GetIndex(G4Step* aStep, int deph)
+G4int PMTSD::GetIndex(const G4Step* aStep, int deph)
 {
 	G4int voulmeNr =
     aStep->GetPostStepPoint()->GetTouchable()->GetReplicaNumber(deph);
 	return voulmeNr;
 }
 
-G4double PMTSD::GetEnergyDeposit(G4Step* aStep)
+G4double PMTSD::GetEnergyDeposit(const G4Step* aStep)
 {
 	return aStep->GetTotalEnergyDeposit();	
 }
 
-G4double PMTSD::GetHitTime(G4Step* aStep)
+G4double PMTSD::GetHitTime(const G4Step* aStep)
 {
     G4StepPoint* postStepPoint = aStep->GetPostStepPoint();
     return postStepPoint->GetGlobalTime();
 }
 
-G4LogicalVolume* PMTSD::GetHitLogVol(G4Step* aStep)
+G4LogicalVolume* PMTSD::GetHitLogVol(const G4Step* aStep)
 {
 	G4LogicalVolume* hitLogVol =
     aStep->GetPostStepPoint()->GetTouchable()->GetVolume()->GetLogicalVolume();

@@ -23,19 +23,23 @@ class PMTSD : public G4VSensitiveDetector
 
   public:
 
-    PMTSD(G4String name, G4int moduleDeph, G4int pmtDeph);
+    PMTSD(G4String name);
     virtual ~PMTSD();
  
     virtual void Initialize(G4HCofThisEvent* );
     virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* );
+    virtual G4bool ProcessHitsConstStep(const G4Step* aStep, G4TouchableHistory* );
     virtual void EndOfEvent(G4HCofThisEvent* );
     virtual void clear();
-
+    void SetPMTDeph(G4int pmtDephVal) {pmtDeph = pmtDephVal;}
+    void SetModuleDeph(G4int moduleDephVal) {moduleDeph = moduleDephVal;}
+    
   private:
-    G4int GetIndex(G4Step* aStep, int deph);
-    G4double GetEnergyDeposit(G4Step* aStep);
-    G4double GetHitTime(G4Step* aStep);
-    G4LogicalVolume* GetHitLogVol(G4Step* aStep);
+
+    G4int GetIndex(const G4Step* aStep, int deph);
+    G4double GetEnergyDeposit(const G4Step* aStep);
+    G4double GetHitTime(const G4Step* aStep);
+    G4LogicalVolume* GetHitLogVol(const G4Step* aStep);
     PMTHitsCollection* pmtHitCollection;
     G4int pmtDeph;
     G4int moduleDeph;

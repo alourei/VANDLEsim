@@ -1,29 +1,5 @@
 //
-// ********************************************************************
-// * License and Disclaimer                                           *
-// *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
-// *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
-// ********************************************************************
-//
-// $Id: LXeDetectorConstruction.cc 82853 2014-07-14 09:07:11Z gcosmo $
+// $Id: DetectorConstruction.cc 12.16.2016 A. Fijalkowska $
 //
 /// \file DetectorConstruction.cc
 /// \brief DetectorConstruction class
@@ -121,7 +97,9 @@ void DetectorConstruction::ConstructSDandField()
   if (!pmtSD.Get()) {
     //Created here so it exists as pmts are being placed
     G4cout << "Construction /VANDLEDet/pmtSD" << G4endl;
-    PMTSD* pmtSDSingle = new PMTSD("/VANDLEDet/pmtSD", 1, 2);
+    PMTSD* pmtSDSingle = new PMTSD("/VANDLEDet/pmtSD");
+    pmtSDSingle->SetModuleDeph(1);
+    pmtSDSingle->SetPMTDeph(2);
     pmtSD.Put(pmtSDSingle);
   }
 

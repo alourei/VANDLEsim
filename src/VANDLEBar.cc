@@ -137,18 +137,18 @@ void VANDLEBar::SetLargeBarSizes()
 }
 
 void VANDLEBar::MakeModuleLogic(G4double barX, G4double barY, G4double barZ, 
-                                G4double wrappThickness, G4double PMTRadius,
-                                G4double PMTGlassThickness, G4double PMTLen)
+                                G4double wrappThickness, G4double PMTRadiusVal,
+                                G4double PMTGlassThicknessVal, G4double PMTLen)
 {
 	
 	G4double halfModuleX = barX/2. + wrappThickness;
-	if(halfModuleX < PMTRadius)
-	    halfModuleX = PMTRadius;
+	if(halfModuleX < PMTRadiusVal)
+	    halfModuleX = PMTRadiusVal;
 	
 	G4double halfModuleY = barY/2. + wrappThickness;
-	if(halfModuleY < PMTRadius)
-	    halfModuleY = PMTRadius;
-	G4double halfModuleZ = barZ/2. + PMTLen + PMTGlassThickness;
+	if(halfModuleY < PMTRadiusVal)
+	    halfModuleY = PMTRadiusVal;
+	G4double halfModuleZ = barZ/2. + PMTLen + PMTGlassThicknessVal;
 	G4Box* moduleSolid = new G4Box("moduleSolid", halfModuleX, halfModuleY, halfModuleZ);
 	
 	G4Material* airMaterial = materialsManager->GetAir();
@@ -421,7 +421,7 @@ void VANDLEBar::SetOpticalSurfacesProperties()
 	plasticWallMatTable->AddProperty( "SPECULARLOBECONSTANT", photonsEn, 
 	                                  plasticWallSpecularLobe, scintEntries );
 	plasticWallMatTable->AddProperty( "SPECULARSPIKECONSTANT", photonsEn, 
-	                                  plasticWallSpecularLobe, scintEntries );
+	                                  plasticWallSecularSpike, scintEntries );
 	plasticWallMatTable->AddProperty( "BACKSCATTERCONSTANT", photonsEn, 
 	                                   plasticWallBackscatter, scintEntries );
 
