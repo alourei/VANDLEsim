@@ -31,6 +31,7 @@
 //
 #include "EventAction.hh"
 #include "PMTHit.hh"
+#include "ScintillatorHit.hh"
 #include "AnalysisManager.hh"
 #include "Trajectory.hh"
 
@@ -51,6 +52,7 @@ EventAction::EventAction()
   forceDrawPhotons = true;
   forceNoPhotons = false;
   pmtCollID = -1;
+  scintillatorCollID = -1;
 }
  
 EventAction::~EventAction(){}
@@ -63,23 +65,50 @@ void EventAction::BeginOfEventAction(const G4Event* anEvent)
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   if(pmtCollID < 0)
     pmtCollID=SDman->GetCollectionID("pmtHitCollection");
+   if(scintillatorCollID < 0) 
+    scintillatorCollID=SDman->GetCollectionID("scintillatorHitCollection");
 
 }
  
 
 void EventAction::EndOfEventAction(const G4Event* anEvent)
 {
-
-  
+	
   G4int eventID = anEvent->GetEventID();
 // periodic printing every 100 events
   if( eventID % 100 == 0 )
   {
     G4cout << "Finished Running Event # " << eventID << G4endl;
   }
-	
-	
-	
+  
+  
+  //sensitive detectores
+  PMTHitsCollection* pmtHC = 0;
+  ScintillatorHitsCollection* scintHC = 0;
+  G4HCofThisEvent* hitsCE = anEvent->GetHCofThisEvent();
+  //Get the hit collections
+  if(hitsCE)
+  {
+    if(pmtCollID >= 0)
+       pmtHC = (PMTHitsCollection*)( hitsCE->GetHC(pmtCollID) );
+    if(scintillatorCollID >= 0)
+       scintHC = (ScintillatorHitsCollection*)( hitsCE->GetHC(scintillatorCollID) );
+  }
+
+  //G4cout << "!!!! scintillatorCollID " << scintillatorCollID << G4endl;
+   AnalysisManager* analysisManager = AnalysisManager::GetInstance();
+  if(pmtHC)
+  {
+      analysisManager->AddHit(pmtHC, eventID);
+  }
+  
+  if(scintHC)
+  {
+      analysisManager->AddHit(scintHC, eventID);
+  }
+
+/*  
+  //print trajectories - TDOD method
   G4TrajectoryContainer* trajectoryContainer=anEvent->GetTrajectoryContainer();
  
   G4int n_trajectories = 0;
@@ -96,24 +125,8 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
       }
       trj->DrawTrajectory();
     }
-  }
+  }*/
 
 
-//sensitive detectores
-  PMTHitsCollection* pmtHC = 0;
-  G4HCofThisEvent* hitsCE = anEvent->GetHCofThisEvent();
-  AnalysisManager* analysisManager = AnalysisManager::GetInstance();
-  //Get the hit collections
-  if(hitsCE)
-  {
-    if(pmtCollID>=0)
-        pmtHC = (PMTHitsCollection*)( hitsCE->GetHC(pmtCollID) );
-  }
-
- 
-  if(pmtHC)
-  {
-      analysisManager->AddHit(pmtHC, eventID);
-  }
 	
 }

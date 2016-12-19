@@ -14,6 +14,7 @@ class G4VPhysicalVolume;
 #include "G4VUserDetectorConstruction.hh"
 #include "G4Cache.hh"
 #include "PMTSD.hh"
+#include "ScintillatorSD.hh"
 #include "MaterialsManager.hh"
 
 class DetectorConstruction : public G4VUserDetectorConstruction
@@ -36,7 +37,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
     //Sensitive Detectors
     G4Cache<PMTSD*> pmtSD;
-
+    G4Cache<ScintillatorSD*> scintillatorSD;
 };
 
 #endif

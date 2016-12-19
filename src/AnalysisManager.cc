@@ -36,20 +36,20 @@ void AnalysisManager::CreateTuple()
    //analysisManager->SetHistoDirectoryName("histograms");
    //analysisManager->SetNtupleDirectoryName("ntuple");
    CreatePMTTuple();
+   CreateScintilatorTuple();
 	
 }
 
 void AnalysisManager::CreatePMTTuple()
 {
   rootManager->CreateNtuple("OptPhotons", "Detected photons");
-  rootManager->CreateNtupleDColumn("eventID");//D - double
-  rootManager->CreateNtupleDColumn("detID");
-  rootManager->CreateNtupleDColumn("pmtID");
+  rootManager->CreateNtupleIColumn("eventID");//D - double, I - int
+  rootManager->CreateNtupleIColumn("detID");
+  rootManager->CreateNtupleIColumn("pmtID");
   rootManager->CreateNtupleDColumn("time");
-  rootManager->CreateNtupleDColumn("energy");
+  rootManager->CreateNtupleDColumn("enDep");
   rootManager->FinishNtuple();
-  nrOfCreatedTuple ++;
-  optPhTupleId = nrOfCreatedTuple;
+  optPhTupleId = nrOfCreatedTuple++;
 /*  analysisManager->CreateNtuple("OptPhotonsSum", "Nr of detected photons");
   analysisManager->CreateNtupleDColumn("eventID");
   analysisManager->CreateNtupleDColumn("detID");
@@ -62,7 +62,16 @@ void AnalysisManager::CreatePMTTuple()
 
 void AnalysisManager::CreateScintilatorTuple()
 {
-	//TODO	
+   rootManager->CreateNtuple("ScintIntersct", "Particle interactions in scint");
+   rootManager->CreateNtupleIColumn("eventID");
+   rootManager->CreateNtupleIColumn("detID");
+   rootManager->CreateNtupleDColumn("time");
+   rootManager->CreateNtupleDColumn("enDep");
+   rootManager->CreateNtupleDColumn("xPos");
+   rootManager->CreateNtupleDColumn("yPos");
+   rootManager->CreateNtupleDColumn("zPos");
+   rootManager->FinishNtuple();
+   scintTupleId = nrOfCreatedTuple++;
 }
 
 
@@ -74,21 +83,51 @@ void AnalysisManager::AddHit(PMTHitsCollection* pmtHC, G4int eventId)
 	   G4int moduleIndex = (*pmtHC)[i]->GetModuleIndex();
 	   G4int pmtIndex = (*pmtHC)[i]->GetPMTIndex();
 	   G4int photonsCounts = (*pmtHC)[i]->GetPhotonsCounts();
-	   for(G4int photonNr=0; photonNr != photonsCounts; photonsCounts++)
+	   for(G4int photonNr=0; photonNr != photonsCounts; photonNr++)
        {
 		   G4double energyDep = (*pmtHC)[i]->GetEnergyDeposit(photonNr);
 		   G4double time = (*pmtHC)[i]->GetTime(photonNr);
 		   
 		   //ugly way to fill tuple forced by G4RootAnalysisManager
 		   int colId = 0;
-		   rootManager->FillNtupleDColumn(optPhTupleId, colId, eventId); 
-		   rootManager->FillNtupleDColumn(optPhTupleId, colId++, moduleIndex);
-		   rootManager->FillNtupleDColumn(optPhTupleId, colId++, pmtIndex);
-		   rootManager->FillNtupleDColumn(optPhTupleId, colId++, time);
-		   rootManager->FillNtupleDColumn(optPhTupleId, colId++, energyDep);
+		   rootManager->FillNtupleIColumn(optPhTupleId, colId, eventId); 
+		   rootManager->FillNtupleIColumn(optPhTupleId, ++colId, moduleIndex);
+		   rootManager->FillNtupleIColumn(optPhTupleId, ++colId, pmtIndex);
+		   rootManager->FillNtupleDColumn(optPhTupleId, ++colId, time);
+		   rootManager->FillNtupleDColumn(optPhTupleId, ++colId, energyDep);
 		   rootManager->AddNtupleRow(optPhTupleId);
 	   }
     }	
 }
 
+
+void AnalysisManager::AddHit(ScintillatorHitsCollection* scintHC, G4int eventId)
+{
+    G4int modules = scintHC->entries();
+    for(G4int i=0; i != modules; i++)
+    {
+	   G4int moduleIndex = (*scintHC)[i]->GetModuleIndex();
+	   G4int nrOfInteractions = (*scintHC)[i]->GetNrOfInteractions();
+	   for(G4int interact=0; interact != nrOfInteractions; interact++)
+       {
+		   G4double energyDep = (*scintHC)[i]->GetEnergyDeposit(interact);
+		   G4double time = (*scintHC)[i]->GetTime(interact);
+		   G4double xPos = (*scintHC)[i]->GetxPos(interact);
+		   G4double yPos = (*scintHC)[i]->GetyPos(interact);
+		   G4double zPos = (*scintHC)[i]->GetzPos(interact);
+		   int colId = 0;
+		   rootManager->FillNtupleIColumn(scintTupleId, colId, eventId); 
+		   rootManager->FillNtupleIColumn(scintTupleId, ++colId, moduleIndex);
+		   rootManager->FillNtupleDColumn(scintTupleId, ++colId, time);
+		   rootManager->FillNtupleDColumn(scintTupleId, ++colId, energyDep);
+		   rootManager->FillNtupleDColumn(scintTupleId, ++colId, xPos);		   
+		   rootManager->FillNtupleDColumn(scintTupleId, ++colId, yPos);
+		   rootManager->FillNtupleDColumn(scintTupleId, ++colId, zPos);		   
+		   rootManager->AddNtupleRow(scintTupleId);
+	   }
+    }	
+}
+
+	
+	
 AnalysisManager *AnalysisManager::s_instance = 0;

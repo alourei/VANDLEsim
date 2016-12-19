@@ -27,7 +27,9 @@ RunAction::RunAction(): G4UserRunAction()
 
 RunAction::~RunAction()
 {
-   delete timer;  
+   delete timer;
+   AnalysisManager* analysisManager = AnalysisManager::GetInstance();
+   analysisManager->SaveOutput();  
 }
 
 void RunAction::BeginOfRunAction(const G4Run* run)
@@ -44,8 +46,6 @@ void RunAction::EndOfRunAction(const G4Run* run)
    G4cout << "number of event = " << run->GetNumberOfEvent() 
           << " " << *timer << G4endl;
          
-   AnalysisManager* analysisManager = AnalysisManager::GetInstance();
-   analysisManager->SaveOutput();
 
 }
 

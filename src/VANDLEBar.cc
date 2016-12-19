@@ -84,7 +84,7 @@ VANDLEBar::VANDLEBar(G4RotationMatrix *pRot,
 	//new G4PVPlacement( 0, zero, airLayerLogic, "airLayerPhysical", wrappingLogic, 0, 0 );
 	
 	MakePlasticBar(barWidth, barHeight, barLength);
-	new G4PVPlacement( 0, zero, barLogic, "bairPhysical", moduleLogic, 0, 0 );
+	new G4PVPlacement( 0, zero, barLogic, "barPhysical", moduleLogic, 0, 0 );
 
 	
 	MakePMTsGlass(PMTRadius, PMTGlassThickness);

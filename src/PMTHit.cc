@@ -36,6 +36,7 @@ PMTHit::PMTHit(const PMTHit &right) : G4VHit()
    drawIt = right.drawIt;
    time = right.time;
    energyDep = right.energyDep;
+   logVol = right.logVol;
 }
 
 
@@ -46,6 +47,7 @@ const PMTHit& PMTHit::operator=(const PMTHit &right){
    drawIt = right.drawIt;
    time = right.time;
    energyDep = right.energyDep;
+   logVol = right.logVol;
    return *this;
 }
 

@@ -56,6 +56,7 @@ class EventAction : public G4UserEventAction
     G4bool forceDrawPhotons;
     G4bool forceNoPhotons;
     G4int  pmtCollID;
+    G4int  scintillatorCollID;
 
 };
 

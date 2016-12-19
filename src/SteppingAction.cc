@@ -37,7 +37,7 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep)
 	
 	//UserTrackInformation* trackInformation
     //=(UserTrackInformation*)theTrack->GetUserInformation(); 
-    
+  //PrintStep(theStep);  
 
   G4Track* theTrack = theStep->GetTrack();
   if ( theTrack->GetCurrentStepNumber() == 1 ) expectedNextStatus = Undefined;
@@ -165,14 +165,16 @@ void SteppingAction::PrintStep(const G4Step* theStep)
    G4Track* theTrack = theStep->GetTrack();
    G4String processName =theStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
    G4String particleName = theTrack->GetDefinition()->GetParticleName();  
-   G4VPhysicalVolume* volume = theTrack -> GetVolume();    
-   G4String volumeName = volume -> GetName();
+   G4VPhysicalVolume* volume = theTrack->GetVolume();    
+   G4String volumeName = volume->GetName();
+   G4double deltaEn = theStep->GetDeltaEnergy();
   
-   if(strcmp(volumeName, "VANDLEbar") == 0 )
+   //if(strcmp(volumeName, "VANDLEbar") == 0 )
+   if(strcmp(particleName, "neutron") == 0 )
    {
-	 std::cout << " name: " << particleName 
-			   << " particle: " << particleName
+	 std::cout << " particle: " << particleName
 		       << " process: " << processName
+		       << " delta en: " << deltaEn
 		       << " voulme name: " << volumeName << std::endl;
     }
 }

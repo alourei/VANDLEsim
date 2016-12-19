@@ -93,12 +93,12 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 void DetectorConstruction::ConstructSDandField() 
 {
   // PMT SD
-
-  if (!pmtSD.Get()) {
+  if (!pmtSD.Get()) 
+  {
     //Created here so it exists as pmts are being placed
     G4cout << "Construction /VANDLEDet/pmtSD" << G4endl;
     PMTSD* pmtSDSingle = new PMTSD("/VANDLEDet/pmtSD");
-    pmtSDSingle->SetModuleDeph(1);
+    pmtSDSingle->SetModuleDeph(1); //TODO - get deph from VANDLE bar
     pmtSDSingle->SetPMTDeph(2);
     pmtSD.Put(pmtSDSingle);
   }
@@ -109,7 +109,17 @@ void DetectorConstruction::ConstructSDandField()
   //boundary to the photocathode (which doesnt get done by attaching it to a
   //logical volume.
   //It does however need to be attached to something or else it doesnt get
-  //reset at the begining of events
-  
+  //reset at the begining of events  
   SetSensitiveDetector(vandleBar->GetPMTLogical(), pmtSD.Get());
+  
+  // Scintillator SD
+   if (!scintillatorSD.Get()) 
+   {
+    //Created here so it exists as pmts are being placed
+    G4cout << "Construction /VANDLEDet/scintillatorSD" << G4endl;
+    ScintillatorSD* scintillatorSingle = new ScintillatorSD("/VANDLEDet/scintillatorSD");
+    scintillatorSingle->SetModuleDeph(1);
+    scintillatorSD.Put(scintillatorSingle);
+  }
+  SetSensitiveDetector(vandleBar->GetScintilatorLogical(), scintillatorSD.Get());
 }

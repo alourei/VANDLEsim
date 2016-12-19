@@ -17,7 +17,7 @@
 #include "G4RootAnalysisManager.hh"
 #include "G4String.hh"
 #include "PMTHit.hh"
-
+#include "ScintillatorHit.hh"
 
 class AnalysisManager
 {
@@ -26,6 +26,7 @@ class AnalysisManager
 		void CreateOutput(G4String filename);
 		void SaveOutput();
 		void AddHit(PMTHitsCollection* pmtHC, G4int eventId);//? just hit, or hit collection?
+		void AddHit(ScintillatorHitsCollection* pmtHC, G4int eventId);
 		
 	private:
 		AnalysisManager();
@@ -38,6 +39,7 @@ class AnalysisManager
 		G4RootAnalysisManager* rootManager;
 		G4int nrOfCreatedTuple;		
 		G4int optPhTupleId;
+		G4int scintTupleId;
 		
 	public:
 	static AnalysisManager* GetInstance()
