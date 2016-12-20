@@ -41,6 +41,7 @@ class AnalysisManager
 		G4int optPhTupleId;
 		G4int scintTupleId;
 		
+		
 	public:
 	static AnalysisManager* GetInstance()
 	{

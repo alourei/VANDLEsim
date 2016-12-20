@@ -6,7 +6,7 @@
 //
 //
 #include "AnalysisManager.hh"
-
+#include "G4SystemOfUnits.hh"
 AnalysisManager::AnalysisManager()
 {
    rootManager = G4RootAnalysisManager::Instance();	
@@ -94,7 +94,7 @@ void AnalysisManager::AddHit(PMTHitsCollection* pmtHC, G4int eventId)
 		   rootManager->FillNtupleIColumn(optPhTupleId, ++colId, moduleIndex);
 		   rootManager->FillNtupleIColumn(optPhTupleId, ++colId, pmtIndex);
 		   rootManager->FillNtupleDColumn(optPhTupleId, ++colId, time);
-		   rootManager->FillNtupleDColumn(optPhTupleId, ++colId, energyDep);
+		   rootManager->FillNtupleDColumn(optPhTupleId, ++colId, energyDep/keV);
 		   rootManager->AddNtupleRow(optPhTupleId);
 	   }
     }	
@@ -119,7 +119,7 @@ void AnalysisManager::AddHit(ScintillatorHitsCollection* scintHC, G4int eventId)
 		   rootManager->FillNtupleIColumn(scintTupleId, colId, eventId); 
 		   rootManager->FillNtupleIColumn(scintTupleId, ++colId, moduleIndex);
 		   rootManager->FillNtupleDColumn(scintTupleId, ++colId, time);
-		   rootManager->FillNtupleDColumn(scintTupleId, ++colId, energyDep);
+		   rootManager->FillNtupleDColumn(scintTupleId, ++colId, energyDep/keV);
 		   rootManager->FillNtupleDColumn(scintTupleId, ++colId, xPos);		   
 		   rootManager->FillNtupleDColumn(scintTupleId, ++colId, yPos);
 		   rootManager->FillNtupleDColumn(scintTupleId, ++colId, zPos);		   

@@ -53,6 +53,7 @@ class MaterialsManager //MaterialsFactory??
 	MaterialsManager();
 	static MaterialsManager* s_instance;
 	void CleanUp();
+	bool useOptical;
 	
 	G4double atomicMass;
     G4double z;

@@ -32,21 +32,15 @@
 #define VANDLEBar_H 1
 
 #include "G4LogicalVolume.hh"
-#include "G4PVPlacement.hh"
-#include "G4RotationMatrix.hh"
 #include "MaterialsManager.hh"
 
-class VANDLEBar : public G4PVPlacement
+class VANDLEBar
 {
   public:
 
-    VANDLEBar(G4RotationMatrix *pRot,
-                 const G4ThreeVector &tlate,
-                 G4LogicalVolume *pMotherLogical,
-                 G4bool pMany,
-                 G4int pCopyNo,
-                 G4int size);
-                 
+    VANDLEBar(G4int size);
+    
+    G4LogicalVolume* GetModuleLogical() {return moduleLogic;}            
     G4LogicalVolume* GetScintilatorLogical() {return barLogic;}
     G4LogicalVolume* GetPMTLogical() {return photocathLogic;}
 
@@ -67,15 +61,21 @@ class VANDLEBar : public G4PVPlacement
 	void MakeWrapping(G4double barX, G4double barY, G4double barZ, 
 	                  G4double airThickness, G4double wrappingThickness);
 	                  
+	void MakeWrapping(G4double barX, G4double barY, 
+                      G4double barZ, G4double wrappThick); 
+                                      
     void MakeAirLayer(G4double barX, G4double barY, 
                       G4double barZ, G4double airThickness); 
-    void MakePMTsGlass(G4double radius, G4double thickness);
-    void MakePMTPhotocathode(G4double radius, G4double thickness); 
-    void PlacePMTPhotocathode(G4double glassThickness, G4double photocathThickness);        
+    void MakePMTsGlass(G4double radius, G4double thickness, 
+                       G4double barX, G4double barY);
+    void MakePMTPhotocathode(G4double radius, G4double thickness, 
+                             G4double barX, G4double barY);
+    void PlacePMTPhotocathode(G4double glassThickness, 
+                              G4double photocathThickness);        
     void PlacePMTGlass(G4double barZ, G4double thickness);
     
     void MakePMTShell(G4double thickness, G4double outerRad, G4double length);
-    void PlacePMTShell(G4double barZ, G4double length);
+    void PlacePMTShell(G4double barZ, G4double length, G4double foilThickness);
     
     void SetOpticalSurfacesProperties();
     

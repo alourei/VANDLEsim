@@ -45,10 +45,7 @@ G4bool PMTSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
 }
 
 G4bool PMTSD::ProcessHitsConstStep(const G4Step* aStep, G4TouchableHistory* )
-{
-  
-  //is it a place for op boundary processes selection?
-
+{  
   if(aStep->GetTrack()->GetDefinition()
      != G4OpticalPhoton::OpticalPhotonDefinition()) return false;
  

@@ -85,23 +85,9 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep)
   G4ParticleDefinition* particleType = theTrack->GetDefinition();
   if(particleType==G4OpticalPhoton::OpticalPhotonDefinition())
   {
-/*
-    if(thePrePV->GetName()=="VANDLEbar")
-      //force drawing of photons in WLS slab
-      trackInformation->SetForceDrawTrajectory(true);
-    else if(thePostPV->GetName()=="expHall")
-      //Kill photons entering expHall from something other than Slab
-      theTrack->SetTrackStatus(fStopAndKill);
-
-    //Was the photon absorbed by the absorption process
-    if(thePostPoint->GetProcessDefinedStep()->GetProcessName()
-       =="OpAbsorption"){
-      eventInformation->IncAbsorption();
-      trackInformation->AddTrackStatusFlag(absorbed);
-    }*/
-
     boundaryStatus=boundary->GetStatus();
 
+    //PrintStep(theStep, boundaryStatus); 
 
     if(thePostPoint->GetStepStatus()==fGeomBoundary)
     {
@@ -111,7 +97,7 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep)
         if(boundaryStatus!=StepTooSmall)
         {
           G4ExceptionDescription ed;
-          ed << "LXeSteppingAction::UserSteppingAction(): "
+          ed << "SteppingAction::UserSteppingAction(): "
                 << "No reallocation step after reflection!"
                 << G4endl;
           G4Exception("SteppingAction::UserSteppingAction()", "VANDLEProj",
@@ -122,6 +108,8 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep)
       expectedNextStatus=Undefined;
       if (boundaryStatus == Detection) 
       {
+		  
+		 
 		 G4SDManager* SDman = G4SDManager::GetSDMpointer();
          G4String sdName="/VANDLEDet/pmtSD";
          PMTSD* pmtSD = (PMTSD*)SDman->FindSensitiveDetector(sdName);
@@ -160,17 +148,37 @@ G4ThreadLocal G4OpBoundaryProcess* SteppingAction::FindBoundaryProcess(const G4S
   return boundary;	
 }*/
 
-void SteppingAction::PrintStep(const G4Step* theStep)
+void SteppingAction::PrintStep(const G4Step* theStep, G4OpBoundaryProcessStatus boundaryStatus)
 {
-   G4Track* theTrack = theStep->GetTrack();
+
+    switch(boundaryStatus)
+    {
+    case Undefined   : std::cout << "Undefined  ";   break;
+    case Transmission : std::cout << "Transmission  "; break;
+    case FresnelRefraction : std::cout << "FresnelRefraction  "; break;
+    case FresnelReflection : std::cout << "FresnelReflection ";  break;
+    case TotalInternalReflection : std::cout << "TotalInternalReflection ";  break;
+    case LambertianReflection : std::cout << "LambertianReflection ";  break;
+    case LobeReflection  : std::cout << "LobeReflection  ";  break;
+    case SpikeReflection : std::cout << "SpikeReflection ";  break;
+    case BackScattering : std::cout << "BackScattering ";  break;
+    case Absorption : std::cout << "Absorption ";  break;
+    case Detection : std::cout << "Detection ";  break;
+    case NotAtBoundary : std::cout << "NotAtBoundary ";  break;
+    case SameMaterial : std::cout << "SameMaterial ";  break;
+    case StepTooSmall : std::cout << "StepTooSmall ";  break;
+    case NoRINDEX : std::cout << "NoRINDEX ";  break;    
+    } 
+    
+    G4Track* theTrack = theStep->GetTrack();
    G4String processName =theStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
    G4String particleName = theTrack->GetDefinition()->GetParticleName();  
    G4VPhysicalVolume* volume = theTrack->GetVolume();    
    G4String volumeName = volume->GetName();
    G4double deltaEn = theStep->GetDeltaEnergy();
-  
+   
    //if(strcmp(volumeName, "VANDLEbar") == 0 )
-   if(strcmp(particleName, "neutron") == 0 )
+   //if(strcmp(particleName, "neutron") == 0 )
    {
 	 std::cout << " particle: " << particleName
 		       << " process: " << processName

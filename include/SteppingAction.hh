@@ -23,7 +23,7 @@ class SteppingAction : public G4UserSteppingAction
  
   private:
      //G4ThreadLocal G4OpBoundaryProcess* FindBoundaryProcess(const G4Step*);
-     void PrintStep(const G4Step*);
+     void PrintStep(const G4Step*, G4OpBoundaryProcessStatus);
     G4OpBoundaryProcessStatus expectedNextStatus;
 };
 

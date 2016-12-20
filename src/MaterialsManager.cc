@@ -37,7 +37,7 @@
 MaterialsManager::MaterialsManager()
 {
   CleanUp();
-  
+  useOptical = true;
   G4NistManager* man = G4NistManager::Instance();
   
   H  = man->FindOrBuildElement("H");
@@ -93,27 +93,29 @@ G4Material* MaterialsManager::GetAir()
   air = new G4Material("Air", density= 1.29*mg/cm3, numberElements=2);
   air->AddElement(N, 70*perCent);
   air->AddElement(O, 30*perCent);
- 
-  G4MaterialPropertiesTable* airLightProperties = new G4MaterialPropertiesTable();
-  int scintEntriesNum = 12;
-  G4double photonEnergies[] = {2.38*eV, 2.48*eV, 2.58*eV, 2.69*eV, 
-                               2.75*eV, 2.82*eV, 2.92*eV, 2.95*eV, 
-                               3.02*eV, 3.10*eV, 3.26*eV, 3.44*eV};
-                                              
-  G4double rIndex[] = {1.00029, 1.00029, 1.00029, 1.00029, 
-                       1.00029, 1.00029, 1.00029, 1.00029, 
-                       1.00029, 1.00029, 1.00029, 1.00029};
-                                      
-  G4double absLength[] = {100.0*m, 100.0*m, 100.0*m, 
-                          100.0*m, 100.0*m, 100.0*m, 
-                          100.0*m, 100.0*m, 100.0*m, 
-                          100.0*m, 100.0*m, 100.0*m};
   
-  airLightProperties->AddProperty("RINDEX", photonEnergies, rIndex, scintEntriesNum);
-  airLightProperties->AddProperty("ABSLENGTH", photonEnergies, absLength, scintEntriesNum);
+  if(useOptical)
+  {
+     G4MaterialPropertiesTable* airLightProperties = new G4MaterialPropertiesTable();
+     int scintEntriesNum = 12;
+     G4double photonEnergies[] = {2.38*eV, 2.48*eV, 2.58*eV, 2.69*eV, 
+                                  2.75*eV, 2.82*eV, 2.92*eV, 2.95*eV, 
+                                  3.02*eV, 3.10*eV, 3.26*eV, 3.44*eV};
+                                              
+     G4double rIndex[] = {1.00029, 1.00029, 1.00029, 1.00029, 
+                          1.00029, 1.00029, 1.00029, 1.00029, 
+                          1.00029, 1.00029, 1.00029, 1.00029};
+                                      
+     G4double absLength[] = {100.0*m, 100.0*m, 100.0*m, 
+                             100.0*m, 100.0*m, 100.0*m, 
+                             100.0*m, 100.0*m, 100.0*m, 
+                             100.0*m, 100.0*m, 100.0*m};
+  
+     airLightProperties->AddProperty("RINDEX", photonEnergies, rIndex, scintEntriesNum);
+     airLightProperties->AddProperty("ABSLENGTH", photonEnergies, absLength, scintEntriesNum);
 
-  air->SetMaterialPropertiesTable(airLightProperties);
-      
+     air->SetMaterialPropertiesTable(airLightProperties);
+  }    
   return air;
 }
 
@@ -125,91 +127,94 @@ G4Material* MaterialsManager::GetBC408()
   BC408->AddElement(H, 138);//H:C ratio = 1.104
   BC408->AddElement(C, 125);  
   
-  //add light properties (is it a good place?), should I read it from file?
-  G4MaterialPropertiesTable* BC408LightProperties = new G4MaterialPropertiesTable();
+  if(useOptical)
+  {
+     //add light properties (is it a good place?), should I read it from file?
+     G4MaterialPropertiesTable* BC408LightProperties = new G4MaterialPropertiesTable();
   
-  //general properties
-  int scintEntries = 12;
-  G4double photonEnergy[] = {2.38*eV, 2.48*eV, 2.58*eV, 2.69*eV,
-                             2.75*eV, 2.82*eV, 2.92*eV, 2.95*eV, 
-                             3.02*eV, 3.10*eV, 3.26*eV, 3.44*eV};
+     //general properties
+     int scintEntries = 12;
+     G4double photonEnergy[] = {2.38*eV, 2.48*eV, 2.58*eV, 2.69*eV,
+                                2.75*eV, 2.82*eV, 2.92*eV, 2.95*eV, 
+                                3.02*eV, 3.10*eV, 3.26*eV, 3.44*eV};
             
-  G4double rIndex[] = { 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 
-                        1.58, 1.58, 1.58, 1.58, 1.58, 1.58 };
+     G4double rIndex[] = { 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 
+                           1.58, 1.58, 1.58, 1.58, 1.58, 1.58 };
              
-  BC408LightProperties->AddProperty("RINDEX", photonEnergy, 
-                                     rIndex, scintEntries);
+     BC408LightProperties->AddProperty("RINDEX", photonEnergy, 
+                                       rIndex, scintEntries);
   
-  G4double absLength[] = { 3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m, 
-                           3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m};
+     G4double absLength[] = { 3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m, 
+                              3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m};
               
-  BC408LightProperties->AddProperty("ABSLENGTH", photonEnergy, 
-                                     absLength, scintEntries);
+     BC408LightProperties->AddProperty("ABSLENGTH", photonEnergy, 
+                                       absLength, scintEntries);
   
-  G4double photonEmissionFraction = 0.2667; //PMT efficiency (TODO - discuss it)
-  BC408LightProperties->AddConstProperty("SCINTILLATIONYIELD",  
-                                          ( 10000.0 * photonEmissionFraction ) / MeV );
+     G4double photonEmissionFraction = 0.2667; //PMT efficiency (TODO - discuss it)
+     BC408LightProperties->AddConstProperty("SCINTILLATIONYIELD",  
+                                            ( 10000.0 * photonEmissionFraction ) / MeV );
                                            //I guess i don't need it
                                             
-  BC408LightProperties->AddConstProperty("RESOLUTIONSCALE",
-                                         1.0 / sqrt(photonEmissionFraction));
+     BC408LightProperties->AddConstProperty("RESOLUTIONSCALE",
+                                             1.0 / sqrt(photonEmissionFraction));
     
-  //fast component
-  G4double scintilFast[] = { 0.02, 0.09, 0.20, 0.40, 0.55, 0.80, 
-                             1.00, 0.80, 0.50, 0.20, 0.08, 0.02 }; 
+      //fast component
+     G4double scintilFast[] = { 0.02, 0.09, 0.20, 0.40, 0.55, 0.80, 
+                                 1.00, 0.80, 0.50, 0.20, 0.08, 0.02 }; 
             
-  G4double* scintilSlow = scintilFast;//for now
-  BC408LightProperties->AddProperty("FASTCOMPONENT",photonEnergy, 
-                                    scintilFast, scintEntries)->SetSpline(true);
-  BC408LightProperties->AddConstProperty("FASTTIMECONSTANT", 2.1*ns);
+     G4double* scintilSlow = scintilFast;//for now
+     BC408LightProperties->AddProperty("FASTCOMPONENT",photonEnergy, 
+                                        scintilFast, scintEntries)->SetSpline(true);
+     BC408LightProperties->AddConstProperty("FASTTIMECONSTANT", 2.1*ns);
     
-  //slow component - do we have any?    
-  BC408LightProperties->AddProperty("SLOWCOMPONENT",photonEnergy, 
-                                    scintilSlow,scintEntries)->SetSpline(true);
+     //slow component - do we have any?    
+     BC408LightProperties->AddProperty("SLOWCOMPONENT",photonEnergy, 
+                                       scintilSlow,scintEntries)->SetSpline(true);
                                     
-  BC408LightProperties->AddConstProperty("SLOWTIMECONSTANT", 10.*ns);
-  BC408LightProperties->AddConstProperty("YIELDRATIO",1.0); //TODO!!!!! find the value
+     BC408LightProperties->AddConstProperty("SLOWTIMECONSTANT", 10.*ns);
+     BC408LightProperties->AddConstProperty("YIELDRATIO",1.0); //TODO!!!!! find the value
 
-  //light yield - data taken form V.V. Verbinski et al, Nucl. Instrum. & Meth. 65 (1968) 8-25
-  int energyPoints = 25;
-  G4double particleEnergy[] = { 0.1*MeV, 0.13*MeV, 0.17*MeV, 0.2*MeV, 
-                                0.24*MeV, 0.3*MeV, 0.34*MeV, 0.4*MeV, 
-                                0.48*MeV, 0.6*MeV, 0.72*MeV, 0.84*MeV, 
-                                1.*MeV, 1.3*MeV, 1.7*MeV, 2.*MeV, 2.4*MeV, 
-                                3.*MeV, 3.4*MeV, 4.*MeV, 4.8*MeV, 6.*MeV, 
-                                7.2*MeV, 8.4*MeV, 10.*MeV };
+     //light yield - data taken form V.V. Verbinski et al, Nucl. Instrum. & Meth. 65 (1968) 8-25
+     int energyPoints = 25;
+     G4double particleEnergy[] = { 0.1*MeV, 0.13*MeV, 0.17*MeV, 0.2*MeV, 
+                                   0.24*MeV, 0.3*MeV, 0.34*MeV, 0.4*MeV, 
+                                   0.48*MeV, 0.6*MeV, 0.72*MeV, 0.84*MeV, 
+                                   1.*MeV, 1.3*MeV, 1.7*MeV, 2.*MeV, 2.4*MeV, 
+                                   3.*MeV, 3.4*MeV, 4.*MeV, 4.8*MeV, 6.*MeV, 
+                                   7.2*MeV, 8.4*MeV, 10.*MeV };
 
-  G4double electronYield[] = { 1000, 1300, 1700, 2000, 2400, 3000, 3400, 
-                               4000, 4800, 6000, 7200, 8400,10000, 13000, 
-                               17000, 20000, 24000, 30000, 34000, 40000, 
-                               48000, 60000, 72000, 84000, 100000 };
+     G4double electronYield[] = { 1000, 1300, 1700, 2000, 2400, 3000, 3400, 
+                                  4000, 4800, 6000, 7200, 8400,10000, 13000, 
+                                  17000, 20000, 24000, 30000, 34000, 40000, 
+                                  48000, 60000, 72000, 84000, 100000 };
              
-  BC408LightProperties->AddProperty("ELECTRONSCINTILLATIONYIELD",
-                                     particleEnergy, electronYield, 
-                                     energyPoints)->SetSpline(true);
+     BC408LightProperties->AddProperty("ELECTRONSCINTILLATIONYIELD",
+                                       particleEnergy, electronYield, 
+                                       energyPoints)->SetSpline(true);
 
-  G4double protonYield[] = { 67.1, 88.6, 120.7, 146.5, 183.8, 246, 
-                              290, 365, 483, 678, 910, 1175, 562, 
-                              2385, 3660, 4725, 6250, 8660, 10420, 
-                              13270, 17180, 23100, 29500, 36200, 45500 };
+     G4double protonYield[] = { 67.1, 88.6, 120.7, 146.5, 183.8, 246, 
+                                290, 365, 483, 678, 910, 1175, 562, 
+                                2385, 3660, 4725, 6250, 8660, 10420, 
+                                13270, 17180, 23100, 29500, 36200, 45500 };
 
-  BC408LightProperties->AddProperty("PROTONSCINTILLATIONYIELD",
-                                    particleEnergy, protonYield, 
-                                    energyPoints)->SetSpline(true);
+     BC408LightProperties->AddProperty("PROTONSCINTILLATIONYIELD",
+                                       particleEnergy, protonYield, 
+                                       energyPoints)->SetSpline(true);
   
-  G4double ionYield[] = { 10.4, 12.7, 15.7, 17.9, 20.8, 25.1, 27.9, 
-                           31.9, 36.8, 43.6, 50.2, 56.9, 65.7, 81.3, 
-                           101.6, 116.5, 136.3, 166.15, 187.1, 218.6, 
-                           260.54, 323.5, 387.5, 451.54, 539.9 };
+     G4double ionYield[] = { 10.4, 12.7, 15.7, 17.9, 20.8, 25.1, 27.9, 
+                             31.9, 36.8, 43.6, 50.2, 56.9, 65.7, 81.3, 
+                             101.6, 116.5, 136.3, 166.15, 187.1, 218.6, 
+                             260.54, 323.5, 387.5, 451.54, 539.9 };
 
-  BC408LightProperties->AddProperty("IONSCINTILLATIONYIELD",
-                                    particleEnergy, ionYield, 
-                                    energyPoints)->SetSpline(true);
+     BC408LightProperties->AddProperty("IONSCINTILLATIONYIELD",
+                                       particleEnergy, ionYield, 
+                                       energyPoints)->SetSpline(true);
                                     
            
-  BC408->SetMaterialPropertiesTable(BC408LightProperties);
-    G4cout << "BC408 G4MaterialPropertiesTable" << G4endl;
-  BC408LightProperties->DumpTable();
+     BC408->SetMaterialPropertiesTable(BC408LightProperties);
+       G4cout << "BC408 G4MaterialPropertiesTable" << G4endl;
+     BC408LightProperties->DumpTable();
+  }
   return BC408;
 }
 
@@ -237,16 +242,18 @@ G4Material* MaterialsManager::GetBorosilicate()
   borosilicate->AddElement(K, massFraction=0.003321);
   
   
-  
-  //optical parameters of Si02 taken from NEXT sim code
- /* const G4int num = 6;
-  G4double photonEn[] = {2.3*eV, 2.757*eV, 3.102*eV, 3.312*eV, 3.545*eV, 4.136*eV };
-  G4double rIndex[] = {1.54, 1.54, 1.54, 1.54, 1.54, 1.54 };
-  G4double absLenght[] =  {127*cm, 125*cm, 123.5*cm, 122*cm, 121*cm, 120*cm};
-  G4MaterialPropertiesTable* optProperty = new G4MaterialPropertiesTable();
-  optProperty->AddProperty("RINDEX", photonEn, rIndex, num);
-  optProperty->AddProperty("ABSLENGTH", photonEn, absLenght, num);
-  borosilicate->SetMaterialPropertiesTable(optProperty);*/
+  if(useOptical)
+  {  
+     //optical parameters of Si02 taken from NEXT sim code
+     const G4int num = 6;
+     G4double photonEn[] = {2.3*eV, 2.757*eV, 3.102*eV, 3.312*eV, 3.545*eV, 4.136*eV };
+     G4double rIndex[] = {1.54, 1.54, 1.54, 1.54, 1.54, 1.54 };
+     G4double absLenght[] =  {127*cm, 125*cm, 123.5*cm, 122*cm, 121*cm, 120*cm};
+     G4MaterialPropertiesTable* optProperty = new G4MaterialPropertiesTable();
+     optProperty->AddProperty("RINDEX", photonEn, rIndex, num);
+     optProperty->AddProperty("ABSLENGTH", photonEn, absLenght, num);
+     borosilicate->SetMaterialPropertiesTable(optProperty);
+  }
   return borosilicate;
 }
  
@@ -261,6 +268,27 @@ G4Material* MaterialsManager::GetAluminium()
   aluminium = new G4Material("Aluminium", density= 2.7*g/cm3, 
                               numberElements=1);
   aluminium->AddElement(Al, 1);
+  
+   //if(useOptical)
+   if(false)
+   {  
+     //rIndex of Al taken from http://refractiveindex.info/?shelf=main&book=Al&page=Rakic
+     const G4int scintEntries = 6;
+     G4double photonEn[] = {2.38*eV, 2.58*eV, 2.75*eV, 
+		                    2.92*eV, 3.02*eV, 3.26*eV};
+                                
+     G4double rIndex[] = { 0.86, 0.72, 0.62, 0.54, 0.50, 0.41 };
+     
+     //find it!!!
+     G4double absLength[] = { 1*mm, 1*mm, 1*mm, 1*mm, 1*mm, 1*mm};
+                              
+     G4MaterialPropertiesTable* optProperty = new G4MaterialPropertiesTable();
+     optProperty->AddProperty("RINDEX", photonEn, rIndex, scintEntries);
+     optProperty->AddProperty("ABSLENGTH", photonEn, absLength, scintEntries);
+     aluminium->SetMaterialPropertiesTable(optProperty);                                      
+   }
+  
+  
   return aluminium;
 }
 

@@ -82,11 +82,14 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 
 
   //call VANDLEBar fabric method
-    vandleBar
-      = new VANDLEBar(0,G4ThreeVector(),experimentalHallLogic,false,0,1);
-   //it has to be Logic Vol type, not Physical Vol!!!!! TODO!!!
+  vandleBar = new VANDLEBar(1);
+  G4LogicalVolume* vandleBarLogic = vandleBar->GetModuleLogical();
 
-  return experimentalHallPhys;
+   //a single module for now
+   new G4PVPlacement(0,G4ThreeVector(), vandleBarLogic,
+                      "singleVandlebar", experimentalHallLogic ,0,0);
+	                                              
+   return experimentalHallPhys;
 }
 
 
@@ -98,8 +101,8 @@ void DetectorConstruction::ConstructSDandField()
     //Created here so it exists as pmts are being placed
     G4cout << "Construction /VANDLEDet/pmtSD" << G4endl;
     PMTSD* pmtSDSingle = new PMTSD("/VANDLEDet/pmtSD");
-    pmtSDSingle->SetModuleDeph(1); //TODO - get deph from VANDLE bar
-    pmtSDSingle->SetPMTDeph(2);
+    pmtSDSingle->SetModuleDeph(0); //TODO - get deph from VANDLE bar
+    pmtSDSingle->SetPMTDeph(1);
     pmtSD.Put(pmtSDSingle);
   }
 
