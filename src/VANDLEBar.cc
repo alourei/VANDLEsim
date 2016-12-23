@@ -83,20 +83,17 @@ VANDLEBar::VANDLEBar(G4int size)
 	                    barWidth, barHeight);
 	PlacePMTPhotocathode(PMTGlassThickness, PMTPhotocathodeThickness);
 	PlacePMTGlass(barLength, PMTGlassThickness);
-	
-	//todo make methods
-
-
     		
-	//MakePMTShell(PMTShellThickness, PMTRadius, PMTLength);
-    //PlacePMTShell(barLength+reflectiveFoilThickness, PMTLength, reflectiveFoilThickness);
+	MakePMTShell(PMTShellThickness, PMTRadius, PMTLength);
+    PlacePMTShell(barLength+reflectiveFoilThickness, PMTLength, reflectiveFoilThickness);
     SetOpticalSurfacesProperties();	
 }
 				
 void VANDLEBar::SetBasicSizes()
 {
 	reflectiveFoilThickness = 0.1*mm;
-	airThickness = 0.01*mm;
+	airThickness = 0.00*mm;
+	//airThickness = 0.01*mm;
 	PMTLength = 10.0*cm;
 	PMTGlassThickness = 4.0*mm;	//1,5	
 	PMTShellThickness = 4.0*mm;

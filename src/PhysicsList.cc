@@ -69,8 +69,8 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   opticalPhysics->SetScintillationYieldFactor(1.0);
   //opticalPhysics->SetScintillationExcitationRatio(0.0); //AF - what's that???
 
-  opticalPhysics->SetMaxNumPhotonsPerStep(100);
-  opticalPhysics->SetMaxBetaChangePerStep(10.0);
+  //opticalPhysics->SetMaxNumPhotonsPerStep(100);
+  //opticalPhysics->SetMaxBetaChangePerStep(10.0);
 
   opticalPhysics->SetTrackSecondariesFirst(kCerenkov,true);
   opticalPhysics->SetTrackSecondariesFirst(kScintillation,true);

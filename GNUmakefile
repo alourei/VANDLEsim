@@ -3,7 +3,7 @@
 # GNUmakefile for VANDLE simmulation proj.
 # --------------------------------------------------------------
 
-name := VANDLE
+name := VANDLESim
 G4TARGET := $(name)
 G4EXLIB := true
 

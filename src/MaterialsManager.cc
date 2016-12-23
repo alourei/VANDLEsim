@@ -151,8 +151,9 @@ G4Material* MaterialsManager::GetBC408()
                                        absLength, scintEntries);
   
      G4double photonEmissionFraction = 0.2667; //PMT efficiency (TODO - discuss it)
-     BC408LightProperties->AddConstProperty("SCINTILLATIONYIELD",  
-                                            ( 10000.0 * photonEmissionFraction ) / MeV );
+     G4double pEF = photonEmissionFraction;
+    // BC408LightProperties->AddConstProperty("SCINTILLATIONYIELD",  
+     //                                       ( 10000.0 * photonEmissionFraction ) / MeV );
                                            //I guess i don't need it
                                             
      BC408LightProperties->AddConstProperty("RESOLUTIONSCALE",
@@ -175,36 +176,45 @@ G4Material* MaterialsManager::GetBC408()
      BC408LightProperties->AddConstProperty("YIELDRATIO",1.0); //TODO!!!!! find the value
 
      //light yield - data taken form V.V. Verbinski et al, Nucl. Instrum. & Meth. 65 (1968) 8-25
-     int energyPoints = 25;
-     G4double particleEnergy[] = { 0.1*MeV, 0.13*MeV, 0.17*MeV, 0.2*MeV, 
+     int energyPoints = 26;
+     G4double particleEnergy[] = { 0.001*MeV, 0.1*MeV, 0.13*MeV, 0.17*MeV, 0.2*MeV, 
                                    0.24*MeV, 0.3*MeV, 0.34*MeV, 0.4*MeV, 
                                    0.48*MeV, 0.6*MeV, 0.72*MeV, 0.84*MeV, 
                                    1.*MeV, 1.3*MeV, 1.7*MeV, 2.*MeV, 2.4*MeV, 
                                    3.*MeV, 3.4*MeV, 4.*MeV, 4.8*MeV, 6.*MeV, 
                                    7.2*MeV, 8.4*MeV, 10.*MeV };
 
-     G4double electronYield[] = { 1000, 1300, 1700, 2000, 2400, 3000, 3400, 
-                                  4000, 4800, 6000, 7200, 8400,10000, 13000, 
-                                  17000, 20000, 24000, 30000, 34000, 40000, 
-                                  48000, 60000, 72000, 84000, 100000 };
+     G4double electronYield[] = {0*pEF, 1000*pEF, 1300*pEF, 1700*pEF, 
+		                         2000*pEF, 2400*pEF, 3000*pEF, 3400*pEF, 
+                                 4000*pEF, 4800*pEF, 6000*pEF, 7200*pEF,
+                                 8400*pEF,10000*pEF, 13000*pEF, 17000*pEF,
+                                 20000*pEF, 24000*pEF, 30000*pEF, 34000*pEF, 
+                                 40000*pEF, 48000*pEF, 60000*pEF, 72000*pEF, 
+                                 84000*pEF, 100000*pEF };
              
      BC408LightProperties->AddProperty("ELECTRONSCINTILLATIONYIELD",
                                        particleEnergy, electronYield, 
                                        energyPoints)->SetSpline(true);
 
-     G4double protonYield[] = { 67.1, 88.6, 120.7, 146.5, 183.8, 246, 
-                                290, 365, 483, 678, 910, 1175, 562, 
-                                2385, 3660, 4725, 6250, 8660, 10420, 
-                                13270, 17180, 23100, 29500, 36200, 45500 };
+     G4double protonYield[] = { 0.6*pEF, 67.1*pEF, 88.6*pEF, 120.7*pEF, 
+		                        146.5*pEF, 183.8*pEF, 246*pEF, 290*pEF, 
+		                        365*pEF, 483*pEF, 678*pEF, 910*pEF, 
+		                        1175*pEF, 562*pEF, 2385*pEF, 3660*pEF, 
+		                        4725*pEF,6250*pEF, 8660*pEF, 10420*pEF, 
+		                        13270*pEF,17180*pEF, 23100*pEF, 
+		                        29500*pEF, 36200*pEF, 45500*pEF};
 
      BC408LightProperties->AddProperty("PROTONSCINTILLATIONYIELD",
                                        particleEnergy, protonYield, 
                                        energyPoints)->SetSpline(true);
   
-     G4double ionYield[] = { 10.4, 12.7, 15.7, 17.9, 20.8, 25.1, 27.9, 
-                             31.9, 36.8, 43.6, 50.2, 56.9, 65.7, 81.3, 
-                             101.6, 116.5, 136.3, 166.15, 187.1, 218.6, 
-                             260.54, 323.5, 387.5, 451.54, 539.9 };
+     G4double ionYield[] = { 0.2*pEF, 10.4*pEF, 12.7*pEF, 15.7*pEF, 
+		                     17.9*pEF, 20.8*pEF, 25.1*pEF, 27.9*pEF, 
+                             31.9*pEF, 36.8*pEF, 43.6*pEF, 50.2*pEF, 
+                             56.9*pEF, 65.7*pEF, 81.3*pEF, 101.6*pEF, 
+                             116.5*pEF, 136.3*pEF, 166.15*pEF, 187.1*pEF, 
+                             218.6*pEF, 260.54*pEF, 323.5*pEF, 387.5*pEF, 
+                             451.54*pEF, 539.9*pEF };
 
      BC408LightProperties->AddProperty("IONSCINTILLATIONYIELD",
                                        particleEnergy, ionYield, 

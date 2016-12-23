@@ -42,7 +42,7 @@ void AnalysisManager::CreateTuple()
 
 void AnalysisManager::CreatePMTTuple()
 {
-  rootManager->CreateNtuple("OptPhotons", "Detected photons");
+  rootManager->CreateNtuple("PMTHitInfo", "Detected photons");
   rootManager->CreateNtupleIColumn("eventID");//D - double, I - int
   rootManager->CreateNtupleIColumn("detID");
   rootManager->CreateNtupleIColumn("pmtID");
@@ -62,7 +62,7 @@ void AnalysisManager::CreatePMTTuple()
 
 void AnalysisManager::CreateScintilatorTuple()
 {
-   rootManager->CreateNtuple("ScintIntersct", "Particle interactions in scint");
+   rootManager->CreateNtuple("NeutronInteractInfo", "Neutron interactions in scint");
    rootManager->CreateNtupleIColumn("eventID");
    rootManager->CreateNtupleIColumn("detID");
    rootManager->CreateNtupleDColumn("time");
