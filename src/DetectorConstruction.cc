@@ -80,15 +80,27 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 
   experimentalHallLogic->SetVisAttributes(G4VisAttributes::Invisible);
 
-
+  int smallSize = 0;
+  int mediumSize = 1;
+  int largeSize = 2;
   //call VANDLEBar fabric method
-  vandleBar = new VANDLEBar(1);
+  vandleBar = new VANDLEBar(largeSize);
   G4LogicalVolume* vandleBarLogic = vandleBar->GetModuleLogical();
 
    //a single module for now
-   new G4PVPlacement(0,G4ThreeVector(), vandleBarLogic,
-                      "singleVandlebar", experimentalHallLogic ,0,0);
-	                                              
+   //new G4PVPlacement(0,G4ThreeVector(), vandleBarLogic,
+   //                   "singleVandlebar", experimentalHallLogic ,0,0);
+	
+	
+	
+   HPGeDet = new HPGe(); 
+   G4AssemblyVolume* HPGeAssembly = HPGeDet->GetHPGeAssembly();
+   G4RotationMatrix rotHPGe;
+   rotHPGe.rotateZ(0.0*degree);
+   const G4ThreeVector posHPGe(0.0,0.0,0.0);
+
+   G4Transform3D transformHPGe(rotHPGe,posHPGe);
+   HPGeAssembly->MakeImprint(experimentalHallLogic,transformHPGe);                                           
    return experimentalHallPhys;
 }
 
