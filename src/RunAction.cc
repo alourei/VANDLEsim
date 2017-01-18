@@ -52,6 +52,9 @@ void RunAction::EndOfRunAction(const G4Run* run)
 
 G4String RunAction::MakeOutputFileName()
 {
+	return "./VANDLE_Output.root";
+	
+	/*
 	//time marked file, code taken form NEXT sim
    time_t rawtime;
    struct tm* timeinfo;
@@ -66,7 +69,7 @@ G4String RunAction::MakeOutputFileName()
    char fileName[300];
    sprintf(fileName, "./VANDLE%s.root",buffer);
    G4String name(fileName);
-   return name;	
+   return name;	*/
 }
 
 

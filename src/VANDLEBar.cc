@@ -1,32 +1,8 @@
-//
-// ********************************************************************
-// * License and Disclaimer                                           *
-// *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
-// *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
-// ********************************************************************
-//
 // $Id: VANDLEBar.cc 17.10.2016 A Fijalkowska $
 //
 /// \file VANDLEBar.cc
-/// \brief Implementation of the VANDLEBar class based on optical/LXe/src/LXeMainVolume.cc
+/// \brief Implementation of the VANDLEBar class based on 
+///  optical/LXe/src/LXeMainVolume.cc
 //
 //
 #include "VANDLEBar.hh"
@@ -64,8 +40,18 @@ VANDLEBar::VANDLEBar(G4int size)
 	                PMTGlassThickness, PMTLength);
 	const G4ThreeVector zero( 0.0, 0.0, 0.0 ); 
 	MakeWrapping(barWidth, barHeight, barLength, reflectiveFoilThickness);
-	MakeWrapping(barWidth, barHeight, barLength, airThickness, reflectiveFoilThickness);
-    new G4PVPlacement( 0, zero, wrappingLogic, "wrappingPhysical", moduleLogic, 0, 0 );                         
+	MakeWrapping(barWidth, 
+	             barHeight,
+	             barLength, 
+	             airThickness, 
+	             reflectiveFoilThickness);
+    new G4PVPlacement( 0, 
+                       zero, 
+                       wrappingLogic, 
+                       "wrappingPhysical", 
+                       moduleLogic, 
+                       0, 
+                       0 );                         
 	
 	
 	MakePlasticBar(barWidth, barHeight, barLength);
@@ -74,7 +60,13 @@ VANDLEBar::VANDLEBar(G4int size)
 
 	
 	//MakeAirLayer(barWidth, barHeight, barLength, airThickness);
-	//new G4PVPlacement( 0, zero, airLayerLogic, "airLayerPhysical", wrappingLogic, 0, 0 );
+	/*new G4PVPlacement( 0, 
+	                     zero, 
+	                     airLayerLogic, 
+	                     "airLayerPhysical", 
+	                     wrappingLogic, 
+	                     0, 
+	                     0 );*/
 	
 	
 	
@@ -85,7 +77,9 @@ VANDLEBar::VANDLEBar(G4int size)
 	PlacePMTGlass(barLength, PMTGlassThickness);
     		
 	MakePMTShell(PMTShellThickness, PMTRadius, PMTLength);
-    PlacePMTShell(barLength+reflectiveFoilThickness, PMTLength, reflectiveFoilThickness);
+    PlacePMTShell(barLength+reflectiveFoilThickness, 
+                  PMTLength, 
+                  reflectiveFoilThickness);
     SetOpticalSurfacesProperties();	
 }
 				
@@ -128,9 +122,13 @@ void VANDLEBar::SetLargeBarSizes()
 	PMTActiveRadius = 2.3*cm;
 }
 
-void VANDLEBar::MakeModuleLogic(G4double barX, G4double barY, G4double barZ, 
-                                G4double wrappThickness, G4double PMTRadiusVal,
-                                G4double PMTGlassThicknessVal, G4double PMTLen)
+void VANDLEBar::MakeModuleLogic(G4double barX, 
+                                G4double barY, 
+                                G4double barZ, 
+                                G4double wrappThickness, 
+                                G4double PMTRadiusVal,
+                                G4double PMTGlassThicknessVal, 
+                                G4double PMTLen)
 {
 	
 	G4double halfModuleX = barX/2. + wrappThickness;
@@ -141,7 +139,10 @@ void VANDLEBar::MakeModuleLogic(G4double barX, G4double barY, G4double barZ,
 	if(halfModuleY < PMTRadiusVal)
 	    halfModuleY = PMTRadiusVal;
 	G4double halfModuleZ = barZ/2. + PMTLen + PMTGlassThicknessVal;
-	G4Box* moduleSolid = new G4Box("moduleSolid", halfModuleX, halfModuleY, halfModuleZ);
+	G4Box* moduleSolid = new G4Box("moduleSolid", 
+	                               halfModuleX, 
+	                               halfModuleY, 
+	                               halfModuleZ);
 	
 	G4Material* airMaterial = materialsManager->GetAir();
 	moduleLogic = new G4LogicalVolume(moduleSolid, airMaterial,"moduleLogic");
@@ -265,7 +266,9 @@ void VANDLEBar::MakePMTsGlass(G4double radius, G4double thickness,
 	                                                          boxSolid,
 	                                                          tubeSolid);                       
 	G4Material* PMTGlassMaterial = materialsManager->GetBorosilicate();
-	glassLogic = new G4LogicalVolume(glassSolid, PMTGlassMaterial, "glassLogical");
+	glassLogic = new G4LogicalVolume(glassSolid, 
+	                                 PMTGlassMaterial, 
+	                                 "glassLogical");
 	
 	G4VisAttributes* visAtt = new G4VisAttributes( G4Colour(0.5,0.5,1.) );
 	visAtt->SetLineWidth(0.1);
@@ -305,7 +308,8 @@ void VANDLEBar::MakePMTPhotocathode(G4double radius, G4double thickness,
 	
 }
     
-void VANDLEBar::PlacePMTPhotocathode(G4double glassThickness, G4double photocathThickness)
+void VANDLEBar::PlacePMTPhotocathode(G4double glassThickness, 
+                                     G4double photocathThickness)
 {
 	const G4double zPosition = (glassThickness - photocathThickness) * 0.5;
 	
@@ -333,7 +337,9 @@ void VANDLEBar::PlacePMTGlass(G4double barZ, G4double thickness)
 
 
 
-void VANDLEBar::MakePMTShell(G4double thickness, G4double outerRad, G4double length)
+void VANDLEBar::MakePMTShell(G4double thickness, 
+                             G4double outerRad, 
+                             G4double length)
 {
 	G4double innerRadius = outerRad - thickness;
 	G4double outerRadius = outerRad;
@@ -355,7 +361,9 @@ void VANDLEBar::MakePMTShell(G4double thickness, G4double outerRad, G4double len
 }
 
 
-void VANDLEBar::PlacePMTShell(G4double barZ, G4double length, G4double foilThickness)
+void VANDLEBar::PlacePMTShell(G4double barZ, 
+                              G4double length, 
+                              G4double foilThickness)
 {
 	const G4double PMTPosition = (barZ + length) * 0.5 + foilThickness;
 	
@@ -410,8 +418,9 @@ void VANDLEBar::SetOpticalSurfacesProperties()
     G4double foilReflectivity[] = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 
 		                            1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 		                            
-    //rIndex of Al taken from http://refractiveindex.info/?shelf=main&book=Al&page=Rakic                            
-    //G4double foilRIndex[] = { 0.86, 0.79, 0.72, 0.65, 0.62, 0.58, 
+    // rIndex of Al taken from 
+    // http://refractiveindex.info/?shelf=main&book=Al&page=Rakic                            
+    // G4double foilRIndex[] = { 0.86, 0.79, 0.72, 0.65, 0.62, 0.58, 
 	//	                      0.54, 0.52, 0.50, 0.47, 0.41, 0.37 };
 		                      
 	G4double plasticWallSpecularLobe[] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
@@ -443,7 +452,8 @@ void VANDLEBar::SetOpticalSurfacesProperties()
 
     //** plastic wall properties
 /*    //this fragment of code was taken from the Charlie's version
-	G4double angleStandardDev = 0.5;// standard deviation, in radians?, of surface normals. .5 ~28.5 degrees
+	G4double angleStandardDev = 0.5;
+	// standard deviation, in radians?, of surface normals. .5 ~28.5 degrees
 	G4double plasticWallrIndex[] = { 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 
 		                             1.58, 1.58, 1.58, 1.58, 1.58, 1.58};
 	G4double plasticWallSpecularLobe[] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,

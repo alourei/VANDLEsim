@@ -59,12 +59,17 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 	                                             G4double phiMax);
 	void GenerateIsotropicDirectionDistribution(G4ThreeVector* direction, 
 	                                            G4double theta0);
+	void RadiateBarByParallelBeam(G4Event* anEvent, 
+	                            G4double barWidth, 
+	                            G4double barLength);
 	void GenerateDecay(G4Event* anEvent);
 	void GenerateSingleParticle(G4Event* anEvent);
 	void RadiateIsotropicallyMediumBar(G4Event* anEvent);
 	
     G4ParticleGun* particleGun;
     Decay* decay;
+    
+    bool runDecay;
 };
 
 

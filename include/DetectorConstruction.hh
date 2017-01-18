@@ -11,6 +11,7 @@ class G4LogicalVolume;
 class G4VPhysicalVolume;
 
 #include "VANDLEBar.hh"
+#include "HPGe.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "G4Cache.hh"
 #include "PMTSD.hh"
@@ -34,7 +35,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     MaterialsManager* materialsManager;
     
 	VANDLEBar* vandleBar;
-
+    HPGe* HPGeDet;
     //Sensitive Detectors
     G4Cache<PMTSD*> pmtSD;
     G4Cache<ScintillatorSD*> scintillatorSD;

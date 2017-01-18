@@ -22,9 +22,11 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
    particleGun(0)
 {
 	decay = 0L;
-  G4int n_particle = 1;
-  particleGun = new G4ParticleGun(n_particle);
+    G4int n_particle = 1;
+    particleGun = new G4ParticleGun(n_particle);
+  	runDecay = false;
 	SetUpDefault();
+
 }
 
 
@@ -45,32 +47,43 @@ void PrimaryGeneratorAction::SetUpDefault()
 	particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
 	particleGun->SetParticleEnergy(500.0*keV);
 	
+	if(runDecay)
+		LoadDecay("Isotope.ens");
 }
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{		
-		//GenerateDecay(anEvent);
-		//RadiateIsotropicallyMediumBar(G4Event* anEvent);
+{	
+	if(runDecay)
+	{
+		GenerateDecay(anEvent);
+	}
+
+	else
+	{
 		GenerateSingleParticle(anEvent);
+	}
 }	
 
 void PrimaryGeneratorAction::GenerateSingleParticle(G4Event* anEvent)
 {
 
-	G4ThreeVector aim(0.0,0.0,-1.0);
+	//G4ThreeVector aim(0.0,0.0,1.0);
 	//GenerateIsotropicDirectionDistribution(&aim,0.0);
-	G4ThreeVector startPos(0.0*cm,0.0*cm,0.0*cm);	
-	particleGun->SetParticlePosition(startPos);
-	particleGun->SetParticleMomentumDirection(aim);
-	particleGun->GeneratePrimaryVertex(anEvent);	
+	//G4ThreeVector startPos(0.0*cm,0.0*cm,0.0*cm);	
+	//particleGun->SetParticlePosition(startPos);
+	//particleGun->SetParticleMomentumDirection(aim);
+	//particleGun->GeneratePrimaryVertex(anEvent);
+	G4double barWidth = 3*cm;
+	G4double barLength = 200*cm;
+	RadiateBarByParallelBeam(anEvent, barWidth, barLength);	
 	return;
 }
 	
 void PrimaryGeneratorAction::GenerateDecay(G4Event* anEvent)
 {
-	LoadDecay("Isotope.ens");
+
 	
-	G4ThreeVector startPos( 0.*mm, -50*cm, 0.0*cm );
+	G4ThreeVector startPos( 0.*mm, 0.0*cm, 0.0*cm );
 	
 	//Direction
 	G4ThreeVector direction( 0.0, 1.0, 0.0 );
@@ -127,6 +140,22 @@ void PrimaryGeneratorAction::RadiateIsotropicallyMediumBar(G4Event* anEvent)
 	//m_ParticleGun->SetParticleEnergy(1*MeV);
 	G4ThreeVector startPos(100.0*cm,0.0*cm,0.0*cm);
 	
+	particleGun->SetParticlePosition(startPos);
+	particleGun->SetParticleMomentumDirection(aim);
+	particleGun->GeneratePrimaryVertex(anEvent);	
+	return;
+}
+
+	
+void PrimaryGeneratorAction::RadiateBarByParallelBeam(G4Event* anEvent, G4double barWidth, G4double barLength)
+{
+
+	G4ThreeVector aim(0.0,-1.0,0.0);
+	G4double xPos = G4UniformRand()*barWidth - barWidth/2.;
+	G4double yPos = 1*m;
+	G4double zPos = G4UniformRand()*barLength - barLength/2.;
+	
+	G4ThreeVector startPos(xPos, yPos, zPos);
 	particleGun->SetParticlePosition(startPos);
 	particleGun->SetParticleMomentumDirection(aim);
 	particleGun->GeneratePrimaryVertex(anEvent);	

@@ -123,10 +123,12 @@ G4Material* MaterialsManager::GetBC408()
 {
   if(BC408)
     return BC408;
+  //BC408 = new G4Material("BC408", density= 1.032*g/cm3, numberElements=2);
+  //BC408->AddElement(H, 138);//H:C ratio = 1.104
+  //BC408->AddElement(C, 125);  
   BC408 = new G4Material("BC408", density= 1.032*g/cm3, numberElements=2);
   BC408->AddElement(H, 138);//H:C ratio = 1.104
-  BC408->AddElement(C, 125);  
-  
+  BC408->AddElement(C, 125);
   if(useOptical)
   {
      //add light properties (is it a good place?), should I read it from file?
@@ -152,6 +154,7 @@ G4Material* MaterialsManager::GetBC408()
   
      G4double photonEmissionFraction = 0.2667; //PMT efficiency (TODO - discuss it)
      G4double pEF = photonEmissionFraction;
+     G4double protonScalingFact = 1.0;
     // BC408LightProperties->AddConstProperty("SCINTILLATIONYIELD",  
      //                                       ( 10000.0 * photonEmissionFraction ) / MeV );
                                            //I guess i don't need it
@@ -195,14 +198,15 @@ G4Material* MaterialsManager::GetBC408()
      BC408LightProperties->AddProperty("ELECTRONSCINTILLATIONYIELD",
                                        particleEnergy, electronYield, 
                                        energyPoints)->SetSpline(true);
-
-     G4double protonYield[] = { 0.6*pEF, 67.1*pEF, 88.6*pEF, 120.7*pEF, 
-		                        146.5*pEF, 183.8*pEF, 246*pEF, 290*pEF, 
-		                        365*pEF, 483*pEF, 678*pEF, 910*pEF, 
-		                        1175*pEF, 562*pEF, 2385*pEF, 3660*pEF, 
-		                        4725*pEF,6250*pEF, 8660*pEF, 10420*pEF, 
-		                        13270*pEF,17180*pEF, 23100*pEF, 
-		                        29500*pEF, 36200*pEF, 45500*pEF};
+     G4double psF = protonScalingFact;
+     G4double protonYield[] = { 0.6*pEF*psF, 67.1*pEF*psF, 88.6*pEF*psF,
+		                        120.7*pEF*psF, 
+		                        146.5*pEF*psF, 183.8*pEF*psF, 246*pEF*psF, 290*pEF*psF, 
+		                        365*pEF*psF, 483*pEF*psF, 678*pEF*psF, 910*pEF*psF, 
+		                        1175*pEF*psF, 562*pEF*psF, 2385*pEF*psF, 3660*pEF*psF, 
+		                        4725*pEF*psF,6250*pEF*psF, 8660*pEF*psF, 10420*pEF*psF, 
+		                        13270*pEF*psF,17180*pEF*psF, 23100*pEF*psF, 
+		                        29500*pEF*psF, 36200*pEF*psF, 45500*pEF*psF};
 
      BC408LightProperties->AddProperty("PROTONSCINTILLATIONYIELD",
                                        particleEnergy, protonYield, 
@@ -313,6 +317,18 @@ G4Material* MaterialsManager::GetBialkali()
   bialkali->AddElement(Cs, massFraction=0.452);
   bialkali->AddElement(Sb, massFraction=0.415); 
   return bialkali;
+}
+
+G4Material* MaterialsManager::GetGermanium()
+{
+  if(germanium)
+    return germanium;
+    	
+  germanium = new G4Material("Germanium",
+                              z=32, 
+                              atomicMass=72.61*g/mole, 
+                              density= 5.323*g/cm3);
+  return germanium;
 }
 
 

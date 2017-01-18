@@ -47,7 +47,7 @@ class MaterialsManager //MaterialsFactory??
     G4Material* GetAluminium();
     G4Material* GetNaI();
     G4Material* GetBialkali();
-
+    G4Material* GetGermanium();
 
   private:
 	MaterialsManager();
@@ -88,6 +88,7 @@ class MaterialsManager //MaterialsFactory??
 	G4Material* aluminium;
 	G4Material* NaI;
 	G4Material* bialkali;
+	G4Material* germanium;
 	
   public:
 	static MaterialsManager *GetInstance()
