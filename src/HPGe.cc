@@ -6,7 +6,7 @@
 //
 #include "HPGe.hh"
 
-#include "G4RotationMatrix.hh"
+#include "G4Transform3D.hh"
 #include "globals.hh"
 #include "G4PVPlacement.hh"
 #include "G4Box.hh"
@@ -41,6 +41,12 @@ void HPGe::SetSizes()
 
 void HPGe::SetBasicSizes()
 {
+	//totalOffset move the whole solid to the such position, 
+	// that central point of HPGe face is located at point (0,0,0) - AF
+	totalOffsetX = -12.6*cm;
+	totalOffsetY = 0.;
+	totalOffsetZ = -52.0*mm;
+	 	
 	crystalInnerRad = 0.0*mm;
   	crystalOuterRad = 25.0*mm;
   	crystalLength = 70.0*mm;
@@ -230,7 +236,9 @@ void HPGe::makeHPGeFace(G4AssemblyVolume* assemblyHPGe)
 	box1b_Logical->SetVisAttributes(HPGeVisAtt);
 	G4RotationMatrix rotBox1b;
 	rotBox1b.rotateY(0.0*degree);
-	G4ThreeVector posBox1b(0.0,0.0,0.0);
+	G4ThreeVector posBox1b(0.0 + totalOffsetX,
+	                       0.0 + totalOffsetY,
+	                       0.0 + totalOffsetZ);
 	G4Transform3D transformBox1b(rotBox1b,posBox1b);
 	assemblyHPGe->AddPlacedVolume(box1b_Logical,transformBox1b);
 	
@@ -245,7 +253,9 @@ void HPGe::makeHPGeFace(G4AssemblyVolume* assemblyHPGe)
 	box1f_Logical->SetVisAttributes(HPGeFVisAtt);		
 	G4RotationMatrix rotBox1f;
 	rotBox1f.rotateY(90*degree);
-	const G4ThreeVector posBox1f(box1_z-box1_thickness,0.0,faceZOffset);
+	const G4ThreeVector posBox1f(box1_z-box1_thickness + totalOffsetX,
+	                             0.0 + totalOffsetY, 
+	                             faceZOffset + totalOffsetZ);
 	G4Transform3D transformBox1f(rotBox1f,posBox1f);
 	assemblyHPGe->AddPlacedVolume(box1f_Logical,transformBox1f);
 
@@ -259,7 +269,11 @@ void HPGe::placeCrystals(G4AssemblyVolume* assemblyHPGe)
 	rotCry.rotateX(0.0*degree);
 	rotCry.rotateY(90.0*degree);
 	rotCry.rotateZ(0.0*degree);
-    const G4ThreeVector posCry(crystalCenterDistance+10.0*mm,0.0,faceZOffset);//X is arbitrary
+    const G4ThreeVector posCry(crystalCenterDistance+10.0*mm + totalOffsetX,
+	                           0.0 + totalOffsetY,
+	                           faceZOffset + totalOffsetZ); //X is arbitrary   
+    
+    
     G4Transform3D transformCry(rotCry,posCry);
 	assemblyHPGe->AddPlacedAssembly(HPGeCrystals,transformCry);
 	
@@ -278,7 +292,10 @@ void HPGe::makeHPGeBox2(G4AssemblyVolume* assemblyHPGe)
     box2b_Logical->SetVisAttributes(HPGeVisAtt);
     G4RotationMatrix rotBox2b;
 	rotBox2b.rotateY(0.0*degree);
-	const G4ThreeVector posBox2b(-(box1_z+box2_z),0.0,box1_x-box2_x);
+	const G4ThreeVector posBox2b(-(box1_z+box2_z) + totalOffsetX,
+	                             0.0 + totalOffsetY,
+	                             box1_x-box2_x+ totalOffsetZ);	                       
+	                       
 	G4Transform3D transformBox2b(rotBox2b,posBox2b);
 	assemblyHPGe->AddPlacedVolume(box2b_Logical,transformBox2b);
     
@@ -292,7 +309,11 @@ void HPGe::makeHPGeBox2(G4AssemblyVolume* assemblyHPGe)
 	box2f_Logical->SetVisAttributes(HPGeFVisAtt);
 	G4RotationMatrix rotBox2f;
 	rotBox2f.rotateY(90*degree);
-	const G4ThreeVector posBox2f(-(box1_z+box2_thickness),0.0,faceZOffset);
+	const G4ThreeVector posBox2f(-(box1_z+box2_thickness) + totalOffsetX,
+	                             0.0 + totalOffsetY,
+	                             faceZOffset + totalOffsetZ);
+                      
+	                       
 	G4Transform3D transformBox2f(rotBox2f,posBox2f);
 	assemblyHPGe->AddPlacedVolume(box2f_Logical,transformBox2f);
 }
@@ -309,7 +330,10 @@ void HPGe::makeHPGeBox3(G4AssemblyVolume* assemblyHPGe)
 	box3b_Logical->SetVisAttributes(HPGeVisAtt);                                                           	
 	G4RotationMatrix rotBox3b;
 	rotBox3b.rotateY(0.0*degree);
-	const G4ThreeVector posBox3b(-(box1_z+2.0*box2_z+box3_z),0.0,box1_x-box3_x);
+	const G4ThreeVector posBox3b(-(box1_z+2.0*box2_z+box3_z) + totalOffsetX,
+	                             0.0 + totalOffsetY,
+	                             box1_x-box3_x + totalOffsetZ);
+	
 	G4Transform3D transformBox3b(rotBox3b,posBox3b);
 	assemblyHPGe->AddPlacedVolume(box3b_Logical,transformBox3b);
 
@@ -326,9 +350,11 @@ void HPGe::makeHPGeBox3(G4AssemblyVolume* assemblyHPGe)
   	box3f_Logical->SetVisAttributes(HPGeFVisAtt);
 	G4RotationMatrix rotBox3f;
 	rotBox3f.rotateY(90*degree);
-	const G4ThreeVector posBox3f(-(box1_z+2.0*box2_z+box3_thickness),
-	                             0.0,
-	                             faceZOffset);
+	const G4ThreeVector posBox3f(-(box1_z+2.0*box2_z+box3_thickness) + totalOffsetX,
+	                             0.0 + totalOffsetY,
+	                             faceZOffset + totalOffsetZ);
+	                       
+	                       
 	G4Transform3D transformBox3f(rotBox3f,posBox3f);
 	assemblyHPGe->AddPlacedVolume(box3f_Logical,transformBox3f);
 	  	
@@ -343,9 +369,14 @@ void HPGe::makeHPGeBox3(G4AssemblyVolume* assemblyHPGe)
 	box3fb_Logical->SetVisAttributes(HPGeVisAtt);
 	G4RotationMatrix rotBox3fb;
 	rotBox3fb.rotateY(90*degree);
-	const G4ThreeVector posBox3fb(-(box1_z+2.0*box2_z+2.0*box3_z-box3_thickness),
-	                              0.0,
-	                              faceZOffset);
+	double xPos = -(box1_z+2.0*box2_z+2.0*box3_z-box3_thickness);
+	const G4ThreeVector posBox3fb(xPos + totalOffsetX,
+	                              0.0 + totalOffsetY,
+	                              faceZOffset + totalOffsetZ);
+
+	                       
+	                       
+	                       
 	G4Transform3D transformBox3fb(rotBox3fb,posBox3fb);
 	assemblyHPGe->AddPlacedVolume(box3fb_Logical,transformBox3fb);
 	
@@ -367,9 +398,12 @@ void HPGe::makeHPGeCylinder4(G4AssemblyVolume* assemblyHPGe)
      
     G4RotationMatrix rotCyl4;
     rotCyl4.rotateY(90*degree);
-    const G4ThreeVector posCyl4(-(box1_z+2.0*box2_z+2.0*box3_z+cyl4_length-box3_thickness),
-                                0.0,
-                                faceZOffset);
+    double xPos = -(box1_z+2.0*box2_z+2.0*box3_z+cyl4_length-box3_thickness);
+    const G4ThreeVector posCyl4(xPos + totalOffsetX,
+                                0.0 + totalOffsetY,
+                                faceZOffset + totalOffsetZ);
+	                       
+	                       
     G4Transform3D transformCyl4(rotCyl4,posCyl4);
 	assemblyHPGe->AddPlacedVolume(cyl4_Logical,transformCyl4);
 }
@@ -391,9 +425,11 @@ void HPGe::makeHPGeCylinder5(G4AssemblyVolume* assemblyHPGe)
     G4RotationMatrix rotCyl5;
 	rotCyl5.rotateY(90*degree);
 	G4double xPos = -(box1_z+2.0*box2_z+2.0*box3_z+2.0*cyl4_length-box3_thickness-cyl5_length);
-    const G4ThreeVector posCyl5(xPos,
-                                0.0,
-                                faceZOffset);
+    const G4ThreeVector posCyl5(xPos + totalOffsetX,
+                                0.0 + totalOffsetY,
+                                faceZOffset + totalOffsetZ);
+	                       
+	                       
     G4Transform3D transformCyl5(rotCyl5,posCyl5);
 	assemblyHPGe->AddPlacedVolume(cyl5_Logical,transformCyl5);
 }
@@ -415,7 +451,10 @@ void HPGe::makeHPGeCylinder6(G4AssemblyVolume* assemblyHPGe)
     G4RotationMatrix rotCyl6;
 	rotCyl6.rotateY(90*degree);
 	G4double xPos = -(box1_z+2.0*box2_z+2.0*box3_z+2.0*cyl4_length-box3_thickness+cyl6_length);
-    const G4ThreeVector posCyl6(xPos,0.0,faceZOffset);
+    const G4ThreeVector posCyl6(xPos + totalOffsetX,
+                                0.0 + totalOffsetY,
+                                faceZOffset + totalOffsetZ);	
+                                
     G4Transform3D transformCyl6(rotCyl6,posCyl6);
 	assemblyHPGe->AddPlacedVolume(cyl6_Logical,transformCyl6);
 }
@@ -437,7 +476,11 @@ void HPGe::makeHPGeCylinder7(G4AssemblyVolume* assemblyHPGe)
     G4RotationMatrix rotCyl7;
 	rotCyl7.rotateY(90*degree);
 	G4double xPos = -(box1_z+2.0*box2_z+2.0*box3_z+2.0*cyl4_length-box3_thickness+2.0*cyl6_length-cyl7_length);
-    const G4ThreeVector posCyl7(xPos,0.0,faceZOffset);
+    const G4ThreeVector posCyl7(xPos + totalOffsetX,
+                                0.0 + totalOffsetY,
+                                faceZOffset + totalOffsetZ);
+	                       
+	                       
     G4Transform3D transformCyl7(rotCyl7,posCyl7);
 	assemblyHPGe->AddPlacedVolume(cyl7_Logical,transformCyl7);
 }
@@ -785,4 +828,33 @@ G4UnionSolid* HPGe::roundedFrontFaceHole(G4double thickness,
 
   return rounded_front_face;
 
+}
+
+void HPGe::Place(G4RotationMatrix *pRot, 
+                 const G4ThreeVector &tlate, 
+                 const G4String &pName, 
+                 G4LogicalVolume *pMotherLogical, 
+                 G4int pCopyNo)
+{
+    //ofset is needed to put central point of germanium face at (0,0,0) pos	
+	//G4double HPGeXOffset = -12.5*cm; 	
+  	//G4double HPGeZOffset = -52.0*mm;
+
+	G4double HPGeXOffset = 0.; 	
+  	G4double HPGeZOffset = 0.;
+  	 	
+  	G4ThreeVector position;
+  	position.setX(tlate.x() + HPGeXOffset);
+  	position.setY(tlate.y());
+  	position.setZ(tlate.z() + HPGeZOffset); 	
+ 	
+  	G4RotationMatrix rot = *pRot;
+  	G4Transform3D transform(rot,position);
+  	HPGeAssembly->MakeImprint (pMotherLogical, transform, pCopyNo);
+   	//HPGeAssembly->MakeImprint(pMotherLogical, position, pRot, pCopyNo);				  
+}
+
+void HPGe::ConstructSDandField()
+{
+	//for now no sensitive part of the detector
 }

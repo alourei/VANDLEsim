@@ -14,14 +14,15 @@ class HPGe
 {
   public:
 
-    HPGe();
-    //void Place (motherVolume, rot, trans, copyNr)
-    //InitializeSensitiveDetectors
-    //G4LogicalVolume* GetLogical() {return HPGeLogic;}            
-    //G4LogicalVolume* GetScintilatorLogical() {return barLogic;}
-    //G4LogicalVolume* GetPMTLogical() {return photocathLogic;}
+    HPGe();    
+    void Place(G4RotationMatrix *pRot, 
+               const G4ThreeVector &tlate, 
+               const G4String &pName, 
+               G4LogicalVolume *pMotherLogical,  
+               G4int pCopyNo = 0);
+               
     G4AssemblyVolume* GetHPGeAssembly() {return HPGeAssembly;}
-
+    virtual void ConstructSDandField();
   private:
      void SetSizes();
      void SetBasicSizes();
@@ -72,6 +73,10 @@ class HPGe
      G4VisAttributes* HPGeFVisAtt;
      
 
+     G4double totalOffsetX;
+     G4double totalOffsetY;
+     G4double totalOffsetZ; 
+	
      G4double crystalInnerRad;
   	 G4double crystalOuterRad;
   	 G4double crystalLength; 	
