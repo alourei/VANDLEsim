@@ -7,7 +7,6 @@
 //
 #include "VANDLEBar.hh"
 
-#include "G4RotationMatrix.hh"
 #include "globals.hh"
 #include "G4PVPlacement.hh"
 #include "G4Box.hh"
@@ -21,9 +20,12 @@
 #include "G4LogicalBorderSurface.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VisAttributes.hh"
+#include "G4SDManager.hh"
 
 VANDLEBar::VANDLEBar(G4int size)                
 {
+	pmtSD = 0;
+	scintillatorSD = 0;
 	//TODO - enum?
 	if(size == 0)
 		SetSmallBarSizes();
@@ -82,6 +84,9 @@ VANDLEBar::VANDLEBar(G4int size)
                   reflectiveFoilThickness);
     SetOpticalSurfacesProperties();	
 }
+
+VANDLEBar::~VANDLEBar() {}
+
 				
 void VANDLEBar::SetBasicSizes()
 {
@@ -90,7 +95,7 @@ void VANDLEBar::SetBasicSizes()
 	//airThickness = 0.01*mm;
 	PMTLength = 10.0*cm;
 	PMTGlassThickness = 4.0*mm;	//1,5	
-	PMTShellThickness = 4.0*mm;
+	PMTShellThickness = 1.0*mm;
 	PMTPhotocathodeThickness = 1.0*mm;
 	                             
 }
@@ -485,4 +490,54 @@ void VANDLEBar::SetOpticalSurfacesProperties()
 		
 	new G4LogicalSkinSurface("plasticWallSkin", barLogic, plasticWallOpSurf);
  */  
+}
+
+
+void VANDLEBar::ConstructSDandField()
+{
+  // PMT SD
+  if (!pmtSD) 
+  {
+    //Created here so it exists as pmts are being placed
+    G4cout << "Construction /VANDLEDet/pmtSD" << G4endl;
+    pmtSD = new PMTSD("/VANDLEDet/pmtSD");
+    pmtSD->SetModuleDeph(3); //TODO - get deph from VANDLE bar
+    pmtSD->SetPMTDeph(1);
+  }
+
+  //sensitive detector is not actually on the photocathode.
+  //processHits gets done manually by the stepping action.
+  //It is used to detect when photons hit and get absorbed&detected at the
+  //boundary to the photocathode (which doesnt get done by attaching it to a
+  //logical volume.
+  //It does however need to be attached to something or else it doesnt get
+  //reset at the begining of events   
+   G4SDManager* SDman = G4SDManager::GetSDMpointer();
+   SDman->AddNewDetector(pmtSD);
+   photocathLogic->SetSensitiveDetector(pmtSD);
+    
+    
+    
+     
+  // Scintillator SD
+   if (!scintillatorSD) 
+   {
+    //Created here so it exists as pmts are being placed
+    G4cout << "Construction /VANDLEDet/scintillatorSD" << G4endl;
+    scintillatorSD = new ScintillatorSD("/VANDLEDet/scintillatorSD");
+    scintillatorSD->SetModuleDeph(1);
+  }
+  SDman->AddNewDetector(scintillatorSD);
+  barLogic->SetSensitiveDetector(scintillatorSD);	
+	
+}
+
+void VANDLEBar::Place(G4RotationMatrix *pRot, const G4ThreeVector &tlate, 
+                      const G4String &pName, G4LogicalVolume *pMotherLogical, 
+                      G4int pCopyNo)
+{
+   new G4PVPlacement(pRot, tlate, moduleLogic, pName, 
+	                 pMotherLogical,0,pCopyNo);					  
+						  
+						  
 }

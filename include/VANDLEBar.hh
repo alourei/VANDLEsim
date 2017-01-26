@@ -32,18 +32,36 @@
 #define VANDLEBar_H 1
 
 #include "G4LogicalVolume.hh"
+#include "G4VPhysicalVolume.hh"
 #include "MaterialsManager.hh"
+#include "G4RotationMatrix.hh"
+#include "G4ThreeVector.hh"
+#include "PMTSD.hh"
+#include "ScintillatorSD.hh"
+
 
 class VANDLEBar
 {
   public:
 
     VANDLEBar(G4int size);
-    
+    virtual ~VANDLEBar();
+
+    virtual void ConstructSDandField();
+    void Place(G4RotationMatrix *pRot, 
+               const G4ThreeVector &tlate, 
+               const G4String &pName, 
+               G4LogicalVolume *pMotherLogical, 
+               G4int pCopyNo);
     G4LogicalVolume* GetModuleLogical() {return moduleLogic;}            
     G4LogicalVolume* GetScintilatorLogical() {return barLogic;}
     G4LogicalVolume* GetPMTLogical() {return photocathLogic;}
-
+    
+    G4double GetWidth() {return barWidth;}
+	G4double GetHeight() {return barHeight;}
+	G4double GetLength() {return barLength;}
+	
+	
   private:
   
 	void SetBasicSizes();
@@ -51,25 +69,40 @@ class VANDLEBar
 	void SetMediumBarSizes();
 	void SetLargeBarSizes();
 	                     
-	void MakeModuleLogic(G4double barX, G4double barY, G4double barZ, 
-                         G4double wrappThickness, G4double PMTRadiusVal,
-                         G4double PMTGlassThicknessVal, G4double PMTLen);
+	void MakeModuleLogic(G4double barX, 
+	                     G4double barY, 
+	                     G4double barZ, 
+                         G4double wrappThickness, 
+                         G4double PMTRadiusVal,
+                         G4double PMTGlassThicknessVal, 
+                         G4double PMTLen);
                                 
                                 
 	void MakePlasticBar(G4double barX, G4double barY, G4double barZ);
 
-	void MakeWrapping(G4double barX, G4double barY, G4double barZ, 
-	                  G4double airThickness, G4double wrappingThickness);
+	void MakeWrapping(G4double barX, 
+	                  G4double barY, 
+	                  G4double barZ, 
+	                  G4double airThickness, 
+	                  G4double wrappingThickness);
 	                  
-	void MakeWrapping(G4double barX, G4double barY, 
-                      G4double barZ, G4double wrappThick); 
+	void MakeWrapping(G4double barX, 
+	                  G4double barY, 
+                      G4double barZ, 
+                      G4double wrappThick); 
                                       
-    void MakeAirLayer(G4double barX, G4double barY, 
-                      G4double barZ, G4double airThickness); 
-    void MakePMTsGlass(G4double radius, G4double thickness, 
-                       G4double barX, G4double barY);
-    void MakePMTPhotocathode(G4double radius, G4double thickness, 
-                             G4double barX, G4double barY);
+    void MakeAirLayer(G4double barX, 
+                      G4double barY, 
+                      G4double barZ, 
+                      G4double airThickness); 
+    void MakePMTsGlass(G4double radius, 
+                       G4double thickness, 
+                       G4double barX, 
+                       G4double barY);
+    void MakePMTPhotocathode(G4double radius, 
+                             G4double thickness, 
+                             G4double barX, 
+                             G4double barY);
     void PlacePMTPhotocathode(G4double glassThickness, 
                               G4double photocathThickness);        
     void PlacePMTGlass(G4double barZ, G4double thickness);
@@ -102,6 +135,9 @@ class VANDLEBar
 	G4LogicalVolume* glassLogic;
 	G4LogicalVolume* photocathLogic;
 
+    PMTSD* pmtSD;
+    ScintillatorSD* scintillatorSD;
+    
 };
 
 #endif							 
