@@ -58,7 +58,10 @@ MaterialsManager::MaterialsManager()
   Cs = man->FindOrBuildElement("Cs");
   Pb = man->FindOrBuildElement("Pb");
   B = man->FindOrBuildElement("B"); 
-
+  Mn = man->FindOrBuildElement("Mn"); 
+  Cr = man->FindOrBuildElement("Cr");
+  Mg = man->FindOrBuildElement("Mg"); 
+  Ca = man->FindOrBuildElement("Ca");
   
 }
 
@@ -72,7 +75,7 @@ void MaterialsManager::CleanUp()
   bialkali = 0L;
   aluminium = 0L;
   NaI = 0L;
-  
+  iron = 0L;
 }
 
 
@@ -331,5 +334,63 @@ G4Material* MaterialsManager::GetGermanium()
   return germanium;
 }
 
+G4Material* MaterialsManager::GetIron()
+{
+   if(iron)
+      return iron;
+    	
+  iron = new G4Material("Iron",
+                              z=26, 
+                              atomicMass=55.85*g/mole, 
+                              density= 7.874*g/cm3);
+  return iron;
+	
+} 
+
+G4Material* MaterialsManager::GetStainSteel()
+{
+  if(stainSteel)
+    return stainSteel;
+  stainSteel = new G4Material("StainSteel", density=8.02*g/cm3, 
+                              numberElements=5);
+  stainSteel->AddElement(Mn, 0.02);
+  stainSteel->AddElement(Si, 0.01);
+  stainSteel->AddElement(Cr, 0.19);
+  stainSteel->AddElement(Ni, 0.10);
+  stainSteel->AddElement(Fe, 0.68);
+  return stainSteel;	
+
+}
+
+G4Material* MaterialsManager::GetConcrete()
+{
+  if(concrete)
+    return concrete;
+    	
+  concrete = new G4Material( "Concrete", density= 2.4*g/cm3, numberElements=9 );
+  concrete->AddElement( H,  0.56852*perCent ); // Is this by volume or mass? Composition specified either by fractional mass or atom counts. So Mass fraction
+  concrete->AddElement( O, 49.62966*perCent );
+  concrete->AddElement( Na, 2.17286*perCent );
+  concrete->AddElement( Mg, 0.25554*perCent );
+  concrete->AddElement( Al, 4.56009*perCent );
+  concrete->AddElement( Si,31.39440*perCent );
+  concrete->AddElement( K,  1.91699*perCent );
+  concrete->AddElement( Ca, 8.26617*perCent );
+  concrete->AddElement( Fe, 1.23576*perCent );
+
+  return concrete;
+} 
+
+G4Material* MaterialsManager::GetHDPE()
+{
+  if(HDPE)
+    return HDPE;
+ 
+  HDPE = new G4Material( "hdpe", density= 0.94*g/cm3, numberElements=2 );
+  HDPE->AddElement( C, 2 );
+  HDPE->AddElement( H, 4 );
+   
+  return HDPE;
+}
 
 MaterialsManager *MaterialsManager::s_instance = 0;
