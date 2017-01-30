@@ -12,10 +12,12 @@ class G4VPhysicalVolume;
 
 #include "VANDLEBar.hh"
 #include "HPGe.hh"
+#include "LeribssGeArray.hh"
+#include "LeribssVandleArray.hh"
+#include "LeribssSupport.hh"
+#include "LeribssBeam.hh"
+#include "LeribssFloor.hh"
 #include "G4VUserDetectorConstruction.hh"
-#include "G4Cache.hh"
-#include "PMTSD.hh"
-#include "ScintillatorSD.hh"
 #include "MaterialsManager.hh"
 
 class DetectorConstruction : public G4VUserDetectorConstruction
@@ -36,9 +38,11 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     
 	VANDLEBar* vandleBar;
     HPGe* HPGeDet;
-    //Sensitive Detectors
-    G4Cache<PMTSD*> pmtSD;
-    G4Cache<ScintillatorSD*> scintillatorSD;
+    LeribssGeArray* leribssGeArray;
+    LeribssVandleArray* leribssVandleArray;
+    LeribssSupport* leribssSupport;
+    LeribssBeam* leribssBeam;
+    LeribssFloor* leribssFloor;
 };
 
 #endif

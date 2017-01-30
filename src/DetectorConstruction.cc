@@ -6,9 +6,6 @@
 //
 //
 #include "DetectorConstruction.hh"
-//#include "PMTSD.hh"
-//#include "ScintSD.hh"
-
 #include "G4SDManager.hh"
 
 
@@ -64,9 +61,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct(){
 G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 {
 
-  G4double expHall_x = 3.*m;
-  G4double expHall_y = 3.*m;
-  G4double expHall_z = 3.*m;
+  G4double expHall_x = 10.*m;
+  G4double expHall_y = 10.*m;
+  G4double expHall_z = 10.*m;
   G4Material* vaccum = materialsManager->GetVaccum();
   //Create experimental hall
   G4Box* experimentalHallSolid
@@ -75,8 +72,13 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
                                              vaccum,
                                              "experimentalHallLogic",
                                              0,0,0);
-  experimentalHallPhys = new G4PVPlacement(0,G4ThreeVector(),
-                              experimentalHallLogic,"expHall",0,false,0);
+  experimentalHallPhys = new G4PVPlacement(0,
+                                           G4ThreeVector(),
+                                           experimentalHallLogic,
+                                           "expHall",
+                                           0,
+                                           false,
+                                           0);
 
   experimentalHallLogic->SetVisAttributes(G4VisAttributes::Invisible);
 
@@ -84,57 +86,75 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
   int mediumSize = 1;
   int largeSize = 2;
   //call VANDLEBar fabric method
-  vandleBar = new VANDLEBar(largeSize);
-  G4LogicalVolume* vandleBarLogic = vandleBar->GetModuleLogical();
+  vandleBar = new VANDLEBar(mediumSize);
+/*  vandleBar->Place(0, 
+                     G4ThreeVector(0.0,10.0*cm,0.0),
+                     "bar1", 
+                      experimentalHallLogic, 0);
+  vandleBar->Place(0, 
+                   G4ThreeVector(0.0,-10.0*cm,0.0),
+                   "bar2", 
+                    experimentalHallLogic, 1);  */
 
-   //a single module for now
-   //new G4PVPlacement(0,G4ThreeVector(), vandleBarLogic,
-   //                   "singleVandlebar", experimentalHallLogic ,0,0);
 	
-	
-	
-   HPGeDet = new HPGe(); 
-   G4AssemblyVolume* HPGeAssembly = HPGeDet->GetHPGeAssembly();
-   G4RotationMatrix rotHPGe;
-   rotHPGe.rotateZ(0.0*degree);
-   const G4ThreeVector posHPGe(0.0,0.0,0.0);
+  /* HPGeDet = new HPGe();
+   G4RotationMatrix* rot = new G4RotationMatrix();
+   rot->rotateY(90.0*degree);
+   G4ThreeVector pos1 = G4ThreeVector(0.0,0.0,0.0);
+   HPGeDet->Place(rot, 
+                  pos1,
+                  "HPGe", 
+                  experimentalHallLogic, 
+                  0); */
+ 
+ 
+  leribssGeArray = new LeribssGeArray();
+  G4ThreeVector gePos = G4ThreeVector(0.0,0.0,0.0);
+  leribssGeArray->Place(0, 
+                        gePos,
+                        "LeribssGeArray", 
+                        experimentalHallLogic, 
+                        0); 
+   
+   leribssVandleArray = new LeribssVandleArray();
+   G4ThreeVector vandlePos = G4ThreeVector(0.0,0.0,0.0);
+   leribssVandleArray->Place(0, 
+                             vandlePos,
+                             "leribssVandleArray", 
+                             experimentalHallLogic, 
+                             0);   
+   
+   leribssSupport = new LeribssSupport();  
+   G4ThreeVector leribssSupportPos = G4ThreeVector(0.0,0.0,0.0);
+   leribssSupport->Place(0, 
+                         leribssSupportPos,
+                         "leribssSupport", 
+                         experimentalHallLogic, 
+                         0);                                    
 
-   G4Transform3D transformHPGe(rotHPGe,posHPGe);
-   HPGeAssembly->MakeImprint(experimentalHallLogic,transformHPGe);                                           
+   
+   leribssBeam = new LeribssBeam();
+   G4ThreeVector leribssBeamPos = G4ThreeVector(0.0,0.0,0.0);
+   leribssBeam->Place(0, 
+                      leribssBeamPos,
+                      "leribssBeam", 
+                      experimentalHallLogic, 
+                      0);   
+   
+   leribssFloor = new LeribssFloor();
+   G4ThreeVector leribssFloorPos = G4ThreeVector(0.0,0.0,0.0);
+   leribssFloor->Place(0, 
+                      leribssFloorPos,
+                      "leribssFloor", 
+                      experimentalHallLogic, 
+                      0); 
+                      
    return experimentalHallPhys;
 }
 
 
 void DetectorConstruction::ConstructSDandField() 
 {
-  // PMT SD
-  if (!pmtSD.Get()) 
-  {
-    //Created here so it exists as pmts are being placed
-    G4cout << "Construction /VANDLEDet/pmtSD" << G4endl;
-    PMTSD* pmtSDSingle = new PMTSD("/VANDLEDet/pmtSD");
-    pmtSDSingle->SetModuleDeph(0); //TODO - get deph from VANDLE bar
-    pmtSDSingle->SetPMTDeph(1);
-    pmtSD.Put(pmtSDSingle);
-  }
-
-  //sensitive detector is not actually on the photocathode.
-  //processHits gets done manually by the stepping action.
-  //It is used to detect when photons hit and get absorbed&detected at the
-  //boundary to the photocathode (which doesnt get done by attaching it to a
-  //logical volume.
-  //It does however need to be attached to something or else it doesnt get
-  //reset at the begining of events  
-  SetSensitiveDetector(vandleBar->GetPMTLogical(), pmtSD.Get());
+	leribssVandleArray->ConstructSDandField();
   
-  // Scintillator SD
-   if (!scintillatorSD.Get()) 
-   {
-    //Created here so it exists as pmts are being placed
-    G4cout << "Construction /VANDLEDet/scintillatorSD" << G4endl;
-    ScintillatorSD* scintillatorSingle = new ScintillatorSD("/VANDLEDet/scintillatorSD");
-    scintillatorSingle->SetModuleDeph(1);
-    scintillatorSD.Put(scintillatorSingle);
-  }
-  SetSensitiveDetector(vandleBar->GetScintilatorLogical(), scintillatorSD.Get());
 }

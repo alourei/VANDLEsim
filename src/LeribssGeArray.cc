@@ -23,7 +23,8 @@ LeribssGeArray::~LeribssGeArray()
 void LeribssGeArray::SetBasicSizes()
 {
 	G4double inch = 2.54*cm;
-  	HPGeXOffset= -2.5*inch;
+  	//HPGeXOffset= -2.5*inch;
+  	HPGeXOffset= -1.7*inch; //AF testy
   	//HPGeXOffset = -6.*inch;   	
 	
 }
