@@ -42,6 +42,7 @@ class MaterialsManager //MaterialsFactory??
 	G4Material* GetVaccum();
     G4Material* GetAir();
     G4Material* GetBC408();
+    G4Material* GetBC408NoLight();
     G4Material* GetTin();
     G4Material* GetBorosilicate();
     G4Material* GetAluminium();
@@ -91,6 +92,7 @@ class MaterialsManager //MaterialsFactory??
 	G4Material* vaccum;
 	G4Material* air;
 	G4Material* BC408;
+	G4Material* BC408NoLight;
 	G4Material* tin;
 	G4Material* borosilicate;
 	G4Material* aluminium;

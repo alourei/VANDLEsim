@@ -236,6 +236,21 @@ G4Material* MaterialsManager::GetBC408()
 }
 
 
+G4Material* MaterialsManager::GetBC408NoLight()
+{
+  if(BC408NoLight)
+    return BC408NoLight;
+ 
+  BC408NoLight = new G4Material("BC408NoLight", 
+                                density= 1.032*g/cm3, 
+                                numberElements=2);
+  BC408NoLight->AddElement(H, 138);
+  BC408NoLight->AddElement(C, 125);
+
+  return BC408NoLight;
+}
+
+
 G4Material* MaterialsManager::GetTin()
 {
   if(tin)

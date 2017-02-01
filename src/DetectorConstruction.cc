@@ -86,18 +86,19 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
   int mediumSize = 1;
   int largeSize = 2;
   //call VANDLEBar fabric method
-  vandleBar = new VANDLEBar(mediumSize);
-/*  vandleBar->Place(0, 
-                     G4ThreeVector(0.0,10.0*cm,0.0),
-                     "bar1", 
-                      experimentalHallLogic, 0);
+  //vandleBar = new VANDLEBar(smallSize);
+  //vandleBar->Place(0, 
+  //                   G4ThreeVector(0.0,10.0*cm,0.0),
+  //                   "bar1", 
+  //                    experimentalHallLogic, 0);
+  /*
   vandleBar->Place(0, 
                    G4ThreeVector(0.0,-10.0*cm,0.0),
                    "bar2", 
                     experimentalHallLogic, 1);  */
 
 	
-  /* HPGeDet = new HPGe();
+   /*HPGeDet = new HPGe();
    G4RotationMatrix* rot = new G4RotationMatrix();
    rot->rotateY(90.0*degree);
    G4ThreeVector pos1 = G4ThreeVector(0.0,0.0,0.0);
@@ -107,7 +108,8 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
                   experimentalHallLogic, 
                   0); */
  
- 
+
+
   leribssGeArray = new LeribssGeArray();
   G4ThreeVector gePos = G4ThreeVector(0.0,0.0,0.0);
   leribssGeArray->Place(0, 
@@ -115,7 +117,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
                         "LeribssGeArray", 
                         experimentalHallLogic, 
                         0); 
-   
+    
    leribssVandleArray = new LeribssVandleArray();
    G4ThreeVector vandlePos = G4ThreeVector(0.0,0.0,0.0);
    leribssVandleArray->Place(0, 
@@ -143,18 +145,26 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
    
    leribssFloor = new LeribssFloor();
    G4ThreeVector leribssFloorPos = G4ThreeVector(0.0,0.0,0.0);
-   leribssFloor->Place(0, 
+   
+   /*leribssFloor->Place(0, 
                       leribssFloorPos,
                       "leribssFloor", 
                       experimentalHallLogic, 
-                      0); 
-                      
+                      0); */
+   
+   leribssBetaDet = new LeribssBetaDet(); 
+   G4ThreeVector leribssBetaDetPos = G4ThreeVector(0.0,0.0,0.0);
+   leribssBetaDet->Place(0, 
+                      leribssBetaDetPos,
+                      "lleribssBetaDet", 
+                      experimentalHallLogic, 
+                      0);              
    return experimentalHallPhys;
 }
 
 
 void DetectorConstruction::ConstructSDandField() 
 {
-	leribssVandleArray->ConstructSDandField();
-  
+	//leribssVandleArray->ConstructSDandField();
+    //vandleBar->ConstructSDandField();
 }

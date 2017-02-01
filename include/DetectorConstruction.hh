@@ -17,6 +17,7 @@ class G4VPhysicalVolume;
 #include "LeribssSupport.hh"
 #include "LeribssBeam.hh"
 #include "LeribssFloor.hh"
+#include "LeribssBetaDet.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "MaterialsManager.hh"
 
@@ -43,6 +44,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     LeribssSupport* leribssSupport;
     LeribssBeam* leribssBeam;
     LeribssFloor* leribssFloor;
+    LeribssBetaDet* leribssBetaDet;
 };
 
 #endif
