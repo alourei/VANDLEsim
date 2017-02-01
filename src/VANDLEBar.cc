@@ -37,9 +37,13 @@ VANDLEBar::VANDLEBar(G4int size)
 	
 	materialsManager = MaterialsManager::GetInstance();
 	
-	MakeModuleLogic(barWidth, barHeight, barLength, 
-	                airThickness + reflectiveFoilThickness, PMTRadius,
-	                PMTGlassThickness, PMTLength);
+	MakeModuleLogic(barWidth, 
+	                barHeight, 
+	                barLength, 
+	                airThickness + reflectiveFoilThickness, 
+	                PMTRadius,
+	                PMTGlassThickness, 
+	                PMTLength);
 	const G4ThreeVector zero( 0.0, 0.0, 0.0 ); 
 	MakeWrapping(barWidth, barHeight, barLength, reflectiveFoilThickness);
 	MakeWrapping(barWidth, 
@@ -73,8 +77,10 @@ VANDLEBar::VANDLEBar(G4int size)
 	
 	
 	MakePMTsGlass(PMTRadius, PMTGlassThickness, barWidth, barHeight);
-	MakePMTPhotocathode(PMTActiveRadius, PMTPhotocathodeThickness, 
-	                    barWidth, barHeight);
+	MakePMTPhotocathode(PMTActiveRadius, 
+	                    PMTPhotocathodeThickness, 
+	                    barWidth, 
+	                    barHeight);
 	PlacePMTPhotocathode(PMTGlassThickness, PMTPhotocathodeThickness);
 	PlacePMTGlass(barLength, PMTGlassThickness);
     		
@@ -171,8 +177,10 @@ void VANDLEBar::MakePlasticBar(G4double barX, G4double barY, G4double barZ)
 
 			
 
-void VANDLEBar::MakeWrapping(G4double barX, G4double barY, 
-                             G4double barZ, G4double airThick,
+void VANDLEBar::MakeWrapping(G4double barX, 
+                             G4double barY, 
+                             G4double barZ, 
+                             G4double airThick,
                              G4double wrappThick)
 {
 	G4double halfExtWrappX = barX/2. + airThick + wrappThick;
@@ -207,8 +215,10 @@ void VANDLEBar::MakeWrapping(G4double barX, G4double barY,
 	wrappingLogic->SetVisAttributes(G4VisAttributes::GetInvisible());
 }
 
-void VANDLEBar::MakeWrapping(G4double barX, G4double barY, 
-                             G4double barZ, G4double wrappThick)
+void VANDLEBar::MakeWrapping(G4double barX, 
+                             G4double barY, 
+                             G4double barZ, 
+                             G4double wrappThick)
 {
 	G4double halfExtWrappX = barX/2. + wrappThick;
 	G4double halfExtWrappY = barY/2. + wrappThick;
@@ -232,8 +242,10 @@ void VANDLEBar::MakeWrapping(G4double barX, G4double barY,
 }
 
 
-void VANDLEBar::MakeAirLayer(G4double barX, G4double barY, 
-                             G4double barZ, G4double airThick)
+void VANDLEBar::MakeAirLayer(G4double barX, 
+                             G4double barY, 
+                             G4double barZ, 
+                             G4double airThick)
 {
 	G4double halfWrappX = barX/2. + airThick;
 	G4double halfWrappY = barY/2. + airThick;
@@ -256,8 +268,10 @@ void VANDLEBar::MakeAirLayer(G4double barX, G4double barY,
 }							 
 
     							 
-void VANDLEBar::MakePMTsGlass(G4double radius, G4double thickness, 
-                              G4double barX, G4double barY)
+void VANDLEBar::MakePMTsGlass(G4double radius, 
+                              G4double thickness, 
+                              G4double barX, 
+                              G4double barY)
 {
 	G4double innerRadius = 0.0*mm;
 	G4double outerRadius = radius;
@@ -284,15 +298,21 @@ void VANDLEBar::MakePMTsGlass(G4double radius, G4double thickness,
 }
 
 
-void VANDLEBar::MakePMTPhotocathode(G4double radius, G4double thickness, 
-                                    G4double barX, G4double barY)
+void VANDLEBar::MakePMTPhotocathode(G4double radius, 
+                                    G4double thickness, 
+                                    G4double barX, 
+                                    G4double barY)
 {
 	G4double innerRadius = 0.0*mm;
 	G4double outerRadius = radius;
 	G4double startPhi = 0.0 * degree;
 	G4double deltaPhi = 360.0 * degree;
-	G4Tubs* tubeSolid = new G4Tubs( "tubeSolid", innerRadius, outerRadius, 
-	                                 thickness, startPhi, deltaPhi);
+	G4Tubs* tubeSolid = new G4Tubs( "tubeSolid", 
+	                                 innerRadius, 
+	                                 outerRadius, 
+	                                 thickness, 
+	                                 startPhi, 
+	                                 deltaPhi);
 	G4Box* boxSolid = new G4Box( "boxSolid", barX/2., barY/2., thickness/2.);
 	
 	G4IntersectionSolid* photocathSolid = new G4IntersectionSolid("photocathSolid",
@@ -300,7 +320,8 @@ void VANDLEBar::MakePMTPhotocathode(G4double radius, G4double thickness,
 	                                                          tubeSolid); 
 	                                       
 	G4Material* photocathMaterial = materialsManager->GetBialkali();
-	photocathLogic = new G4LogicalVolume(photocathSolid, photocathMaterial,
+	photocathLogic = new G4LogicalVolume(photocathSolid, 
+	                                     photocathMaterial,
 	                                     "photocathLogic");
 	
 	G4VisAttributes* visAtt = new G4VisAttributes( G4Colour(0.0,0.0,1.) );
@@ -319,8 +340,13 @@ void VANDLEBar::PlacePMTPhotocathode(G4double glassThickness,
 	const G4double zPosition = (glassThickness - photocathThickness) * 0.5;
 	
 	G4ThreeVector placement = G4ThreeVector(0.0, 0.0, zPosition);
-	new G4PVPlacement( 0, placement, photocathLogic, 
-	                   "PMTPhotocathPhysical", glassLogic, 0, 0 );
+	new G4PVPlacement( 0, 
+	                   placement, 
+	                   photocathLogic, 
+	                   "PMTPhotocathPhysical", 
+	                   glassLogic, 
+	                   0, 
+	                   0 );
 }
    
     
@@ -329,14 +355,24 @@ void VANDLEBar::PlacePMTGlass(G4double barZ, G4double thickness)
 	const G4double PMTGlassPosition = (barZ - thickness) * 0.5;
 	
 	G4ThreeVector placement = G4ThreeVector(0.0, 0.0, PMTGlassPosition);
-	new G4PVPlacement( 0, placement, glassLogic, 
-	                   "PMTGlassPhysical", barLogic, 0, 0 );
+	new G4PVPlacement( 0, 
+	                   placement, 
+	                   glassLogic, 
+	                   "PMTGlassPhysical", 
+	                   barLogic, 
+	                   0, 
+	                   0 );
 	
 	G4RotationMatrix* rot = new G4RotationMatrix();
 	rot->rotateX( 180 * degree );
 	placement = G4ThreeVector(0.0, 0.0, -PMTGlassPosition);
-	new G4PVPlacement( rot, placement, glassLogic, 
-	                   "PMTGlassPhysical", barLogic, 0, 1 );
+	new G4PVPlacement( rot, 
+	                   placement, 
+	                   glassLogic, 
+	                   "PMTGlassPhysical", 
+	                   barLogic, 
+	                   0, 
+	                   1 );
 
 }
 
@@ -353,8 +389,12 @@ void VANDLEBar::MakePMTShell(G4double thickness,
 	G4double halfLength = length/2.;
 	
 
-	G4Tubs* PMTSolid = new G4Tubs("PMTSolid", innerRadius, outerRadius, 
-	                               halfLength, startPhi, deltaPhi);
+	G4Tubs* PMTSolid = new G4Tubs("PMTSolid", 
+	                               innerRadius, 
+	                               outerRadius, 
+	                               halfLength, 
+	                               startPhi, 
+	                               deltaPhi);
 	G4Material* PMTMaterial = materialsManager->GetBorosilicate();
 	PMTLogic = new G4LogicalVolume( PMTSolid, PMTMaterial, "PMTLogic");
 	
@@ -373,12 +413,22 @@ void VANDLEBar::PlacePMTShell(G4double barZ,
 	const G4double PMTPosition = (barZ + length) * 0.5 + foilThickness;
 	
 	G4ThreeVector placement = G4ThreeVector(0.0, 0.0, PMTPosition);
-	new G4PVPlacement( 0, placement, PMTLogic, 
-	                   "PMTShellPhysical", moduleLogic, 0, 0 );
+	new G4PVPlacement( 0, 
+	                   placement, 
+	                   PMTLogic, 
+	                   "PMTShellPhysical", 
+	                   moduleLogic, 
+	                   0, 
+	                   0 );
 	
 	placement = G4ThreeVector(0.0, 0.0, -PMTPosition);
-	new G4PVPlacement( 0, placement, PMTLogic, 
-	                   "PMTShellPhysical", moduleLogic, 0, 1 );
+	new G4PVPlacement( 0, 
+	                   placement, 
+	                   PMTLogic, 
+	                   "PMTShellPhysical", 
+	                   moduleLogic, 
+	                   0, 
+	                   1 );
 
 }
 
@@ -403,10 +453,14 @@ void VANDLEBar::SetOpticalSurfacesProperties()
     assert(sizeof(photocathReflectivity) == sizeof(photonsEn));
        
     G4MaterialPropertiesTable* photocathMatTable = new G4MaterialPropertiesTable();
-    photocathMatTable->AddProperty("EFFICIENCY", photonsEn,
-                                    photocathEfficiency, scintEntries);
-    photocathMatTable->AddProperty("REFLECTIVITY", photonsEn,
-                                   photocathReflectivity, scintEntries);
+    photocathMatTable->AddProperty("EFFICIENCY", 
+                                    photonsEn,
+                                    photocathEfficiency, 
+                                    scintEntries);
+    photocathMatTable->AddProperty("REFLECTIVITY", 
+                                    photonsEn,
+                                    photocathReflectivity, 
+                                    scintEntries);
     
     G4OpticalSurface* photocathOpSurf = new G4OpticalSurface("photocathOpSurf");
     photocathOpSurf->SetModel( unified );
@@ -437,16 +491,26 @@ void VANDLEBar::SetOpticalSurfacesProperties()
 	G4double plasticWallBackscatter[] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
 		                                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0};	                          
     G4MaterialPropertiesTable* reflectFoilMatTable = new G4MaterialPropertiesTable();
-	reflectFoilMatTable->AddProperty( "EFFICIENCY", photonsEn, 
-	                                   foilEfficiency, scintEntries );
-	reflectFoilMatTable->AddProperty( "REFLECTIVITY", photonsEn, 
-	                                   foilReflectivity, scintEntries );
-	reflectFoilMatTable->AddProperty( "SPECULARLOBECONSTANT", photonsEn, 
-	                                  plasticWallSpecularLobe, scintEntries );
-	reflectFoilMatTable->AddProperty( "SPECULARSPIKECONSTANT", photonsEn, 
-	                                  plasticWallSecularSpike, scintEntries );
-	reflectFoilMatTable->AddProperty( "BACKSCATTERCONSTANT", photonsEn, 
-	                                   plasticWallBackscatter, scintEntries );	
+	reflectFoilMatTable->AddProperty( "EFFICIENCY", 
+	                                   photonsEn, 
+	                                   foilEfficiency, 
+	                                   scintEntries );
+	reflectFoilMatTable->AddProperty( "REFLECTIVITY", 
+	                                   photonsEn, 
+	                                   foilReflectivity, 
+	                                   scintEntries );
+	reflectFoilMatTable->AddProperty( "SPECULARLOBECONSTANT", 
+	                                   photonsEn, 
+	                                   plasticWallSpecularLobe, 
+	                                   scintEntries );
+	reflectFoilMatTable->AddProperty( "SPECULARSPIKECONSTANT", 
+	                                   photonsEn, 
+	                                   plasticWallSecularSpike, 
+	                                   scintEntries );
+	reflectFoilMatTable->AddProperty( "BACKSCATTERCONSTANT", 
+	                                   photonsEn, 
+	                                   plasticWallBackscatter, 
+	                                   scintEntries );	
 	G4OpticalSurface* reflectFoilOpSurf = new G4OpticalSurface("reflectFoilOpSurf");
 	reflectFoilOpSurf->SetType( dielectric_metal );
 	reflectFoilOpSurf->SetFinish( polished );
@@ -532,12 +596,19 @@ void VANDLEBar::ConstructSDandField()
 	
 }
 
-void VANDLEBar::Place(G4RotationMatrix *pRot, const G4ThreeVector &tlate, 
-                      const G4String &pName, G4LogicalVolume *pMotherLogical, 
+void VANDLEBar::Place(G4RotationMatrix *pRot, 
+                      const G4ThreeVector &tlate, 
+                      const G4String &pName, 
+                      G4LogicalVolume *pMotherLogical, 
                       G4int pCopyNo)
 {
-   new G4PVPlacement(pRot, tlate, moduleLogic, pName, 
-	                 pMotherLogical,0,pCopyNo);					  
+   new G4PVPlacement(pRot, 
+                     tlate, 
+                     moduleLogic, 
+                     pName, 
+	                 pMotherLogical,
+	                 0,
+	                 pCopyNo);					  
 						  
 						  
 }
