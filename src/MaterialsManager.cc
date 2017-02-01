@@ -157,7 +157,7 @@ G4Material* MaterialsManager::GetBC408()
   
      G4double photonEmissionFraction = 0.2667; //PMT efficiency (TODO - discuss it)
      G4double pEF = photonEmissionFraction;
-     G4double protonScalingFact = 1.0;
+     G4double protonScalingFact = 1.35;//AF test 30.01.2017
     // BC408LightProperties->AddConstProperty("SCINTILLATIONYIELD",  
      //                                       ( 10000.0 * photonEmissionFraction ) / MeV );
                                            //I guess i don't need it
