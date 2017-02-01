@@ -160,8 +160,8 @@ void LeribssBeam::BeamLine(G4RotationMatrix *pRot,
 
 	G4Material* stainSteelMaterial = materialsManager->GetStainSteel();
 
-	G4double BeamLine_inn_rad = 1.54*inch;
-  	G4double BeamLine_out_rad = 1.7*inch;
+	G4double BeamLine_inn_rad = 1.54*inch/2.;
+  	G4double BeamLine_out_rad = 1.7*inch/2.;
   	G4double BeamLine_length = 30.0*inch;
   	
     G4Tubs* BeamLine = new G4Tubs("BeamLine", BeamLine_inn_rad, BeamLine_out_rad, BeamLine_length, 0.0*M_PI, 2.0*M_PI);
