@@ -67,15 +67,16 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 void PrimaryGeneratorAction::GenerateSingleParticle(G4Event* anEvent)
 {
 
-	//G4ThreeVector aim(0.0,0.0,1.0);
-	//GenerateIsotropicDirectionDistribution(&aim,0.0);
-	//G4ThreeVector startPos(0.0*cm,0.0*cm,0.0*cm);	
-	//particleGun->SetParticlePosition(startPos);
-	//particleGun->SetParticleMomentumDirection(aim);
-	//particleGun->GeneratePrimaryVertex(anEvent);
-	G4double barWidth = 3*cm;
-	G4double barLength = 200*cm;
-	RadiateBarByParallelBeam(anEvent, barWidth, barLength);	
+	G4ThreeVector aim(0.0,1.0,0.0);
+	GenerateIsotropicDirectionDistribution(&aim,0.0);
+	G4ThreeVector startPos(0.0*cm,0.0*cm,0.0*cm);	
+	particleGun->SetParticlePosition(startPos);
+	particleGun->SetParticleMomentumDirection(aim);
+	particleGun->GeneratePrimaryVertex(anEvent);
+	
+	//G4double barWidth = 3*cm;
+	//G4double barLength = 200*cm;
+	//RadiateBarByParallelBeam(anEvent, barWidth, barLength);	
 	return;
 }
 	

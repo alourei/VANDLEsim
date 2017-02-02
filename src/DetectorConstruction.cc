@@ -61,9 +61,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct(){
 G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 {
 
-  G4double expHall_x = 10.*m;
-  G4double expHall_y = 10.*m;
-  G4double expHall_z = 10.*m;
+  G4double expHall_x = 5.*m;
+  G4double expHall_y = 5.*m;
+  G4double expHall_z = 5.*m;
   G4Material* vaccum = materialsManager->GetVaccum();
   //Create experimental hall
   G4Box* experimentalHallSolid
@@ -146,11 +146,11 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
    leribssFloor = new LeribssFloor();
    G4ThreeVector leribssFloorPos = G4ThreeVector(0.0,0.0,0.0);
    
-   /*leribssFloor->Place(0, 
+   leribssFloor->Place(0, 
                       leribssFloorPos,
                       "leribssFloor", 
                       experimentalHallLogic, 
-                      0); */
+                      0); 
    
    leribssBetaDet = new LeribssBetaDet(); 
    G4ThreeVector leribssBetaDetPos = G4ThreeVector(0.0,0.0,0.0);
@@ -165,6 +165,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 
 void DetectorConstruction::ConstructSDandField() 
 {
-	//leribssVandleArray->ConstructSDandField();
+	leribssVandleArray->ConstructSDandField();
     //vandleBar->ConstructSDandField();
 }

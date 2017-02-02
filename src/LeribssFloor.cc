@@ -57,7 +57,8 @@ void LeribssFloor::MakeCeilFloor(G4RotationMatrix *pRot,
      //const G4double floorYOffset = (91.5 - 5.08/4.)*cm + 5.0*inch + 37.973/2.0*cm; //154.305*cm //MSU: 51.18 //LeRIBSS: 91.5
 	
 	 const G4double ceilYOffset =  50.874*inch + boxThickness;
-     const G4double floorYOffset = (91.5 - 5.08/4.)*cm + 5.0*inch + 37.973/2.0*cm;
+     //const G4double floorYOffset = (91.5 - 5.08/4.)*cm + 5.0*inch + 37.973/2.0*cm;
+     const G4double floorYOffset = 2*m;
      
 	G4double wallXOffset = boxWidth - boxThickness;
 	G4double wallYOffset = ((ceilYOffset + floorYOffset)/2. - floorYOffset);
