@@ -76,6 +76,13 @@ void MaterialsManager::CleanUp()
   aluminium = 0L;
   NaI = 0L;
   iron = 0L;
+  BC408NoLight = 0L;
+  germanium = 0L;
+  iron = 0L;
+  stainSteel = 0L;
+  concrete = 0L;
+  HDPE = 0L;
+	
 }
 
 
