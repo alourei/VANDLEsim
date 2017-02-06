@@ -5,8 +5,9 @@
 //
 
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
+#ifdef G4MULTITHREADED //TODO!!!
+//#include "G4MTRunManager.hh"
+#include "G4RunManager.hh"
 #else
 #include "G4RunManager.hh"
 #endif
@@ -29,8 +30,9 @@
 
 int main(int argc, char** argv)
 {
-#ifdef G4MULTITHREADED
-  G4MTRunManager * runManager = new G4MTRunManager;
+#ifdef G4MULTITHREADED //TODO!!!
+  //G4MTRunManager * runManager = new G4MTRunManager;
+  G4RunManager * runManager = new G4RunManager;
 #else
   G4RunManager * runManager = new G4RunManager;
 #endif
