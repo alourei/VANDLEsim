@@ -47,16 +47,18 @@ void AnalysisManager::CreatePMTTuple()
   rootManager->CreateNtupleIColumn("detID");
   rootManager->CreateNtupleIColumn("pmtID");
   rootManager->CreateNtupleDColumn("time");
-  rootManager->CreateNtupleDColumn("enDep");
+  //rootManager->CreateNtupleDColumn("enDep");
   rootManager->FinishNtuple();
   optPhTupleId = nrOfCreatedTuple++;
-/*  analysisManager->CreateNtuple("OptPhotonsSum", "Nr of detected photons");
-  analysisManager->CreateNtupleDColumn("eventID");
-  analysisManager->CreateNtupleDColumn("detID");
-  analysisManager->CreateNtupleDColumn("pmtID");
-  analysisManager->CreateNtupleDColumn("nrOfPhotons");
-  analysisManager->FinishNtuple();*/
-	
+
+//add first empty event
+   int colId = 0;
+   rootManager->FillNtupleIColumn(optPhTupleId, colId, 0); 
+   rootManager->FillNtupleIColumn(optPhTupleId, ++colId, 0);
+   rootManager->FillNtupleIColumn(optPhTupleId, ++colId, 0);
+   rootManager->FillNtupleDColumn(optPhTupleId, ++colId, 0.);
+   //rootManager->FillNtupleDColumn(optPhTupleId, ++colId, 0.);
+   rootManager->AddNtupleRow(optPhTupleId);
 	
 }
 
@@ -72,6 +74,17 @@ void AnalysisManager::CreateScintilatorTuple()
    rootManager->CreateNtupleDColumn("zPos");
    rootManager->FinishNtuple();
    scintTupleId = nrOfCreatedTuple++;
+   
+   int colId = 0;
+   rootManager->FillNtupleIColumn(scintTupleId, colId, 0); 
+   rootManager->FillNtupleIColumn(scintTupleId, ++colId, 0);
+   rootManager->FillNtupleDColumn(scintTupleId, ++colId, 0.);
+   rootManager->FillNtupleDColumn(scintTupleId, ++colId, 0.);
+   rootManager->FillNtupleDColumn(scintTupleId, ++colId, 0.);		   
+   rootManager->FillNtupleDColumn(scintTupleId, ++colId, 0.);
+   rootManager->FillNtupleDColumn(scintTupleId, ++colId, 0.);		   
+   rootManager->AddNtupleRow(scintTupleId);   
+   
 }
 
 
@@ -94,7 +107,7 @@ void AnalysisManager::AddHit(PMTHitsCollection* pmtHC, G4int eventId)
 		   rootManager->FillNtupleIColumn(optPhTupleId, ++colId, moduleIndex);
 		   rootManager->FillNtupleIColumn(optPhTupleId, ++colId, pmtIndex);
 		   rootManager->FillNtupleDColumn(optPhTupleId, ++colId, time);
-		   rootManager->FillNtupleDColumn(optPhTupleId, ++colId, energyDep/keV);
+		   //rootManager->FillNtupleDColumn(optPhTupleId, ++colId, energyDep/keV);
 		   rootManager->AddNtupleRow(optPhTupleId);
 	   }
     }	

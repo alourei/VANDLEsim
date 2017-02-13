@@ -75,7 +75,10 @@ G4SubtractionSolid* LeribssSupport::MakeBracket()
     rotBracketCut.rotateZ(45.0*deg);
     const G4ThreeVector  translationBracketCut(-bracketBase_x,-bracketBase_y,0.0);
     G4Transform3D transformBracketCut(rotBracketCut,translationBracketCut);
-    G4SubtractionSolid* bracket = new G4SubtractionSolid("bracket", bracketBase, bracketCut, transformBracketCut);
+    G4SubtractionSolid* bracket = new G4SubtractionSolid("bracket", 
+                                                          bracketBase, 
+                                                          bracketCut, 
+                                                          transformBracketCut);
     return bracket;
      
      
@@ -126,12 +129,22 @@ void LeribssSupport::MakeDetectorPlate(G4RotationMatrix *pRot,
      const G4double Plate1OffsetZ = half_thickness_zm + detPlate_z;
 
      
-     G4LogicalVolume* detPlateLog = new G4LogicalVolume(detPlate, aluminiumMaterial, "supprotRingLog");
+     G4LogicalVolume* detPlateLog = new G4LogicalVolume(detPlate, 
+                                                        aluminiumMaterial, 
+                                                        "supprotRingLog");
      detPlateLog->SetVisAttributes(supportVisAtt);
      G4RotationMatrix* rotPlate1 = new G4RotationMatrix();
      rotPlate1->rotateZ(-90.0*deg);
-     const G4ThreeVector posDetPlate1(Plate1OffsetX,0.0,-boxDist/2.0-Plate1OffsetZ);
-	 new G4PVPlacement( rotPlate1, posDetPlate1, detPlateLog, pName, pMotherLogical, 0, 0 ); 
+     const G4ThreeVector posDetPlate1(Plate1OffsetX,
+                                      0.0,
+                                      -boxDist/2.0-Plate1OffsetZ);
+	 new G4PVPlacement( rotPlate1, 
+	                    posDetPlate1, 
+	                    detPlateLog, 
+	                    pName, 
+	                    pMotherLogical, 
+	                    0, 
+	                    0 ); 
 	 
 	 
 
@@ -234,9 +247,9 @@ G4UnionSolid* LeribssSupport::MatekTotalCeilingSupport(G4SubtractionSolid* ceilS
 
 G4SubtractionSolid* LeribssSupport::MakeCeilingSupportBracket()
 {
-    const G4double ceilBracketBase_x = 1.875*inch;
-	const G4double ceilBracketBase_y = 1.75*inch;
-	const G4double ceilBracketBase_z = 0.25*inch;
+    ceilBracketBase_x = 1.875*inch;
+	ceilBracketBase_y = 1.75*inch;
+	ceilBracketBase_z = 0.25*inch;
 	
 	const G4double ceilBracketCutX = 2.812*inch;
 	
@@ -279,14 +292,23 @@ G4UnionSolid* LeribssSupport::MakeHPGeHolderExtra()
 	const G4double HPGeholderBoxCut_y = HPGeholderBoxCut_x;
 	const G4double HPGeholderBoxCut_z = 2.0*HPGeholderBox_z;
 	
-	G4Box* HPGeholderBoxBase = new G4Box("HPGeholderBoxBase", HPGeholderBox_x, HPGeholderBox_y, HPGeholderBox_z);
-	G4Box* HPGeholderBoxCut = new G4Box("HPGeholderBoxCut", HPGeholderBoxCut_x, HPGeholderBoxCut_y, HPGeholderBoxCut_z);
+	G4Box* HPGeholderBoxBase = new G4Box("HPGeholderBoxBase", 
+	                                      HPGeholderBox_x, 
+	                                      HPGeholderBox_y, 
+	                                      HPGeholderBox_z);
+	G4Box* HPGeholderBoxCut = new G4Box("HPGeholderBoxCut", 
+	                                     HPGeholderBoxCut_x, 
+	                                     HPGeholderBoxCut_y, 
+	                                     HPGeholderBoxCut_z);
 
 	G4RotationMatrix rotHPGeholderBoxCut;
     rotHPGeholderBoxCut.rotateZ(0.0*deg);
     const G4ThreeVector  translationHPGeholderBoxCut(0.0,0.0,0.0);
     G4Transform3D transformHPGeholderBoxCut(rotHPGeholderBoxCut,translationHPGeholderBoxCut);
-    G4SubtractionSolid* HPGeholderBox = new G4SubtractionSolid("HPGeholderBox", HPGeholderBoxBase, HPGeholderBoxCut, transformHPGeholderBoxCut);
+    G4SubtractionSolid* HPGeholderBox = new G4SubtractionSolid("HPGeholderBox", 
+                                                                HPGeholderBoxBase, 
+                                                                HPGeholderBoxCut, 
+                                                                transformHPGeholderBoxCut);
     //return HPGeholderBox;
 
 	HPGeholderBoxExtra_x = 2.0*inch;
@@ -462,13 +484,22 @@ void LeribssSupport::MakeSupportRing(G4RotationMatrix *pRot,
 {   
     const G4double radiusHole = 20.438*inch;
     G4double lengthCyl = boxDist + 2.0*half_thickness_zm;    	
-	G4Tubs* cylinderHole = new G4Tubs("cylinderHole", 0.0, radiusHole, lengthCyl, 0.0*M_PI, 2.0*M_PI);
+	G4Tubs* cylinderHole = new G4Tubs("cylinderHole", 
+	                                  0.0, 
+	                                  radiusHole, 
+	                                  lengthCyl, 
+	                                  0.0*M_PI, 
+	                                  2.0*M_PI);
 	
 	
 	G4Box* boxM = new G4Box("boxM", half_length_xm, half_length_ym, half_thickness_zm);
-	///////////////////////////////////////////////////////////////////////////////////
+
 	const G4double holeOffset = 0.0*inch;	
-     G4SubtractionSolid* boxMHole = new G4SubtractionSolid("boxhvHole", boxM, cylinderHole, 0, G4ThreeVector(0.0,holeOffset,0.0));
+     G4SubtractionSolid* boxMHole = new G4SubtractionSolid("boxhvHole", 
+                                                           boxM, 
+                                                           cylinderHole, 
+                                                           0, 
+                                                           G4ThreeVector(0.0,holeOffset,0.0));
 
 
      //make supportRing top cuts 
@@ -478,13 +509,19 @@ void LeribssSupport::MakeSupportRing(G4RotationMatrix *pRot,
      rotBoxUpCut1.rotateZ(45.0*deg);
      G4ThreeVector  translationBoxUpCut1(-half_length_xm, half_length_ym, 0.0);
      G4Transform3D transformBoxUpCut1(rotBoxUpCut1,translationBoxUpCut1);
-     G4SubtractionSolid* boxUpCut1 = new G4SubtractionSolid("boxUpCut1", boxMHole, boxUpCut, transformBoxUpCut1);
+     G4SubtractionSolid* boxUpCut1 = new G4SubtractionSolid("boxUpCut1", 
+                                                            boxMHole, 
+                                                            boxUpCut, 
+                                                            transformBoxUpCut1);
 
      G4RotationMatrix rotBoxUpCut2;
      rotBoxUpCut2.rotateZ(45.0*deg);
      G4ThreeVector  translationBoxUpCut2(half_length_xm, half_length_ym, 0.0);
      G4Transform3D transformBoxUpCut2(rotBoxUpCut2,translationBoxUpCut2);
-     G4SubtractionSolid* boxUpCut12 = new G4SubtractionSolid("boxUpCut12", boxUpCut1, boxUpCut, transformBoxUpCut2);
+     G4SubtractionSolid* boxUpCut12 = new G4SubtractionSolid("boxUpCut12", 
+                                                              boxUpCut1, 
+                                                              boxUpCut, 
+                                                              transformBoxUpCut2);
 
 
      //make supportRing bottom cuts    
@@ -493,26 +530,45 @@ void LeribssSupport::MakeSupportRing(G4RotationMatrix *pRot,
      rotBoxBCut1.rotateZ(-boxBCutAngle*deg);
      G4ThreeVector  translationBoxBCut1(-half_length_xm,-half_length_ym,0.0);
      G4Transform3D transformBoxBCut1(rotBoxBCut1,translationBoxBCut1);
-     G4SubtractionSolid* boxBCut1 = new G4SubtractionSolid("boxBCut1", boxUpCut12, boxBCut, transformBoxBCut1);
-     G4LogicalVolume* boxBCut_LogicalVolume = new G4LogicalVolume(boxBCut1, aluminiumMaterial, "boxBCut_Logical");
+     G4SubtractionSolid* boxBCut1 = new G4SubtractionSolid("boxBCut1", 
+                                                            boxUpCut12, 
+                                                            boxBCut, 
+                                                            transformBoxBCut1);
 
      G4RotationMatrix rotBoxBCut2;
      rotBoxBCut2.rotateZ(boxBCutAngle*deg);
      G4ThreeVector  translationBoxBCut2(half_length_xm,-half_length_ym,0.0);
      G4Transform3D transformBoxBCut2(rotBoxBCut2,translationBoxBCut2);
-     G4SubtractionSolid* boxBCut12 = new G4SubtractionSolid("boxBCut12", boxBCut1, boxBCut, transformBoxBCut2);
-     ///////////////////////////////////////////////////////////////////////////////////////////////
+     G4SubtractionSolid* boxBCut12 = new G4SubtractionSolid("boxBCut12", 
+                                                             boxBCut1, 
+                                                             boxBCut, 
+                                                             transformBoxBCut2);
 
 
-     G4LogicalVolume* supprotRingLog = new G4LogicalVolume(boxBCut12, aluminiumMaterial, "supprotRingLog");
+
+     G4LogicalVolume* supprotRingLog = new G4LogicalVolume(boxBCut12, 
+                                                           aluminiumMaterial, 
+                                                           "supprotRingLog");
      supprotRingLog->SetVisAttributes(supportVisAtt);
      const G4ThreeVector possupprotRing1(0.0,0.0,-boxDist/2.0);
-	 new G4PVPlacement( 0, possupprotRing1, supprotRingLog, pName, pMotherLogical, 0, 0 );   
+	 new G4PVPlacement( 0, 
+	                    possupprotRing1, 
+	                    supprotRingLog, 
+	                    pName, 
+	                    pMotherLogical, 
+	                    0, 
+	                    0 );   
 	 
      G4RotationMatrix* rotSupp2 = new G4RotationMatrix();
      rotSupp2->rotateY(180.0*deg);
      G4ThreeVector possupprotRing2(0.0,0.0,boxDist/2.0);
-     new G4PVPlacement(rotSupp2, possupprotRing2, supprotRingLog, pName, pMotherLogical, 0, 1 );
+     new G4PVPlacement(rotSupp2, 
+                       possupprotRing2, 
+                       supprotRingLog, 
+                       pName, 
+                       pMotherLogical, 
+                       0, 
+                       1 );
 
 }
 
@@ -530,23 +586,42 @@ void LeribssSupport::MakeRailSupport(G4RotationMatrix *pRot,
 
      G4RotationMatrix rotBraL;
      rotBraL.rotateY(90.*deg);
-     G4ThreeVector  translationBraL(boxOut_x+ceilBracketBase_z,-(boxOut_y+ceilSuppBase_z),(boxOut_z-ceilBracketBase_x));
+     G4ThreeVector  translationBraL(boxOut_x+ceilBracketBase_z,
+                                    -(boxOut_y+ceilSuppBase_z),
+                                    (boxOut_z-ceilBracketBase_x));
      G4Transform3D transformBraL(rotBraL,translationBraL);
-     G4UnionSolid* railBraL = new G4UnionSolid("railBraL", railSupportR, ceilBracket, transformBraL);
+     G4UnionSolid* railBraL = new G4UnionSolid("railBraL", 
+                                                railSupportR, 
+                                                ceilBracket, 
+                                                transformBraL);
 
      const G4double railSupportX = 12.431*inch;
      const G4double railSupportY = 30.249*inch;
 
      
-     G4LogicalVolume* railSupportLog = new G4LogicalVolume(railBraL, aluminiumMaterial, "supprotRingLog");
+     G4LogicalVolume* railSupportLog = new G4LogicalVolume(railBraL, 
+                                                           aluminiumMaterial, 
+                                                           "supprotRingLog");
      railSupportLog->SetVisAttributes(supportVisAtt);
      const G4ThreeVector posRailSupport1(railSupportX,railSupportY,0);
-	 new G4PVPlacement( 0, posRailSupport1, railSupportLog, pName, pMotherLogical, 0, 0 ); 
+	 new G4PVPlacement( 0, 
+	                    posRailSupport1, 
+	                    railSupportLog, 
+	                    pName, 
+	                    pMotherLogical, 
+	                    0, 
+	                    0 ); 
 	    
 	 const G4ThreeVector posRailSupport2(-railSupportX,railSupportY,0);   
 	 G4RotationMatrix* rotRailSupport2 = new G4RotationMatrix();
      rotRailSupport2->rotateY(180.*deg);  
-	 new G4PVPlacement(rotRailSupport2, posRailSupport2, railSupportLog, pName, pMotherLogical, 0, 1 );   
+	 new G4PVPlacement(rotRailSupport2, 
+	                   posRailSupport2, 
+	                   railSupportLog, 
+	                   pName, 
+	                   pMotherLogical, 
+	                   0, 
+	                   1 );   
  
 }
 
@@ -560,7 +635,9 @@ void LeribssSupport::PlaceTubes(G4RotationMatrix *pRot,
 	G4double tubeRad = 1.0*inch;
 
     G4Tubs* tube = new G4Tubs("tube", 0.0, tubeRad, tubeLength, 0.0*M_PI, 2.0*M_PI);
-    G4LogicalVolume* tubeLogic = new G4LogicalVolume(tube, aluminiumMaterial, "tubeLogic");
+    G4LogicalVolume* tubeLogic = new G4LogicalVolume(tube, 
+                                                     aluminiumMaterial, 
+                                                     "tubeLogic");
     tubeLogic->SetVisAttributes(supportVisAtt);
     G4RotationMatrix rotTube;
     
@@ -595,40 +672,112 @@ void LeribssSupport::PlaceTubes(G4RotationMatrix *pRot,
     G4double tube12y = -tube9y;
     
     G4ThreeVector posTube1(tube1x,tube1y,0);
-	new G4PVPlacement( 0, posTube1, tubeLogic, pName + "tube0", pMotherLogical, 0, 0 );
+	new G4PVPlacement( 0, 
+	                  posTube1, 
+	                  tubeLogic, 
+	                  pName + "tube0", 
+	                  pMotherLogical, 
+	                  0, 
+	                  0 );
 
     G4ThreeVector  posTube2(tube2x, tube2y, 0);
-	new G4PVPlacement( 0, posTube2, tubeLogic, pName + "tube0", pMotherLogical, 0, 1 );
+	new G4PVPlacement( 0, 
+	                   posTube2, 
+	                   tubeLogic, 
+	                   pName + "tube0", 
+	                   pMotherLogical, 
+	                   0, 
+	                   1 );
 	 
     G4ThreeVector posTube3(tube3x, tube3y, 0);
-    new G4PVPlacement( 0, posTube3, tubeLogic, pName + "tube0", pMotherLogical, 0, 2 );
+    new G4PVPlacement( 0, 
+                       posTube3, 
+                       tubeLogic, 
+                       pName + "tube0", 
+                       pMotherLogical, 
+                       0, 
+                       2 );
  
     G4ThreeVector posTube4(tube4x, tube4y, 0);
-    new G4PVPlacement( 0, posTube4, tubeLogic, pName + "tube0", pMotherLogical, 0, 3 );
+    new G4PVPlacement( 0, 
+                       posTube4, 
+                       tubeLogic, 
+                       pName + "tube0", 
+                       pMotherLogical, 
+                       0, 
+                       3 );
 
     G4ThreeVector  posTube5(tube5x, tube5y, 0);
-    new G4PVPlacement( 0, posTube5, tubeLogic, pName + "tube0", pMotherLogical, 0, 4 );
+    new G4PVPlacement( 0, 
+                       posTube5, 
+                       tubeLogic, 
+                       pName + "tube0", 
+                       pMotherLogical, 
+                       0, 
+                       4 );
      
     G4ThreeVector posTube6(tube6x, tube6y, 0);
-    new G4PVPlacement( 0, posTube6, tubeLogic, pName + "tube0", pMotherLogical, 0, 5 );
+    new G4PVPlacement( 0, 
+                       posTube6, 
+                       tubeLogic, 
+                       pName + "tube0", 
+                       pMotherLogical, 
+                       0, 
+                       5 );
 
     G4ThreeVector posTube7(tube7x, tube7y, 0);
-    new G4PVPlacement( 0, posTube7, tubeLogic, pName + "tube0", pMotherLogical, 0, 6 );
+    new G4PVPlacement( 0, 
+                       posTube7, 
+                       tubeLogic, 
+                       pName + "tube0", 
+                       pMotherLogical, 
+                       0, 
+                       6 );
 
     G4ThreeVector posTube8(tube8x, tube8y, 0);
-    new G4PVPlacement( 0, posTube8, tubeLogic, pName + "tube0", pMotherLogical, 0, 7 );
+    new G4PVPlacement( 0, 
+                       posTube8, 
+                       tubeLogic, 
+                       pName + "tube0", 
+                       pMotherLogical, 
+                       0, 
+                       7 );
 
     G4ThreeVector posTube9(tube9x, tube9y, 0);
-    new G4PVPlacement( 0, posTube9, tubeLogic, pName + "tube0", pMotherLogical, 0, 8 );
+    new G4PVPlacement( 0, 
+                       posTube9, 
+                       tubeLogic, 
+                       pName + "tube0", 
+                       pMotherLogical, 
+                       0, 
+                       8 );
 
     G4ThreeVector posTube10(tube10x, tube10y, 0);
-    new G4PVPlacement( 0, posTube10, tubeLogic, pName + "tube0", pMotherLogical, 0, 9 );
+    new G4PVPlacement( 0, 
+                       posTube10, 
+                       tubeLogic, 
+                       pName + "tube0", 
+                       pMotherLogical, 
+                       0, 
+                       9 );
 
     G4ThreeVector posTube11(tube11x, tube11y, 0);
-    new G4PVPlacement( 0, posTube11, tubeLogic, pName + "tube0", pMotherLogical, 0, 10 );
+    new G4PVPlacement( 0, 
+                       posTube11, 
+                       tubeLogic, 
+                       pName + "tube0", 
+                       pMotherLogical, 
+                       0, 
+                       10 );
 
     G4ThreeVector posTube12(tube12x, tube12y, 0);
-    new G4PVPlacement( 0, posTube12, tubeLogic, pName + "tube0", pMotherLogical, 0, 11 );
+    new G4PVPlacement( 0, 
+                       posTube12, 
+                       tubeLogic, 
+                       pName + "tube0", 
+                       pMotherLogical, 
+                       0, 
+                       11 );
 }
 
 
@@ -669,7 +818,10 @@ void LeribssSupport::Place(G4RotationMatrix *pRot,
 
 
 
-G4UnionSolid* LeribssSupport::roundedHalfPlate(G4double height, G4double width, G4double thickness, G4double radius)
+G4UnionSolid* LeribssSupport::roundedHalfPlate(G4double height, 
+                                               G4double width, 
+                                               G4double thickness, 
+                                               G4double radius)
 {
  
   G4double half_width_xv = width/2.0-radius;    
@@ -690,21 +842,37 @@ G4UnionSolid* LeribssSupport::roundedHalfPlate(G4double height, G4double width, 
   G4Transform3D transformBoxH(rotBoxH,translationBoxH);
   G4UnionSolid* boxvh = new G4UnionSolid("boxvh", boxv, boxh, transformBoxH);
 
-  G4Tubs* cylinderUR = new G4Tubs("cylinderUR", 0.0, radius, half_thickness_zh, 0.0*M_PI, 2.0*M_PI/4.0);
+  G4Tubs* cylinderUR = new G4Tubs("cylinderUR", 
+                                   0.0, 
+                                   radius, 
+                                   half_thickness_zh, 
+                                   0.0*M_PI, 
+                                   2.0*M_PI/4.0);
   
   G4RotationMatrix rotUR;
   rotUR.rotateX(0.*deg);
   G4ThreeVector  translationUR(half_width_xv, half_height_yv - radius, 0);
   G4Transform3D transformUR(rotUR,translationUR);
-  G4UnionSolid* boxhvULR = new G4UnionSolid("boxhvULR", boxvh, cylinderUR, transformUR);
+  G4UnionSolid* boxhvULR = new G4UnionSolid("boxhvULR", 
+                                             boxvh, 
+                                             cylinderUR, 
+                                             transformUR);
 
-  G4Tubs* cylinderBR = new G4Tubs("cylinderBR", 0.0, radius, half_thickness_zh, 0.0*M_PI, 2.0*M_PI/4.0);
+  G4Tubs* cylinderBR = new G4Tubs("cylinderBR", 
+                                   0.0, 
+                                   radius, 
+                                   half_thickness_zh, 
+                                   0.0*M_PI, 
+                                   2.0*M_PI/4.0);
   
   G4RotationMatrix rotBR;
   rotBR.rotateY(180.*deg);
   G4ThreeVector  translationBR(-half_width_xv, half_height_yv - radius, 0);
   G4Transform3D transformBR(rotBR,translationBR);
-  G4UnionSolid* rounded_half_plate = new G4UnionSolid("boxhvUBLR", boxhvULR, cylinderBR, transformBR);	
+  G4UnionSolid* rounded_half_plate = new G4UnionSolid("boxhvUBLR", 
+                                                       boxhvULR, 
+                                                       cylinderBR, 
+                                                       transformBR);	
 
   return rounded_half_plate;
 
