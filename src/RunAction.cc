@@ -18,6 +18,7 @@ RunAction::RunAction(): G4UserRunAction()
   // set printing event number per each event
   //G4RunManager::GetRunManager()->SetPrintProgress(1);     
   timer = new G4Timer;
+  totNrOfEvents = 0;
    AnalysisManager* analysisManager = AnalysisManager::GetInstance();
    G4String fileName = MakeOutputFileName();
    std::cout<<fileName<<std::endl; 
@@ -29,6 +30,7 @@ RunAction::~RunAction()
 {
    delete timer;
    AnalysisManager* analysisManager = AnalysisManager::GetInstance();
+   analysisManager->AddNrOfEvent(totNrOfEvents);
    analysisManager->SaveOutput();  
 }
 
@@ -45,7 +47,7 @@ void RunAction::EndOfRunAction(const G4Run* run)
    timer->Stop();
    G4cout << "number of event = " << run->GetNumberOfEvent() 
           << " " << *timer << G4endl;
-         
+   totNrOfEvents += run->GetNumberOfEvent();   
 
 }
 

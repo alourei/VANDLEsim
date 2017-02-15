@@ -24,6 +24,7 @@ class RunAction : public G4UserRunAction
   private:
     G4Timer* timer;
     G4String MakeOutputFileName();
+    G4int totNrOfEvents;
 };
 
 

@@ -25,6 +25,7 @@ class AnalysisManager
 
 		void CreateOutput(G4String filename);
 		void SaveOutput();
+		void AddNrOfEvent(G4int nrOfEvents);
 		void AddHit(PMTHitsCollection* pmtHC, G4int eventId);//? just hit, or hit collection?
 		void AddHit(ScintillatorHitsCollection* pmtHC, G4int eventId);
 		
@@ -34,12 +35,14 @@ class AnalysisManager
 		void CreateTuple();
 		void CreatePMTTuple();
 		void CreateScintilatorTuple();
+		void CreateNrOfCountsTuple();
 		
 		static AnalysisManager *s_instance;
 		G4RootAnalysisManager* rootManager;
 		G4int nrOfCreatedTuple;		
 		G4int optPhTupleId;
 		G4int scintTupleId;
+		G4int nrOrCountsTupleId;
 		
 		
 	public:

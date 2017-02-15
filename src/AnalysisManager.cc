@@ -37,7 +37,7 @@ void AnalysisManager::CreateTuple()
    //analysisManager->SetNtupleDirectoryName("ntuple");
    CreatePMTTuple();
    CreateScintilatorTuple();
-	
+	CreateNrOfCountsTuple();
 }
 
 void AnalysisManager::CreatePMTTuple()
@@ -85,6 +85,13 @@ void AnalysisManager::CreateScintilatorTuple()
    rootManager->FillNtupleDColumn(scintTupleId, ++colId, 0.);		   
    rootManager->AddNtupleRow(scintTupleId);   
    
+}
+
+void AnalysisManager::CreateNrOfCountsTuple()
+{
+    rootManager->CreateNtuple("NrOfCountsInfo", "Tot nr of counts");
+    rootManager->CreateNtupleIColumn("nrOfCounts");
+    nrOrCountsTupleId = nrOfCreatedTuple++;
 }
 
 
@@ -141,6 +148,14 @@ void AnalysisManager::AddHit(ScintillatorHitsCollection* scintHC, G4int eventId)
     }	
 }
 
+void AnalysisManager::AddNrOfEvent(G4int nrOfEvents)
+{
+    int colId = 0;
+    rootManager->FillNtupleIColumn(nrOrCountsTupleId, colId, nrOfEvents); 	
+    rootManager->AddNtupleRow(nrOrCountsTupleId);
+}
+
+//TODO add small branch with total number of events
 	
 	
 AnalysisManager *AnalysisManager::s_instance = 0;
