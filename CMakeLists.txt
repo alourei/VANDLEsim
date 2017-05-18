@@ -7,8 +7,15 @@ include(${Geant4_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # CADMesh, form example
-# find_package(cadmesh)
-# include_directories(${CADMESH_INCLUDE_DIRS})
+ find_package(cadmesh)
+ include_directories(${CADMESH_INCLUDE_DIRS})
+
+# root
+find_package(ROOT)
+message(${ROOT_INCLUDE_DIRS})
+include_directories(${ROOT_INCLUDE_DIRS})
+
+
 
 set(CMAKE_BUILD_TYPE release)
 
@@ -18,9 +25,11 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 add_executable(VANDLESim VANDLESim.cc ${sources} ${headers})
 target_link_libraries(VANDLESim ${Geant4_LIBRARIES})
-#target_link_libraries(VANDLESim ${cadmesh_LIBRARIES})
+target_link_libraries(VANDLESim ${cadmesh_LIBRARIES})
+target_link_libraries(VANDLESim ${ROOT_LIBRARIES})
+
+
 
 install(TARGETS VANDLESim DESTINATION ${PROJECT_SOURCE_DIR})
-
 
 

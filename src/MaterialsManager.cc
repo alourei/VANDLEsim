@@ -73,7 +73,7 @@ void MaterialsManager::CleanUp()
   tin = 0L;
   borosilicate = 0L;
   bialkali = 0L;
-  aluminium = 0L;
+  aluminum = 0L;
   NaI = 0L;
   iron = 0L;
   BC408NoLight = 0L;
@@ -82,7 +82,7 @@ void MaterialsManager::CleanUp()
   stainSteel = 0L;
   concrete = 0L;
   HDPE = 0L;
-	
+  liqNitrogen = 0L;	
 }
 
 
@@ -300,13 +300,13 @@ G4Material* MaterialsManager::GetBorosilicate()
 
   
   
-G4Material* MaterialsManager::GetAluminium()
+G4Material* MaterialsManager::GetAluminum()
 {
-  if(aluminium)
-    return aluminium;
-  aluminium = new G4Material("Aluminium", density= 2.7*g/cm3, 
+  if(aluminum)
+    return aluminum;
+  aluminum = new G4Material("Aluminum", density= 2.7*g/cm3, 
                               numberElements=1);
-  aluminium->AddElement(Al, 1);
+  aluminum->AddElement(Al, 1);
   
    //if(useOptical)
    if(false)
@@ -324,11 +324,11 @@ G4Material* MaterialsManager::GetAluminium()
      G4MaterialPropertiesTable* optProperty = new G4MaterialPropertiesTable();
      optProperty->AddProperty("RINDEX", photonEn, rIndex, scintEntries);
      optProperty->AddProperty("ABSLENGTH", photonEn, absLength, scintEntries);
-     aluminium->SetMaterialPropertiesTable(optProperty);                                      
+     aluminum->SetMaterialPropertiesTable(optProperty);                                      
    }
   
   
-  return aluminium;
+  return aluminum;
 }
 
 G4Material* MaterialsManager::GetBialkali()
@@ -414,5 +414,21 @@ G4Material* MaterialsManager::GetHDPE()
    
   return HDPE;
 }
+
+G4Material* MaterialsManager::GetLiqNitrogen()
+{
+  if(liqNitrogen)
+    return liqNitrogen;
+ 
+  liqNitrogen = new G4Material ("liqNitrogen", 0.8*g/cm3, 1, kStateLiquid, 77.*kelvin, 1.0*atmosphere);
+  liqNitrogen->AddElement(N, 1);  
+   
+  return liqNitrogen;
+	
+}
+
+
+
+
 
 MaterialsManager *MaterialsManager::s_instance = 0;

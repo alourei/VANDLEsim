@@ -24,8 +24,7 @@
 
 VANDLEBar::VANDLEBar(G4int size)                
 {
-	pmtSD = 0;
-	scintillatorSD = 0;
+
 	//TODO - enum?
 	if(size == 0)
 		SetSmallBarSizes();
@@ -168,8 +167,9 @@ void VANDLEBar::MakePlasticBar(G4double barX, G4double barY, G4double barZ)
 	barLogic = new G4LogicalVolume(barSolid, barMaterial, "barLogic");
 	
 	G4VisAttributes* visAtt = new G4VisAttributes( G4Colour(0xFF,0x00,0x00) );
-	visAtt->SetLineWidth(0.1);
-	visAtt->SetForceAuxEdgeVisible(true);
+	visAtt->SetLineWidth(1);
+	//visAtt->SetForceAuxEdgeVisible(true);
+	visAtt->SetForceSolid(true);
 	barLogic->SetVisAttributes(visAtt);
 	//barLogic->SetVisAttributes(G4VisAttributes::GetInvisible());
 } 
@@ -202,7 +202,7 @@ void VANDLEBar::MakeWrapping(G4double barX,
 	                                    wrappingExteriorSolid,
 	                                    wrappingInteriorSolid);
 	                                    
-	G4Material* wrappingMaterial = materialsManager->GetAluminium();
+	G4Material* wrappingMaterial = materialsManager->GetAluminum();
 	wrappingLogic = new G4LogicalVolume(wrappingSolid, 
 	                                    wrappingMaterial, 
 	                                    "wrappingLogic");
@@ -228,7 +228,7 @@ void VANDLEBar::MakeWrapping(G4double barX,
 	                                         halfExtWrappY, 
 	                                         halfExtWrappZ);	
 	const G4ThreeVector position(0., 0., 0.);                                        	                                    
-	G4Material* wrappingMaterial = materialsManager->GetAluminium();
+	G4Material* wrappingMaterial = materialsManager->GetAluminum();
 	wrappingLogic = new G4LogicalVolume(wrappingSolid, 
 	                                    wrappingMaterial, 
 	                                    "wrappingLogic");
@@ -565,7 +565,7 @@ void VANDLEBar::ConstructSDandField()
     //Created here so it exists as pmts are being placed
     G4cout << "Construction /VANDLEDet/pmtSD" << G4endl;
     pmtSD = new PMTSD("/VANDLEDet/pmtSD");
-    pmtSD->SetModuleDeph(3); //TODO - get deph from VANDLE bar
+    pmtSD->SetModuleDeph(3); 
     pmtSD->SetPMTDeph(1);
   }
 
@@ -612,3 +612,21 @@ void VANDLEBar::Place(G4RotationMatrix *pRot,
 						  
 						  
 }
+
+
+void VANDLEBar::Place(const G4Transform3D& transform3D, 
+                      const G4String &pName, 
+                      G4LogicalVolume *pMotherLogical, 
+                      G4int pCopyNo)
+{
+   new G4PVPlacement(transform3D,
+		             moduleLogic,
+		             pName, 
+	                 pMotherLogical,
+	                 0,
+	                 pCopyNo);	 	
+}
+
+    
+PMTSD* VANDLEBar::pmtSD = 0;
+ScintillatorSD* VANDLEBar::scintillatorSD = 0;

@@ -20,7 +20,12 @@ class HPGe
                const G4String &pName, 
                G4LogicalVolume *pMotherLogical,  
                G4int pCopyNo = 0);
-               
+    
+    void Place(G4Transform3D &pTransform, 
+               const G4String &pName, 
+               G4LogicalVolume *pMotherLogical,  
+               G4int pCopyNo = 0);
+                          
     G4AssemblyVolume* GetHPGeAssembly() {return HPGeAssembly;}
     virtual void ConstructSDandField();
   private:

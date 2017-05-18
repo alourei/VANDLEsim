@@ -45,7 +45,7 @@ class MaterialsManager //MaterialsFactory??
     G4Material* GetBC408NoLight();
     G4Material* GetTin();
     G4Material* GetBorosilicate();
-    G4Material* GetAluminium();
+    G4Material* GetAluminum();
     G4Material* GetNaI();
     G4Material* GetBialkali();
     G4Material* GetGermanium();
@@ -53,6 +53,7 @@ class MaterialsManager //MaterialsFactory??
     G4Material* GetStainSteel();
     G4Material* GetConcrete();
     G4Material* GetHDPE();
+    G4Material* GetLiqNitrogen();
     
   private:
 	MaterialsManager();
@@ -95,7 +96,7 @@ class MaterialsManager //MaterialsFactory??
 	G4Material* BC408NoLight;
 	G4Material* tin;
 	G4Material* borosilicate;
-	G4Material* aluminium;
+	G4Material* aluminum;
 	G4Material* NaI;
 	G4Material* bialkali;
 	G4Material* germanium;
@@ -103,6 +104,7 @@ class MaterialsManager //MaterialsFactory??
 	G4Material* stainSteel;
 	G4Material* concrete;
 	G4Material* HDPE;
+	G4Material* liqNitrogen;
 	
   public:
 	static MaterialsManager *GetInstance()

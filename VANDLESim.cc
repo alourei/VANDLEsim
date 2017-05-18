@@ -12,6 +12,12 @@
 #include "G4RunManager.hh"
 #endif
 
+//read CERN configuration
+#include "global.hh"
+#include "read_config.hh"
+
+
+
 #include "G4UImanager.hh"
 #include "G4String.hh"
 #include "PhysicsList.hh"
@@ -37,6 +43,12 @@ int main(int argc, char** argv)
   G4RunManager * runManager = new G4RunManager;
 #endif
 
+
+
+  G4String cFileName = "../configfiles/config.dat";
+  read_config(cFileName);
+  
+  
   runManager->SetUserInitialization(new DetectorConstruction());
   runManager->SetUserInitialization(new PhysicsList());
 
@@ -59,10 +71,10 @@ int main(int argc, char** argv)
 #ifdef G4UI_USE
     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
-    UImanager->ApplyCommand("/control/execute vis.mac");
+    UImanager->ApplyCommand("/control/execute ../macro/vis.mac");
 #endif
     if (ui->IsGUI())
-       UImanager->ApplyCommand("/control/execute gui.mac");
+       UImanager->ApplyCommand("/control/execute ../macro/gui.mac");
     ui->SessionStart();
     delete ui;
 #endif

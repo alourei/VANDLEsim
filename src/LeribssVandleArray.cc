@@ -37,10 +37,6 @@ void LeribssVandleArray::Place(G4RotationMatrix *pRot,
                                G4LogicalVolume *pMotherLogical,  
                                G4int pCopyNo)
 {
-
-	const G4double modHeight = vandleBar->GetHeight();
-
-	const G4double innerRad = radius - 0.5 * modHeight;
 	
 	G4cout << "The Center Radius of the cylinder is :" 
 	       << radius / cm 

@@ -226,7 +226,7 @@ void HPGe::placeSingleCrystal(G4LogicalVolume* crystalLogVol,
 
 void HPGe::makeHPGeFace(G4AssemblyVolume* assemblyHPGe)
 {
-	G4Material* aluminiumMaterial = materialsManager->GetAluminium();
+	G4Material* aluminiumMaterial = materialsManager->GetAluminum();
   	  	
   	//side
 	G4UnionSolid* box1b = roundedBox(box1_z,box1_x,box1_rad,box1_thickness);
@@ -282,7 +282,7 @@ void HPGe::placeCrystals(G4AssemblyVolume* assemblyHPGe)
 
 void HPGe::makeHPGeBox2(G4AssemblyVolume* assemblyHPGe)
 {
-	G4Material* aluminiumMaterial = materialsManager->GetAluminium();
+	G4Material* aluminiumMaterial = materialsManager->GetAluminum();
 	
 	//side
 	G4UnionSolid* box2b = roundedBox(box2_z,box2_x,box2_rad,box2_thickness);
@@ -320,7 +320,7 @@ void HPGe::makeHPGeBox2(G4AssemblyVolume* assemblyHPGe)
 
 void HPGe::makeHPGeBox3(G4AssemblyVolume* assemblyHPGe)
 {
-	G4Material* aluminiumMaterial = materialsManager->GetAluminium();
+	G4Material* aluminiumMaterial = materialsManager->GetAluminum();
 	
 	//side
 	G4UnionSolid* box3b = roundedBox(box3_z,box3_x,box3_rad,box3_thickness);
@@ -384,7 +384,7 @@ void HPGe::makeHPGeBox3(G4AssemblyVolume* assemblyHPGe)
 
 void HPGe::makeHPGeCylinder4(G4AssemblyVolume* assemblyHPGe)
 {
-	G4Material* aluminiumMaterial = materialsManager->GetAluminium();
+	G4Material* aluminiumMaterial = materialsManager->GetAluminum();
 	G4Tubs* cyl4 = new G4Tubs("cyl4", 
 	                           cyl4_inn_rad, 
 	                           cyl4_out_rad, 
@@ -410,7 +410,7 @@ void HPGe::makeHPGeCylinder4(G4AssemblyVolume* assemblyHPGe)
 
 void HPGe::makeHPGeCylinder5(G4AssemblyVolume* assemblyHPGe)
 {
-	G4Material* aluminiumMaterial = materialsManager->GetAluminium();
+	G4Material* aluminiumMaterial = materialsManager->GetAluminum();
     G4Tubs* cyl5 = new G4Tubs("cyl5", 
                                cyl5_inn_rad, 
                                cyl5_out_rad, 
@@ -436,7 +436,7 @@ void HPGe::makeHPGeCylinder5(G4AssemblyVolume* assemblyHPGe)
 
 void HPGe::makeHPGeCylinder6(G4AssemblyVolume* assemblyHPGe)
 {
-	G4Material* aluminiumMaterial = materialsManager->GetAluminium();
+	G4Material* aluminiumMaterial = materialsManager->GetAluminum();
 	G4Tubs* cyl6 = new G4Tubs("cyl6", 
 	                           cyl6_inn_rad, 
 	                           cyl6_out_rad, 
@@ -461,7 +461,7 @@ void HPGe::makeHPGeCylinder6(G4AssemblyVolume* assemblyHPGe)
 
 void HPGe::makeHPGeCylinder7(G4AssemblyVolume* assemblyHPGe)
 {
-	    G4Material* aluminiumMaterial = materialsManager->GetAluminium();
+	    G4Material* aluminiumMaterial = materialsManager->GetAluminum();
 	G4Tubs* cyl7 = new G4Tubs("cyl7", 
                                cyl7_inn_rad, 
                                cyl7_out_rad, 
@@ -851,10 +851,25 @@ void HPGe::Place(G4RotationMatrix *pRot,
   	G4RotationMatrix rot = *pRot;
   	G4Transform3D transform(rot,position);
   	HPGeAssembly->MakeImprint (pMotherLogical, transform, pCopyNo);
-   	//HPGeAssembly->MakeImprint(pMotherLogical, position, pRot, pCopyNo);				  
+				  
 }
 
+void HPGe::Place(G4Transform3D &pTransform, 
+                 const G4String &pName, 
+                 G4LogicalVolume *pMotherLogical,  
+                 G4int pCopyNo)
+{
+    HPGeAssembly->MakeImprint (pMotherLogical, pTransform, pCopyNo);
+					 
+}
+               
+               
 void HPGe::ConstructSDandField()
 {
 	//for now no sensitive part of the detector
 }
+
+
+
+
+               

@@ -36,6 +36,7 @@
 #include "MaterialsManager.hh"
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
+#include "G4Transform3D.hh"
 #include "PMTSD.hh"
 #include "ScintillatorSD.hh"
 
@@ -53,6 +54,10 @@ class VANDLEBar
                const G4String &pName, 
                G4LogicalVolume *pMotherLogical, 
                G4int pCopyNo);
+   void Place(const G4Transform3D& transform3D, 
+              const G4String &pName, 
+              G4LogicalVolume *pMotherLogical, 
+              G4int pCopyNo);
     G4LogicalVolume* GetModuleLogical() {return moduleLogic;}            
     G4LogicalVolume* GetScintilatorLogical() {return barLogic;}
     G4LogicalVolume* GetPMTLogical() {return photocathLogic;}
@@ -135,8 +140,8 @@ class VANDLEBar
 	G4LogicalVolume* glassLogic;
 	G4LogicalVolume* photocathLogic;
 
-    PMTSD* pmtSD;
-    ScintillatorSD* scintillatorSD;
+    static PMTSD* pmtSD;
+    static ScintillatorSD* scintillatorSD;
     
 };
 

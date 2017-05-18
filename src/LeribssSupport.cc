@@ -789,7 +789,7 @@ void LeribssSupport::Place(G4RotationMatrix *pRot,
 {
 
 
-   aluminiumMaterial = materialsManager->GetAluminium();
+   aluminiumMaterial = materialsManager->GetAluminum();
    supportVisAtt = new G4VisAttributes( G4Colour(100/255.,100./255.,100./255.));
    supportVisAtt->SetForceAuxEdgeVisible(true);// Can see outline when drawn with lines
    supportVisAtt->SetForceSolid(true);

@@ -6,18 +6,14 @@
 //
 //
 #include "DetectorConstruction.hh"
-#include "G4SDManager.hh"
-
 
 #include "G4GeometryManager.hh"
-#include "G4SolidStore.hh"
-#include "G4LogicalVolumeStore.hh"
 #include "G4PhysicalVolumeStore.hh"
-#include "G4LogicalBorderSurface.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
 #include "G4LogicalSkinSurface.hh"
+#include "G4LogicalBorderSurface.hh"
 
-#include "G4OpticalSurface.hh"
-#include "G4MaterialTable.hh"
 #include "G4VisAttributes.hh"
 #include "G4Material.hh"
 #include "G4Box.hh"
@@ -26,10 +22,16 @@
 #include "G4PVPlacement.hh"
 #include "globals.hh"
 #include "G4UImanager.hh"
-#include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-
-
+#include "ArgoneFrame.hh"
+#include "ArgoneAuxDet.hh"
+#include "ArgoneGeArray.hh"
+#include "ArgoneHPGeHolder.hh"
+#include "ArgoneBeamLine.hh"
+#include "ArgoneTapeBox.hh"
+#include "ArgoneBetaDet.hh"
+#include "ArgoneLN2Tank.hh"
+#include "Floor.hh"
 
 DetectorConstruction::DetectorConstruction()
 {
@@ -86,85 +88,99 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
   int mediumSize = 1;
   int largeSize = 2;
   //call VANDLEBar fabric method
-  //vandleBar = new VANDLEBar(smallSize);
-  //vandleBar->Place(0, 
-  //                   G4ThreeVector(0.0,10.0*cm,0.0),
-  //                   "bar1", 
-  //                    experimentalHallLogic, 0);
-  /*
-  vandleBar->Place(0, 
-                   G4ThreeVector(0.0,-10.0*cm,0.0),
-                   "bar2", 
-                    experimentalHallLogic, 1);  */
+  //vandleBar = new VANDLEBar(mediumSize);
+  argoneVandleArray = new ArgoneVandleArray();
+  G4ThreeVector vandlePosition = G4ThreeVector(0.0,0.0,0.0);
+  argoneVandleArray->Place(0, 
+                         vandlePosition,
+                         "argoneVandleArray", 
+                          experimentalHallLogic, 
+                          0);
+                
 
-	
-   /*HPGeDet = new HPGe();
-   G4RotationMatrix* rot = new G4RotationMatrix();
-   rot->rotateY(90.0*degree);
-   G4ThreeVector pos1 = G4ThreeVector(0.0,0.0,0.0);
-   HPGeDet->Place(rot, 
-                  pos1,
-                  "HPGe", 
-                  experimentalHallLogic, 
-                  0); */
+   ArgoneFrame* argoneFrame = new ArgoneFrame();
+   argoneFrame->Place(0, 
+                      vandlePosition,
+                      "argoneFrame", 
+                      experimentalHallLogic, 
+                      0);
+   
+   	
+   G4ThreeVector auxDetPos(80.*mm,-105.0*mm,0.);                   
+   ArgoneAuxDet* argoneAuxDet = new ArgoneAuxDet();
+   argoneAuxDet->Place(0, 
+                      auxDetPos,
+                      "argoneAuxDet", 
+                      experimentalHallLogic, 
+                      0);
+                      
+                      
+   ArgoneGeArray* argoneGeArray = new ArgoneGeArray();
+   argoneGeArray->Place(0, 
+                      vandlePosition,
+                      "argoneGeArray", 
+                      experimentalHallLogic, 
+                      0);
+                      
+   ArgoneHPGeHolder* argoneHPGeHolder = new ArgoneHPGeHolder();
+   argoneHPGeHolder->Place(0, 
+                      vandlePosition,
+                      "argoneHPGeHolder", 
+                      experimentalHallLogic, 
+                      0);
+    
+   ArgoneBeamLine* argoneBeamLine = new ArgoneBeamLine();
+   argoneBeamLine->Place(0, 
+                         vandlePosition,
+                         "argoneBeamLine", 
+                         experimentalHallLogic, 
+                         0);
+                      
+   ArgoneTapeBox* argoneTapeBox = new ArgoneTapeBox();
+   G4ThreeVector argoneTapeBoxPos(170.0*cm,0.0,0.0);
+   argoneTapeBox->Place(0, 
+                        argoneTapeBoxPos,
+                        "argoneTapeBox", 
+                        experimentalHallLogic, 
+                        0);   
  
-
-
-  leribssGeArray = new LeribssGeArray();
-  G4ThreeVector gePos = G4ThreeVector(0.0,0.0,0.0);
-  leribssGeArray->Place(0, 
-                        gePos,
-                        "LeribssGeArray", 
+   ArgoneBetaDet* argoneBetaDet = new ArgoneBetaDet();
+   G4ThreeVector argoneBetaDetPos(0.0,0.0,0.0);
+   argoneBetaDet->Place(0, 
+                        argoneBetaDetPos,
+                        "argoneBetaDet", 
                         experimentalHallLogic, 
                         0); 
-    
-   leribssVandleArray = new LeribssVandleArray();
-   G4ThreeVector vandlePos = G4ThreeVector(0.0,0.0,0.0);
-   leribssVandleArray->Place(0, 
-                             vandlePos,
-                             "leribssVandleArray", 
-                             experimentalHallLogic, 
-                             0);   
-   
-   leribssSupport = new LeribssSupport();  
-   G4ThreeVector leribssSupportPos = G4ThreeVector(0.0,0.0,0.0);
-   leribssSupport->Place(0, 
-                         leribssSupportPos,
-                         "leribssSupport", 
-                         experimentalHallLogic, 
-                         0);                                    
-
-   
-   leribssBeam = new LeribssBeam();
-   G4ThreeVector leribssBeamPos = G4ThreeVector(0.0,0.0,0.0);
-   leribssBeam->Place(0, 
-                      leribssBeamPos,
-                      "leribssBeam", 
+                          
+   ArgoneLN2Tank* argoneLN2Tank = new ArgoneLN2Tank();
+   G4ThreeVector argoneLN2TankPos(-1.45*m,-159.3215*cm,-0.4*m);
+   argoneLN2Tank->Place(0, 
+                        argoneLN2TankPos,
+                        "argoneLN2Tank", 
+                        experimentalHallLogic, 
+                        0); 
+                          
+   Floor* argoneFloor = new Floor();
+   G4ThreeVector argoneFloorPos(0,-159.3215*cm,0);
+   argoneFloor->Place(0, 
+                      argoneFloorPos,
+                      "argoneFloor", 
                       experimentalHallLogic, 
-                      0);   
-   
-   leribssFloor = new LeribssFloor();
-   G4ThreeVector leribssFloorPos = G4ThreeVector(0.0,0.0,0.0);
-   
-   leribssFloor->Place(0, 
-                      leribssFloorPos,
-                      "leribssFloor", 
-                      experimentalHallLogic, 
-                      0); 
-   
-   leribssBetaDet = new LeribssBetaDet(); 
-   G4ThreeVector leribssBetaDetPos = G4ThreeVector(0.0,0.0,0.0);
-   leribssBetaDet->Place(0, 
-                      leribssBetaDetPos,
-                      "lleribssBetaDet", 
-                      experimentalHallLogic, 
-                      0);              
+                      0);  
+                                     
    return experimentalHallPhys;
 }
 
 
+
 void DetectorConstruction::ConstructSDandField() 
 {
-	leribssVandleArray->ConstructSDandField();
+	argoneVandleArray->ConstructSDandField();
     //vandleBar->ConstructSDandField();
 }
+
+
+
+
+
+
