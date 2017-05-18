@@ -1,3 +1,4 @@
 *.rndm
 *.root
+STL_export/
 neutronHPenv.sh
