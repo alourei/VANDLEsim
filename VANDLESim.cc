@@ -13,8 +13,8 @@
 #endif
 
 //read CERN configuration
-#include "global.hh"
-#include "read_config.hh"
+//#include "global.hh"
+//#include "read_config.hh"
 
 
 
@@ -45,8 +45,8 @@ int main(int argc, char** argv)
 
 
 
-  G4String cFileName = "../configfiles/config.dat";
-  read_config(cFileName);
+  //G4String cFileName = "../configfiles/config.dat";
+  //read_config(cFileName);
   
   
   runManager->SetUserInitialization(new DetectorConstruction());
