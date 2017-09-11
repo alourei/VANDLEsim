@@ -1,11 +1,11 @@
-// $Id: ArgoneAuxDet.cc 03.05.2017 A Fijalkowska $
+// $Id: ArgonneAuxDet.cc 03.05.2017 A Fijalkowska $
 //
-/// \file ArgoneAuxDet.cc
-/// \brief Implementation of the ArgoneAuxDet class, S.I. code
+/// \file ArgonneAuxDet.cc
+/// \brief Implementation of the ArgonneAuxDet class, S.I. code
 //
 //
 
-#include "ArgoneAuxDet.hh"
+#include "ArgonneAuxDet.hh"
 
 #include "G4Transform3D.hh"
 #include "globals.hh"
@@ -15,24 +15,24 @@
 #include "G4SystemOfUnits.hh"
 #include "G4VisAttributes.hh"
 
-ArgoneAuxDet::ArgoneAuxDet()
+ArgonneAuxDet::ArgonneAuxDet()
 {
 	SetBasicSizes();	
     materialsManager = MaterialsManager::GetInstance();
     
 } 
 
-ArgoneAuxDet::~ArgoneAuxDet()
+ArgonneAuxDet::~ArgonneAuxDet()
 {
 	
 }
 
-void ArgoneAuxDet::SetBasicSizes()
+void ArgonneAuxDet::SetBasicSizes()
 {
 
 }
 
- void ArgoneAuxDet::Place(G4RotationMatrix *pRot, 
+ void ArgonneAuxDet::Place(G4RotationMatrix *pRot, 
                          G4ThreeVector &tlate, 
                          const G4String &pName, 
                          G4LogicalVolume *pMotherLogical,  

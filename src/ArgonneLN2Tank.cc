@@ -1,11 +1,11 @@
-// $Id: ArgoneLN2Tank.cc 16.05.2017 A Fijalkowska $
+// $Id: ArgonneLN2Tank.cc 16.05.2017 A Fijalkowska $
 //
-/// \file ArgoneLN2Tank.cc
-/// \brief Implementation of the ArgoneLN2Tank class, S.I. code
+/// \file ArgonneLN2Tank.cc
+/// \brief Implementation of the ArgonneLN2Tank class, S.I. code
 //
 //
 
-#include "ArgoneLN2Tank.hh"
+#include "ArgonneLN2Tank.hh"
 
 #include "G4Transform3D.hh"
 #include "globals.hh"
@@ -15,19 +15,19 @@
 #include "G4SystemOfUnits.hh"
 #include "G4VisAttributes.hh"
 
-ArgoneLN2Tank::ArgoneLN2Tank()
+ArgonneLN2Tank::ArgonneLN2Tank()
 {
 	SetBasicSizes();	
     materialsManager = MaterialsManager::GetInstance();
     
 } 
 
-ArgoneLN2Tank::~ArgoneLN2Tank()
+ArgonneLN2Tank::~ArgonneLN2Tank()
 {
 	
 }
 
-void ArgoneLN2Tank::SetBasicSizes()
+void ArgonneLN2Tank::SetBasicSizes()
 {
  	
   	// crystal
@@ -47,7 +47,7 @@ void ArgoneLN2Tank::SetBasicSizes()
   	outR[3] = 5.*cm;
 }
 
-void ArgoneLN2Tank::Place(G4RotationMatrix *pRot, 
+void ArgonneLN2Tank::Place(G4RotationMatrix *pRot, 
                          G4ThreeVector &tlate, 
                          const G4String &pName, 
                          G4LogicalVolume *pMotherLogical,  
@@ -67,7 +67,7 @@ void ArgoneLN2Tank::Place(G4RotationMatrix *pRot,
   	 
 }
 
-G4LogicalVolume* ArgoneLN2Tank::MakeTankShell()
+G4LogicalVolume* ArgonneLN2Tank::MakeTankShell()
 {
     G4Material *stainSteel = materialsManager->GetStainSteel();
 
@@ -82,7 +82,7 @@ G4LogicalVolume* ArgoneLN2Tank::MakeTankShell()
 	return tankLogVol;
 }
 
-void ArgoneLN2Tank::AddLN2(G4LogicalVolume* tankShellLogVol)
+void ArgonneLN2Tank::AddLN2(G4LogicalVolume* tankShellLogVol)
 {
 	G4Material *LN2Material = materialsManager->GetLiqNitrogen();
 	const G4double th = 1.5*cm;

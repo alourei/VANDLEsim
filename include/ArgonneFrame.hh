@@ -1,10 +1,10 @@
-// $Id: ArgoneFrame.hh 26.01.2016 A Fijalkowska $
+// $Id: ArgonneFrame.hh 26.01.2016 A Fijalkowska $
 //
-/// \file ArgoneFrame.hh
-/// \brief Definition of the ArgoneFrame class
+/// \file ArgonneFrame.hh
+/// \brief Definition of the ArgonneFrame class
 //
-#ifndef ArgoneFrame_H
-#define ArgoneFrame_H1
+#ifndef ArgonneFrame_H
+#define ArgonneFrame_H1
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
 #include "G4LogicalVolume.hh"
@@ -13,12 +13,12 @@
 #include "G4Material.hh"
 #include "G4VSolid.hh"
 
-class ArgoneFrame
+class ArgonneFrame
 {
   public:
 
-    ArgoneFrame(); 
-    virtual ~ArgoneFrame(); 
+    ArgonneFrame(); 
+    virtual ~ArgonneFrame(); 
     void Place(G4RotationMatrix *pRot, 
                G4ThreeVector &tlate, 
                const G4String &pName, 

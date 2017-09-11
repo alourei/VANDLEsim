@@ -1,8 +1,8 @@
 
-// $Id: ArgoneFrame.cc 07.05.2017 A Fijalkowska $
+// $Id: ArgonneFrame.cc 07.05.2017 A Fijalkowska $
 //
-/// \file ArgoneFrame.cc
-/// \brief Implementation of the ArgoneFrame class
+/// \file ArgonneFrame.cc
+/// \brief Implementation of the ArgonneFrame class
 //
 //
 
@@ -13,9 +13,9 @@
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 
-#include "ArgoneFrame.hh"
+#include "ArgonneFrame.hh"
 
-ArgoneFrame::ArgoneFrame()
+ArgonneFrame::ArgonneFrame()
 {
     materialsManager = MaterialsManager::GetInstance();
     SetBasicSizes();
@@ -24,12 +24,12 @@ ArgoneFrame::ArgoneFrame()
 	argSupportVisAtt->SetForceSolid(true);
 } 
 
-ArgoneFrame::~ArgoneFrame()
+ArgonneFrame::~ArgonneFrame()
 {
 
 }
 
-void ArgoneFrame::SetBasicSizes()
+void ArgonneFrame::SetBasicSizes()
 {
     boxB_x = 183.2356/2.0*cm;    
     boxB_y = 112.9284/2.0*cm;    
@@ -37,12 +37,12 @@ void ArgoneFrame::SetBasicSizes()
 	
 }
 
-G4VSolid* ArgoneFrame::GetRibsSolid()
+G4VSolid* ArgonneFrame::GetRibsSolid()
 {	
 	return MakeRibsSolid();
 }
 
-void ArgoneFrame::Place(G4RotationMatrix *pRot, 
+void ArgonneFrame::Place(G4RotationMatrix *pRot, 
                         G4ThreeVector &tlate, 
                         const G4String &pName, 
                         G4LogicalVolume *pMotherLogical,  
@@ -102,7 +102,7 @@ void ArgoneFrame::Place(G4RotationMatrix *pRot,
 
 
 
-G4VSolid* ArgoneFrame::MakeRibsSolid()
+G4VSolid* ArgonneFrame::MakeRibsSolid()
 {
     //main solid
 
@@ -224,7 +224,7 @@ G4VSolid* ArgoneFrame::MakeRibsSolid()
 }
 
 
-G4VSolid* ArgoneFrame::AddHolders(G4VSolid*ribsSolid)
+G4VSolid* ArgonneFrame::AddHolders(G4VSolid*ribsSolid)
 {
 	//horizontal
     G4double boxRibH_x = 18.5674/2.0*cm;    
@@ -303,7 +303,7 @@ G4VSolid* ArgoneFrame::AddHolders(G4VSolid*ribsSolid)
 	
 }
 
-void ArgoneFrame::PlaceSkeleton(G4RotationMatrix *pRot, 
+void ArgonneFrame::PlaceSkeleton(G4RotationMatrix *pRot, 
                                 G4ThreeVector &tlate, 
                                 const G4String &pName, 
                                 G4LogicalVolume *pMotherLogical,  

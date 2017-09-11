@@ -1,10 +1,10 @@
-// $Id: ArgoneLN2Tank.hh 10.05.2017 A Fijalkowska $
+// $Id: ArgonneLN2Tank.hh 10.05.2017 A Fijalkowska $
 //
-/// \file ArgoneLN2Tank.hh
-/// \brief Definition of the ArgoneLN2Tank class
+/// \file ArgonneLN2Tank.hh
+/// \brief Definition of the ArgonneLN2Tank class
 //
-#ifndef ArgoneLN2Tank_H
-#define ArgoneLN2Tank_H1
+#ifndef ArgonneLN2Tank_H
+#define ArgonneLN2Tank_H1
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
 #include "G4LogicalVolume.hh"
@@ -13,12 +13,12 @@
 #include "G4Material.hh"
 #include "G4VSolid.hh"
 
-class ArgoneLN2Tank
+class ArgonneLN2Tank
 {
   public:
 
-    ArgoneLN2Tank(); 
-    virtual ~ArgoneLN2Tank(); 
+    ArgonneLN2Tank(); 
+    virtual ~ArgonneLN2Tank(); 
     void Place(G4RotationMatrix *pRot, 
                G4ThreeVector &tlate, 
                const G4String &pName, 

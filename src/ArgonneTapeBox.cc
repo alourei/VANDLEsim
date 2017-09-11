@@ -1,8 +1,8 @@
 
-// $Id: ArgoneTapeBox.cc 10.05.2017 A Fijalkowska $
+// $Id: ArgonneTapeBox.cc 10.05.2017 A Fijalkowska $
 //
-/// \file ArgoneTapeBox.cc
-/// \brief Implementation of the ArgoneTapeBox class, S Ilushkin code
+/// \file ArgonneTapeBox.cc
+/// \brief Implementation of the ArgonneTapeBox class, S Ilushkin code
 //
 //
 
@@ -13,28 +13,28 @@
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 
-#include "ArgoneTapeBox.hh"
+#include "ArgonneTapeBox.hh"
 
-ArgoneTapeBox::ArgoneTapeBox()
+ArgonneTapeBox::ArgonneTapeBox()
 {
     materialsManager = MaterialsManager::GetInstance();
     SetBasicSizes();
 
 } 
 
-ArgoneTapeBox::~ArgoneTapeBox()
+ArgonneTapeBox::~ArgonneTapeBox()
 {
 
 }
 
-void ArgoneTapeBox::SetBasicSizes()
+void ArgonneTapeBox::SetBasicSizes()
 {
 	
 }
 
 
 
-void ArgoneTapeBox::Place(G4RotationMatrix *pRot, 
+void ArgonneTapeBox::Place(G4RotationMatrix *pRot, 
                         G4ThreeVector &tlate, 
                         const G4String &pName, 
                         G4LogicalVolume *pMotherLogical,  

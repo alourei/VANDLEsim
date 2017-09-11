@@ -1,21 +1,21 @@
-// $Id: ArgoneGeArray.hh 10.05.2017 A Fijalkowska $
+// $Id: ArgonneGeArray.hh 10.05.2017 A Fijalkowska $
 //
-/// \file ArgoneGeArray.hh
-/// \brief Definition of the ArgoneGeArray class
+/// \file ArgonneGeArray.hh
+/// \brief Definition of the ArgonneGeArray class
 //
-#ifndef ArgoneGeArray_H
-#define ArgoneGeArray_H 1
+#ifndef ArgonneGeArray_H
+#define ArgonneGeArray_H 1
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
 #include "G4LogicalVolume.hh"
 #include "HPGe.hh"
 
-class ArgoneGeArray
+class ArgonneGeArray
 {
   public:
 
-    ArgoneGeArray(); 
-    virtual ~ArgoneGeArray();     
+    ArgonneGeArray(); 
+    virtual ~ArgonneGeArray();     
     void Place(G4RotationMatrix *pRot, 
                G4ThreeVector &tlate, 
                const G4String &pName, 

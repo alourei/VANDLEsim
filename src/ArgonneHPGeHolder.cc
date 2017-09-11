@@ -1,8 +1,8 @@
 
-// $Id: ArgoneHPGeHolder.cc 10.05.2017 A Fijalkowska $
+// $Id: ArgonneHPGeHolder.cc 10.05.2017 A Fijalkowska $
 //
-/// \file ArgoneHPGeHolder.cc
-/// \brief Implementation of the ArgoneHPGeHolder class, SI code
+/// \file ArgonneHPGeHolder.cc
+/// \brief Implementation of the ArgonneHPGeHolder class, SI code
 //
 //
 
@@ -12,21 +12,21 @@
 #include "G4SubtractionSolid.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
-#include "ArgoneHPGeHolder.hh"
+#include "ArgonneHPGeHolder.hh"
 
-ArgoneHPGeHolder::ArgoneHPGeHolder()
+ArgonneHPGeHolder::ArgonneHPGeHolder()
 {
     materialsManager = MaterialsManager::GetInstance();
     SetBasicSizes();
 
 } 
 
-ArgoneHPGeHolder::~ArgoneHPGeHolder()
+ArgonneHPGeHolder::~ArgonneHPGeHolder()
 {
 
 }
 
-void ArgoneHPGeHolder::SetBasicSizes()
+void ArgonneHPGeHolder::SetBasicSizes()
 {
 	inch = 2.54*cm;
     HPGeholderBox_x = 2.975*inch;
@@ -36,7 +36,7 @@ void ArgoneHPGeHolder::SetBasicSizes()
 }
 
 
-void ArgoneHPGeHolder::Place(G4RotationMatrix *pRot, 
+void ArgonneHPGeHolder::Place(G4RotationMatrix *pRot, 
                         G4ThreeVector &tlate, 
                         const G4String &pName, 
                         G4LogicalVolume *pMotherLogical,  
@@ -83,7 +83,7 @@ void ArgoneHPGeHolder::Place(G4RotationMatrix *pRot,
 }
 
 
-G4VSolid* ArgoneHPGeHolder::MakeMainHPGeHolderSolid()
+G4VSolid* ArgonneHPGeHolder::MakeMainHPGeHolderSolid()
 {
 	const G4double HPGeholderBoxCut_x = 2.6*inch;
 	const G4double HPGeholderBoxCut_y = HPGeholderBoxCut_x;
@@ -110,7 +110,7 @@ G4VSolid* ArgoneHPGeHolder::MakeMainHPGeHolderSolid()
     return HPGeHolderBox;
 }
 
-G4VSolid* ArgoneHPGeHolder::AddSupplementHPGeHolderSolid(G4VSolid* mainHolder)
+G4VSolid* ArgonneHPGeHolder::AddSupplementHPGeHolderSolid(G4VSolid* mainHolder)
 {
 	const G4double HPGeholderBoxExtra_x = 2.0*inch;
 	const G4double HPGeholderBoxExtra_y = 0.25*inch;
@@ -147,7 +147,7 @@ G4VSolid* ArgoneHPGeHolder::AddSupplementHPGeHolderSolid(G4VSolid* mainHolder)
 }
 
 
-G4VSolid* ArgoneHPGeHolder::AddHPGeHolderRing(G4VSolid* suppHPGeHolderSolid)
+G4VSolid* ArgonneHPGeHolder::AddHPGeHolderRing(G4VSolid* suppHPGeHolderSolid)
 {
 
     G4double holderRingRad = 6.0*inch;
@@ -192,7 +192,7 @@ G4VSolid* ArgoneHPGeHolder::AddHPGeHolderRing(G4VSolid* suppHPGeHolderSolid)
 
 
 
-G4VSolid* ArgoneHPGeHolder::AddHPGeHolderPlate(G4VSolid* HPGeHolderRingSolid)
+G4VSolid* ArgonneHPGeHolder::AddHPGeHolderPlate(G4VSolid* HPGeHolderRingSolid)
 {  
      
     G4double holderPlate_x = 7.31*inch;

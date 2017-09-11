@@ -1,31 +1,31 @@
-// $Id: ArgoneGeArray.cc 24.01.2016 A Fijalkowska $
+// $Id: ArgonneGeArray.cc 24.01.2016 A Fijalkowska $
 //
-/// \file ArgoneGeArray.cc
-/// \brief Implementation of the ArgoneGeArray class, mostly Sergey's Ilyushkin code
+/// \file ArgonneGeArray.cc
+/// \brief Implementation of the ArgonneGeArray class, mostly Sergey's Ilyushkin code
 //
 //
 
-#include "ArgoneGeArray.hh"
+#include "ArgonneGeArray.hh"
 #include "G4SystemOfUnits.hh"
 
 
-ArgoneGeArray::ArgoneGeArray()
+ArgonneGeArray::ArgonneGeArray()
 {
 	SetBasicSizes();	
 	HPGeDet = new HPGe();	
 } 
 
-ArgoneGeArray::~ArgoneGeArray()
+ArgonneGeArray::~ArgonneGeArray()
 {
 	
 }
 
-void ArgoneGeArray::SetBasicSizes()
+void ArgonneGeArray::SetBasicSizes()
 {  	
 	
 }
   
-void ArgoneGeArray::Place(G4RotationMatrix *pRot, 
+void ArgonneGeArray::Place(G4RotationMatrix *pRot, 
                           G4ThreeVector &tlate, 
                           const G4String &pName, 
                           G4LogicalVolume *pMotherLogical,  
@@ -57,7 +57,7 @@ void ArgoneGeArray::Place(G4RotationMatrix *pRot,
 
 }
 
-void ArgoneGeArray::ConstructSDandField()
+void ArgonneGeArray::ConstructSDandField()
 {
 	HPGeDet->ConstructSDandField();
 }

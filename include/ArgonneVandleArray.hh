@@ -1,21 +1,21 @@
-// $Id: ArgoneVandleArray.hh 26.03.2017 A Fijalkowska $
+// $Id: ArgonneVandleArray.hh 26.03.2017 A Fijalkowska $
 //
-/// \file ArgoneVandleArray.hh
-/// \brief Definition of the ArgoneVandleArray class
+/// \file ArgonneVandleArray.hh
+/// \brief Definition of the ArgonneVandleArray class
 //
-#ifndef ArgoneVandleArray_H
-#define ArgoneVandleArray_H 1
+#ifndef ArgonneVandleArray_H
+#define ArgonneVandleArray_H 1
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
 #include "G4LogicalVolume.hh"
 #include "VANDLEBar.hh"
 
-class ArgoneVandleArray
+class ArgonneVandleArray
 {
   public:
 
-    ArgoneVandleArray(); 
-    virtual ~ArgoneVandleArray(); 
+    ArgonneVandleArray(); 
+    virtual ~ArgonneVandleArray(); 
     virtual void ConstructSDandField();    
     void Place(G4RotationMatrix *pRot, 
                G4ThreeVector &tlate, 

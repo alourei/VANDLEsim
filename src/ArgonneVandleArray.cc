@@ -1,15 +1,15 @@
-// $Id: ArgoneVandleArray.cc 206.05.2017 A Fijalkowska $
+// $Id: ArgonneVandleArray.cc 206.05.2017 A Fijalkowska $
 //
-/// \file ArgoneVandleArray.cc
-/// \brief Implementation of the ArgoneVandleArray class
+/// \file ArgonneVandleArray.cc
+/// \brief Implementation of the ArgonneVandleArray class
 //
 //
 
-#include "ArgoneVandleArray.hh"
+#include "ArgonneVandleArray.hh"
 #include "G4SystemOfUnits.hh"
 
 
-ArgoneVandleArray::ArgoneVandleArray()
+ArgonneVandleArray::ArgonneVandleArray()
 {
 	SetBasicSizes();	
 	int smallSize = 0;
@@ -18,7 +18,7 @@ ArgoneVandleArray::ArgoneVandleArray()
 	mediumBar = new VANDLEBar(mediumSize);
 } 
 
-ArgoneVandleArray::~ArgoneVandleArray()
+ArgonneVandleArray::~ArgonneVandleArray()
 {
     std::vector<G4RotationMatrix*>::iterator it;
 	for (it = rotations.begin(); it != rotations.end(); ++it)
@@ -26,7 +26,7 @@ ArgoneVandleArray::~ArgoneVandleArray()
     rotations.clear();
 }
 
-void ArgoneVandleArray::SetBasicSizes()
+void ArgonneVandleArray::SetBasicSizes()
 {
     smallArchRadius = 50.8574*cm;
     mediumArchRadius = 100.362*cm;
@@ -37,7 +37,7 @@ void ArgoneVandleArray::SetBasicSizes()
 
 
 
-void ArgoneVandleArray::PlaceSmallBars(G4RotationMatrix *pRot, 
+void ArgonneVandleArray::PlaceSmallBars(G4RotationMatrix *pRot, 
                                        G4ThreeVector &tlate, 
                                        const G4String &pName, 
                                        G4LogicalVolume *pMotherLogical,  
@@ -72,7 +72,7 @@ void ArgoneVandleArray::PlaceSmallBars(G4RotationMatrix *pRot,
 }
 
 
-void ArgoneVandleArray::PlaceMediumBars(G4RotationMatrix *pRot, 
+void ArgonneVandleArray::PlaceMediumBars(G4RotationMatrix *pRot, 
                                         G4ThreeVector &tlate, 
                                         const G4String &pName, 
                                         G4LogicalVolume *pMotherLogical,  
@@ -111,7 +111,7 @@ void ArgoneVandleArray::PlaceMediumBars(G4RotationMatrix *pRot,
 }
 
 
-void ArgoneVandleArray::Place(G4RotationMatrix *pRot, 
+void ArgonneVandleArray::Place(G4RotationMatrix *pRot, 
                               G4ThreeVector &tlate, 
                               const G4String &pName, 
                               G4LogicalVolume *pMotherLogical,  
@@ -123,7 +123,7 @@ void ArgoneVandleArray::Place(G4RotationMatrix *pRot,
 }
 
                          
-void ArgoneVandleArray::ConstructSDandField()
+void ArgonneVandleArray::ConstructSDandField()
 {
 	smallBar->ConstructSDandField();
 	mediumBar->ConstructSDandField();

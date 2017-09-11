@@ -11,7 +11,7 @@ class G4LogicalVolume;
 class G4VPhysicalVolume;
 
 #include "VANDLEBar.hh"
-#include "ArgoneVandleArray.hh"
+#include "ArgonneVandleArray.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "MaterialsManager.hh"
 
@@ -33,7 +33,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 	VANDLEBar* vandleBar;
 
     
-    ArgoneVandleArray* argoneVandleArray;
+    ArgonneVandleArray* argonneVandleArray;
     
 };
 

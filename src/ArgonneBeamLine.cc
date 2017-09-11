@@ -1,8 +1,8 @@
 
-// $Id: ArgoneBeamLine.cc 10.05.2017 A Fijalkowska $
+// $Id: ArgonneBeamLine.cc 10.05.2017 A Fijalkowska $
 //
-/// \file ArgoneBeamLine.cc
-/// \brief Implementation of the ArgoneBeamLine class, S Ilushkin code
+/// \file ArgonneBeamLine.cc
+/// \brief Implementation of the ArgonneBeamLine class, S Ilushkin code
 //
 //
 
@@ -13,21 +13,21 @@
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 
-#include "ArgoneBeamLine.hh"
+#include "ArgonneBeamLine.hh"
 
-ArgoneBeamLine::ArgoneBeamLine()
+ArgonneBeamLine::ArgonneBeamLine()
 {
     materialsManager = MaterialsManager::GetInstance();
     SetBasicSizes();
 
 } 
 
-ArgoneBeamLine::~ArgoneBeamLine()
+ArgonneBeamLine::~ArgonneBeamLine()
 {
 
 }
 
-void ArgoneBeamLine::SetBasicSizes()
+void ArgonneBeamLine::SetBasicSizes()
 {
     inch = 2.54*cm;
 	
@@ -35,7 +35,7 @@ void ArgoneBeamLine::SetBasicSizes()
 
 
 
-void ArgoneBeamLine::Place(G4RotationMatrix *pRot, 
+void ArgonneBeamLine::Place(G4RotationMatrix *pRot, 
                         G4ThreeVector &tlate, 
                         const G4String &pName, 
                         G4LogicalVolume *pMotherLogical,  

@@ -1,10 +1,10 @@
-// $Id: ArgoneBeamLine.hh 10.05.2017 A Fijalkowska $
+// $Id: ArgonneBetaDet.hh 10.05.2017 A Fijalkowska $
 //
-/// \file ArgoneBeamLine.hh
-/// \brief Definition of the ArgoneBeamLine class
+/// \file ArgonneBetaDet.hh
+/// \brief Definition of the ArgonneBetaDet class
 //
-#ifndef ArgoneBeamLine_H
-#define ArgoneBeamLine_H1
+#ifndef ArgonneBetaDet_H
+#define ArgonneBetaDet_H1
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
 #include "G4LogicalVolume.hh"
@@ -13,12 +13,12 @@
 #include "G4Material.hh"
 #include "G4VSolid.hh"
 
-class ArgoneBeamLine
+class ArgonneBetaDet
 {
   public:
 
-    ArgoneBeamLine(); 
-    virtual ~ArgoneBeamLine(); 
+    ArgonneBetaDet(); 
+    virtual ~ArgonneBetaDet(); 
     void Place(G4RotationMatrix *pRot, 
                G4ThreeVector &tlate, 
                const G4String &pName, 
@@ -28,7 +28,11 @@ class ArgoneBeamLine
   private:
      void SetBasicSizes();                                                                                      
      MaterialsManager* materialsManager;
-     G4double inch;
+     G4LogicalVolume* MakeBetaDet();
+     G4LogicalVolume* MakeBetaFrame();
+
+     G4double offset;
+     //G4double inch;
 
 };
 

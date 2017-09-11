@@ -1,8 +1,8 @@
 
-// $Id: ArgoneBetaDet.cc 10.05.2017 A Fijalkowska $
+// $Id: ArgonneBetaDet.cc 10.05.2017 A Fijalkowska $
 //
-/// \file ArgoneBetaDet.cc
-/// \brief Implementation of the ArgoneBetaDet class, S Ilushkin code
+/// \file ArgonneBetaDet.cc
+/// \brief Implementation of the ArgonneBetaDet class, S Ilushkin code
 //
 //
 
@@ -13,27 +13,27 @@
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 
-#include "ArgoneBetaDet.hh"
+#include "ArgonneBetaDet.hh"
 
-ArgoneBetaDet::ArgoneBetaDet()
+ArgonneBetaDet::ArgonneBetaDet()
 {
     materialsManager = MaterialsManager::GetInstance();
     SetBasicSizes();
 } 
 
-ArgoneBetaDet::~ArgoneBetaDet()
+ArgonneBetaDet::~ArgonneBetaDet()
 {
 
 }
 
-void ArgoneBetaDet::SetBasicSizes()
+void ArgonneBetaDet::SetBasicSizes()
 {
 	offset = 29.*mm;
 }
 
 
 
-void ArgoneBetaDet::Place(G4RotationMatrix *pRot, 
+void ArgonneBetaDet::Place(G4RotationMatrix *pRot, 
                         G4ThreeVector &tlate, 
                         const G4String &pName, 
                         G4LogicalVolume *pMotherLogical,  
@@ -71,7 +71,7 @@ void ArgoneBetaDet::Place(G4RotationMatrix *pRot,
 }
 
 
-G4LogicalVolume* ArgoneBetaDet::MakeBetaDet()
+G4LogicalVolume* ArgonneBetaDet::MakeBetaDet()
 {
 	G4Material* BC408Material = materialsManager->GetBC408NoLight();
     G4double boxWidth = 60.*mm; //x //120.*mm
@@ -115,7 +115,7 @@ G4LogicalVolume* ArgoneBetaDet::MakeBetaDet()
 	return betaDetLogVol;
 }
 
-G4LogicalVolume* ArgoneBetaDet::MakeBetaFrame()
+G4LogicalVolume* ArgonneBetaDet::MakeBetaFrame()
 {
 	G4Material *stainSteel = materialsManager->GetStainSteel();
 	
