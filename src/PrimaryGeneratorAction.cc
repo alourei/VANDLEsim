@@ -40,7 +40,6 @@ void PrimaryGeneratorAction::SetUpDefault()
 {
 	G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
 	G4ParticleDefinition* particle = particleTable->FindParticle("neutron");
-
 	particleGun->SetParticleDefinition(particle);
 	particleGun->SetParticleTime(0.0*ns);
 	particleGun->SetParticlePosition(G4ThreeVector(0.0*cm,0.0*cm,0.0*cm));

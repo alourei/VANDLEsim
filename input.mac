@@ -7,6 +7,6 @@
 /material/verbose 0
 /random/resetEngineFrom currentEvent.rndm
 /random/setSavingFlag true
-/gun/particle neutron
-/gun/energy 100 keV
+/gun/particle gamma
+/gun/energy 1000 keV
 /run/beamOn 10

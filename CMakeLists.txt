@@ -6,14 +6,14 @@ find_package(Geant4 REQUIRED ui_all vis_all)
 include(${Geant4_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
-# CADMesh, form example
+# CADMesh, from example
 # find_package(cadmesh)
 # include_directories(${CADMESH_INCLUDE_DIRS})
 
 # root
 find_package(ROOT)
-message(${ROOT_INCLUDE_DIRS})
-include_directories(${ROOT_INCLUDE_DIRS})
+message(${ROOT_INCLUDE_DIR})
+include_directories(${ROOT_INCLUDE_DIR})
 
 
 
